@@ -1,0 +1,24 @@
+[Unit]
+Description=Passa Facil Web
+After=network.target passafacil-api.service
+Wants=passafacil-api.service
+
+[Service]
+Type=simple
+User=passafacil
+Group=passafacil
+WorkingDirectory=/srv/passafacil/app/apps/web
+EnvironmentFile=-/etc/passafacil/web.env
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=9001
+ExecStart=/usr/bin/node /srv/passafacil/app/apps/web/.next/standalone/server.js
+Restart=on-failure
+RestartSec=5
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

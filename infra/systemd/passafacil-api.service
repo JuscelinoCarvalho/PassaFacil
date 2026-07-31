@@ -1,0 +1,21 @@
+[Unit]
+Description=Passa Facil API
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=passafacil
+Group=passafacil
+WorkingDirectory=/srv/passafacil/app/apps/api
+EnvironmentFile=/etc/passafacil/api.env
+ExecStart=/srv/passafacil/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 9000 --proxy-headers --forwarded-allow-ips=127.0.0.1
+Restart=on-failure
+RestartSec=5
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
