@@ -1,21 +1,17 @@
 [Unit]
-Description=Passa Facil API
-After=network.target postgresql.service
-Wants=postgresql.service
+Description=Passa Facil API (passafacil.jussa.com.br) - FastAPI
+After=network.target
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-User=passafacil
-Group=passafacil
-WorkingDirectory=/srv/passafacil/app/apps/api
-EnvironmentFile=/etc/passafacil/api.env
-ExecStart=/srv/passafacil/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 9000 --proxy-headers --forwarded-allow-ips=127.0.0.1
-Restart=on-failure
+User=jussa
+Group=jussa
+WorkingDirectory=/home/jussa/FileShare/development/passa_facil/apps/api
+EnvironmentFile=-/etc/passafacil.env
+ExecStart=/home/jussa/FileShare/development/passa_facil/apps/api/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 9000 --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=always
 RestartSec=5
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
-NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target

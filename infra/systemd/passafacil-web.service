@@ -1,24 +1,21 @@
 [Unit]
-Description=Passa Facil Web
+Description=Passa Facil Web (passafacil.jussa.com.br) - Next.js standalone
 After=network.target passafacil-api.service
 Wants=passafacil-api.service
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-User=passafacil
-Group=passafacil
-WorkingDirectory=/srv/passafacil/app/apps/web
-EnvironmentFile=-/etc/passafacil/web.env
+User=jussa
+Group=jussa
+WorkingDirectory=/home/jussa/FileShare/development/passa_facil/apps/web/.next/standalone
 Environment=NODE_ENV=production
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=9001
-ExecStart=/usr/bin/node /srv/passafacil/app/apps/web/.next/standalone/server.js
-Restart=on-failure
+# Node do nvm do usuario jussa; ajuste se a versao do nvm mudar.
+ExecStart=/home/jussa/.nvm/versions/node/v24.1.0/bin/node /home/jussa/FileShare/development/passa_facil/apps/web/.next/standalone/server.js
+Restart=always
 RestartSec=5
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
-NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
