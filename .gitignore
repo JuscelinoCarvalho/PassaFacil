@@ -9,5 +9,7 @@ dist/
 coverage/
 *.log
 *.db
+*.db.bak*
 .DS_Store
 apps/api/data/imports/
+docs/infos/
