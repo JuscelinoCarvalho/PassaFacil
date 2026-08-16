@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     # Cerebras). A OpenRouter fica FORA por padrão: os modelos :free custam US$0,
     # mas a plataforma exige crédito/cartão para limites úteis. Ela continua
     # suportada — basta incluir "openrouter" no GRADING_ORDER e a chave no /etc.
-    grading_order: str = "groq,gemini,cerebras"
+    grading_order: str = "groq,gemini"
     grading_timeout_seconds: int = 40
 
     # Groq — camada grátis generosa e muito rápida (https://console.groq.com)
@@ -82,9 +82,11 @@ class Settings(BaseSettings):
     openrouter_model: str = "deepseek/deepseek-chat-v3-0324:free"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
 
-    # Cerebras — camada grátis (https://cloud.cerebras.ai)
+    # Cerebras — PARADO/fora da cascata: exige crédito/cartão (retorna
+    # payment_required no tier grátis). Chave já validada; retomar quando crescer
+    # a base de assinantes incluindo "cerebras" no GRADING_ORDER. (cloud.cerebras.ai)
     cerebras_api_key: str = ""
-    cerebras_model: str = "llama-3.3-70b"
+    cerebras_model: str = "gpt-oss-120b"  # modelo válido nesta conta (não há Llama)
     cerebras_base_url: str = "https://api.cerebras.ai/v1"
 
     @property
