@@ -108,7 +108,10 @@ def _call_provider(base_url: str, model: str, api_key: str, messages: list[dict]
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
-            # Cabeçalhos opcionais que a OpenRouter usa para atribuição de tráfego.
+            # User-Agent explícito é OBRIGATÓRIO: o WAF (Cloudflare) da Groq — e de
+            # outros provedores — bloqueia o "Python-urllib/x.y" padrão com HTTP 403.
+            "User-Agent": "PassaFacil/1.0 (+https://passafacil.jussa.com.br)",
+            # Cabeçalhos que a OpenRouter usa para atribuição de tráfego.
             "HTTP-Referer": settings.site_url,
             "X-Title": "Passa Facil",
         },
