@@ -50,7 +50,7 @@
 ## 5. Pendências / próximos passos
 
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
-- [ ] (Opcional) Adicionar chaves de **Gemini / OpenRouter / Cerebras** no `/etc/passafacil.env` para dar resiliência à cascata (hoje só Groq).
+- [ ] (Opcional) Adicionar chaves de **Gemini** e **Cerebras** (grátis, sem cartão) no `/etc/passafacil.env` para dar resiliência à cascata (hoje só Groq). **OpenRouter fica de fora** por padrão: modelos `:free` custam US$0, mas a plataforma pede crédito/cartão para limites úteis.
 - [ ] Feature de **Áudios** ainda "em breve". Se for regerar/ampliar: criar `apps/api/scripts/gerar_audios.py` **versionado**, lendo `ELEVENLABS_API_KEY` do `/etc` (nunca hardcoded).
 - [x] Pagamento Asaas em **produção** (`ASAAS_SANDBOX=false` no `/etc`) — o default do código é `true`, o `/etc` sobrescreve.
 
@@ -65,6 +65,10 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-16 (cascata) — OpenRouter fora do padrão (fricção de pagamento)
+- O dono apontou que a **OpenRouter "é paga"**: os modelos `:free` custam US$0, mas a plataforma exige crédito/cartão para limites úteis. Removida da cascata padrão.
+- `GRADING_ORDER` padrão agora é **`groq,gemini,cerebras`** (só provedores grátis sem cartão) em `config.py` e no `.env.example`. Suporte à OpenRouter continua no código — basta re-incluí-la no `GRADING_ORDER` e pôr a chave. Backups grátis recomendados: **Gemini** (aistudio.google.com/apikey) e **Cerebras** (cloud.cerebras.ai).
 
 ### 2026-08-16 (limpeza) — organização do repositório
 - Mesclado `feat/correcao-ia-discursivas` na `main` e o branch **apagado** (local + remoto).

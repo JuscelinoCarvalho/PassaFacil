@@ -56,7 +56,11 @@ class Settings(BaseSettings):
     # chave é pulado. Sem nenhuma chave (ou se todos falharem), o app cai na
     # autoavaliação manual — nada quebra.
     grading_enabled: bool = True
-    grading_order: str = "groq,gemini,openrouter,cerebras"
+    # Ordem padrão só com provedores 100% gratuitos e sem cartão (Groq/Gemini/
+    # Cerebras). A OpenRouter fica FORA por padrão: os modelos :free custam US$0,
+    # mas a plataforma exige crédito/cartão para limites úteis. Ela continua
+    # suportada — basta incluir "openrouter" no GRADING_ORDER e a chave no /etc.
+    grading_order: str = "groq,gemini,cerebras"
     grading_timeout_seconds: int = 40
 
     # Groq — camada grátis generosa e muito rápida (https://console.groq.com)
@@ -69,7 +73,8 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.0-flash"
     gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai"
 
-    # OpenRouter — modelos com sufixo :free (https://openrouter.ai)
+    # OpenRouter — OPCIONAL/fora da cascata padrão: modelos :free custam US$0, mas
+    # a plataforma pede crédito/cartão para limites úteis (https://openrouter.ai)
     openrouter_api_key: str = ""
     openrouter_model: str = "deepseek/deepseek-chat-v3-0324:free"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
