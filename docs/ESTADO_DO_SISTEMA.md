@@ -66,6 +66,15 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-16 (limpeza) — organização do repositório
+- Mesclado `feat/correcao-ia-discursivas` na `main` e o branch **apagado** (local + remoto).
+- **Assets soltos da raiz reorganizados** (não referenciados por código — só um comentário citava "config_ads3"):
+  - screenshots do app → `docs/screenshots/app/`
+  - screenshots do Google Ads → `docs/screenshots/google-ads/`
+  - `aprovada.png` → `docs/screenshots/`
+  - `Anexo_PassaFacil_Case.pdf`, `edital_tenologia.txt`, CSV de keywords → `docs/anexos/`
+- **Removidos do versionamento** (eram lixo commitado por engano no `git add -A`): um `.claude/settings.local.json.tmp.*` (temporário do harness) e `apps/web/tsconfig.tsbuildinfo` (artefato de build). `.gitignore` atualizado para não voltarem (`*.tsbuildinfo`, `.claude/settings.local.json*`).
+
 ### 2026-08-16 (correção) — ELEVENLABS_API_KEY existe no /etc
 - Correção de um erro meu registrado neste doc: a `ELEVENLABS_API_KEY` **está** em `/etc/passafacil.env` (`sk_…`) — não se perdeu. Só o script de geração dos áudios é que não foi versionado. Segredos hoje no `/etc`: JWT, DATABASE_URL, CORS, OWNER, ASAAS_* (sandbox=false), GOOGLE_ADS_*, SUPPORT_*, **ELEVENLABS_API_KEY**, **GROQ_API_KEY**.
 - **Nota:** `ASAAS_SANDBOX=false` no `/etc` (produção real de pagamento já ligada — o default do código é `true`, mas o `/etc` sobrescreve).

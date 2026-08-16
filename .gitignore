@@ -13,3 +13,10 @@ coverage/
 .DS_Store
 apps/api/data/imports/
 docs/infos/
+
+# Config local / temporários do Claude Code (não versionar)
+.claude/settings.local.json
+.claude/settings.local.json.*
+
+# Artefatos de build do TypeScript/Next
+*.tsbuildinfo
