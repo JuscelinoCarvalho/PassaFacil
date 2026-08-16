@@ -41,11 +41,13 @@
 - **Aplicar mudança de FRONTEND no ar (não esquecer — mudança em `apps/web` NÃO aparece sem rebuild!):**
   ```bash
   export PATH="/home/jussa/.nvm/versions/node/v24.1.0/bin:$PATH"
+  export NEXT_PUBLIC_API_URL="https://passafacil.jussa.com.br/api/v1"  # ⚠️ OBRIGATÓRIO
   cd apps/web && ./node_modules/.bin/next build            # 1) build standalone
   rm -rf .next/standalone/.next/static && cp -r .next/static .next/standalone/.next/static  # 2) copiar assets
   sudo systemctl restart passafacil-web                     # 3) reiniciar
   ```
-  Conferir no ar: `curl -s http://127.0.0.1:9001/ -o /dev/null -w "%{http_code}\n"` e checar strings novas em `.next/static/chunks/`.
+  ⚠️ **NUNCA rode `next build` sem exportar `NEXT_PUBLIC_API_URL`.** O Next embute o valor no bundle em tempo de build; sem ele, o front cai no default `http://localhost:9000/api/v1` e **quebra o login/todas as chamadas** no navegador do usuário.
+  Conferir no ar: `curl -s http://127.0.0.1:9001/ -o /dev/null -w "%{http_code}\n"`; garantir que o bundle tem a URL de produção e **não** `localhost`: `grep -rl localhost:9000 .next/standalone/.next/static/`.
 - Adicionar/rotacionar um segredo: editar `/etc/passafacil.env` → `sudo systemctl restart passafacil-api`.
 - Ver o ambiente que o processo enxerga: `sudo tr '\0' '\n' < /proc/$(systemctl show passafacil-api -p MainPID --value)/environ`.
 
@@ -74,6 +76,10 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-16 (hotfix) — login quebrado: rebuild sem NEXT_PUBLIC_API_URL
+- O rebuild do front (item abaixo) foi feito **sem exportar `NEXT_PUBLIC_API_URL`**, então o bundle embutiu o default `http://localhost:9000/api/v1` → o navegador do usuário tentava falar com o próprio localhost → **falha de conexão no login e em tudo**.
+- **Corrigido:** rebuild com `NEXT_PUBLIC_API_URL=https://passafacil.jussa.com.br/api/v1` + restart. Bundle agora tem só a URL de produção (login responde 401 p/ credenciais falsas = vivo). Passo marcado como OBRIGATÓRIO na seção 3.
 
 ### 2026-08-16 (UI) — autoavaliação removida; IA marca os botões + REBUILD do front
 - **Causa de o dono ainda ver a autoavaliação:** o frontend nunca tinha sido reconstruído — o build em produção era de 14/ago, anterior às mudanças. **Lição:** mudança em `apps/web` só aparece após `next build` + copiar `.next/static` + `restart passafacil-web` (ver seção 3). Documentado para não repetir.
