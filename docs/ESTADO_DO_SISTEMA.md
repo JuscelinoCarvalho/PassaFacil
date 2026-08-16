@@ -77,6 +77,25 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-16 (docs) — documentação completa do sistema (arquitetura, funcional, swagger)
+- Criada a documentação técnica de todo o sistema, a pedido do dono:
+  - `docs/ARQUITETURA.md` — stack, camadas do backend, ciclo de vida (create_all +
+    micro‑migração + seed), autenticação/níveis de acesso, serviços externos
+    (`urllib`), modelo de dados completo, infra/deploy e convenções.
+  - `docs/FUNCIONAL.md` — perfis, jornadas (teste grátis, cadastro→pagamento,
+    estudo, simulado, discursiva com IA, suporte), regras de negócio, catálogo do
+    concurso e features administrativas.
+  - `docs/API_REFERENCE.md` — catálogo legível dos 60 endpoints por domínio + níveis
+    de acesso.
+  - `docs/api/openapi.json` — **spec OpenAPI gerado da própria API** (`app.openapi()`,
+    60 rotas) + `docs/api/swagger.html` (Swagger UI offline, spec embutido).
+  - `docs/README.md` — índice da documentação.
+- **Como regenerar o swagger ao mudar rotas:** `cd apps/api && .venv/bin/python -c
+  "import json;from app.main import app;json.dump(app.openapi(),
+  open('../../docs/api/openapi.json','w'),ensure_ascii=False,indent=2)"` e reembutir
+  no `swagger.html` (procedimento no cabeçalho de `API_REFERENCE.md`).
+- Nenhuma mudança de código/produção — só documentação (não exige restart/rebuild).
+
 ### 2026-08-16 (hotfix) — login quebrado: rebuild sem NEXT_PUBLIC_API_URL
 - O rebuild do front (item abaixo) foi feito **sem exportar `NEXT_PUBLIC_API_URL`**, então o bundle embutiu o default `http://localhost:9000/api/v1` → o navegador do usuário tentava falar com o próprio localhost → **falha de conexão no login e em tudo**.
 - **Corrigido:** rebuild com `NEXT_PUBLIC_API_URL=https://passafacil.jussa.com.br/api/v1` + restart. Bundle agora tem só a URL de produção (login responde 401 p/ credenciais falsas = vivo). Passo marcado como OBRIGATÓRIO na seção 3.
