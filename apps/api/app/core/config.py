@@ -69,8 +69,11 @@ class Settings(BaseSettings):
     groq_base_url: str = "https://api.groq.com/openai/v1"
 
     # Google Gemini — endpoint compatível com OpenAI (https://aistudio.google.com)
+    # Usa o alias "-latest": contas novas não têm acesso a versões antigas pinadas
+    # (ex.: gemini-2.0/2.5-flash dão 404 "no longer available to new users"), então
+    # o alias auto-acompanha o flash atual e evita quebrar em deprecações.
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-flash-latest"
     gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai"
 
     # OpenRouter — OPCIONAL/fora da cascata padrão: modelos :free custam US$0, mas
