@@ -2,7 +2,9 @@ import enum
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import Boolean, Date, DateTime, Enum, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import (
+    JSON, Boolean, Date, DateTime, Enum, ForeignKey, Integer, Numeric, String, Text, UniqueConstraint
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin, UUIDMixin
@@ -29,6 +31,7 @@ class User(UUIDMixin, TimestampMixin, Base):
     password_hash: Mapped[str] = mapped_column(String(255))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False)
 
     subscription: Mapped["Subscription | None"] = relationship(back_populates="user", uselist=False)
     attempts: Mapped[list["Attempt"]] = relationship(back_populates="user")
@@ -47,6 +50,18 @@ class Subscription(UUIDMixin, TimestampMixin, Base):
     provider_customer_id: Mapped[str | None] = mapped_column(String(120), unique=True)
     provider_subscription_id: Mapped[str | None] = mapped_column(String(120), unique=True)
     current_period_end: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Conversão Google Ads: marcada ao liberar acesso por pagamento real; o front
+    # dispara o gtag na próxima visita e chama /billing/conversion/reported para
+    # limpar (garante que a conversão não se perca se a aba fechar durante o Pix).
+    conversion_pending: Mapped[bool] = mapped_column(Boolean, default=False)
+    conversion_reported: Mapped[bool] = mapped_column(Boolean, default=False)
+    # gclid do Google Ads capturado no primeiro acesso (query ?gclid=). Permite a
+    # conversão server-side via Google Ads API: não depende do comprador voltar ao
+    # site nem sofre com bloqueadores de script. conversion_uploaded = enviada com
+    # sucesso pela API; conversion_upload_error guarda a última falha (diagnóstico).
+    gclid: Mapped[str | None] = mapped_column(String(512))
+    conversion_uploaded: Mapped[bool] = mapped_column(Boolean, default=False)
+    conversion_upload_error: Mapped[str | None] = mapped_column(Text)
 
     user: Mapped[User] = relationship(back_populates="subscription")
 
@@ -74,6 +89,9 @@ class Subject(UUIDMixin, TimestampMixin, Base):
     category: Mapped[str] = mapped_column(String(80), default="specific")
     weight: Mapped[int] = mapped_column(Integer, default=1)
     display_order: Mapped[int] = mapped_column(Integer, default=0)
+    # Especialidade do concurso a que a matéria pertence (ti, atuariais, contabeis,
+    # economicas, direito, engenharia-civil). NULL = Conhecimentos Gerais (comum a todas).
+    specialty: Mapped[str | None] = mapped_column(String(40), index=True)
 
     exam: Mapped[Exam] = relationship(back_populates="subjects")
     topics: Mapped[list["Topic"]] = relationship(back_populates="subject", cascade="all, delete-orphan")
@@ -243,3 +261,96 @@ class SimulationAnswer(UUIDMixin, Base):
 
     simulation: Mapped[Simulation] = relationship(back_populates="answers")
     question: Mapped[Question] = relationship()
+
+
+# ===================== P5 — Módulo discursivo / estudo de caso =====================
+class DiscursiveCase(UUIDMixin, TimestampMixin, Base):
+    """Questão discursiva/estudo de caso padrão VUNESP. Guarda enunciado, o espelho
+    (resposta-modelo em prosa), a micro-aula de estrutura/raciocínio e os critérios
+    pontuáveis (grade). Modelo compatível com a futura correção por IA (Fase 2)."""
+    __tablename__ = "discursive_cases"
+
+    subject_id: Mapped[UUID | None] = mapped_column(ForeignKey("subjects.id", ondelete="SET NULL"))
+    slug: Mapped[str] = mapped_column(String(140), unique=True)
+    tipo: Mapped[str] = mapped_column(String(20), default="estudo_caso")  # dissertativa|estudo_caso
+    disciplina: Mapped[str] = mapped_column(String(120))
+    tema: Mapped[str] = mapped_column(String(200))
+    enunciado: Mapped[str] = mapped_column(Text)
+    texto_apoio: Mapped[str | None] = mapped_column(Text)
+    model_answer: Mapped[str] = mapped_column(Text)   # espelho / resposta-modelo (prosa)
+    micro_aula: Mapped[str] = mapped_column(Text)     # ensino de estrutura e linha de raciocínio
+    pontuacao_maxima: Mapped[float] = mapped_column(Numeric(5, 2), default=20)
+    limite_linhas: Mapped[int] = mapped_column(Integer, default=30)
+    banca_referencia: Mapped[str] = mapped_column(String(60), default="VUNESP")
+    is_demo: Mapped[bool] = mapped_column(Boolean, default=False)  # demonstração de método (não é TI)
+    is_published: Mapped[bool] = mapped_column(Boolean, default=False)
+    display_order: Mapped[int] = mapped_column(Integer, default=0)
+
+    criteria: Mapped[list["DiscursiveCriterion"]] = relationship(
+        back_populates="case", cascade="all, delete-orphan", order_by="DiscursiveCriterion.ordem"
+    )
+
+
+class DiscursiveCriterion(UUIDMixin, Base):
+    """Item da grade de correção (N1, N2...) de um estudo de caso."""
+    __tablename__ = "discursive_criteria"
+    __table_args__ = (UniqueConstraint("case_id", "codigo"),)
+
+    case_id: Mapped[UUID] = mapped_column(ForeignKey("discursive_cases.id", ondelete="CASCADE"), index=True)
+    codigo: Mapped[str] = mapped_column(String(10))       # N1, N2...
+    descricao: Mapped[str] = mapped_column(Text)          # o que o candidato precisa demonstrar
+    conteudo_esperado: Mapped[str] = mapped_column(Text)  # resposta-modelo do critério
+    pontuacao_maxima: Mapped[float] = mapped_column(Numeric(5, 2))
+    ordem: Mapped[int] = mapped_column(Integer, default=0)
+
+    case: Mapped[DiscursiveCase] = relationship(back_populates="criteria")
+
+
+class DiscursiveSubmission(UUIDMixin, TimestampMixin, Base):
+    """Resposta do aluno + correção. A correção por IA (Fase 2) preenche os campos
+    ai_*; a autoavaliação manual (Fase 1) preenche os self_* e serve de fallback
+    quando a IA está indisponível."""
+    __tablename__ = "discursive_submissions"
+
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    case_id: Mapped[UUID] = mapped_column(ForeignKey("discursive_cases.id", ondelete="CASCADE"), index=True)
+    texto_resposta: Mapped[str] = mapped_column(Text)
+    self_scores: Mapped[dict | None] = mapped_column(JSON)   # {codigo: pontos} da autoavaliação
+    self_total: Mapped[float | None] = mapped_column(Numeric(5, 2))
+    # Correção automática por IA (cascata de provedores gratuitos — services/grading.py)
+    ai_scores: Mapped[dict | None] = mapped_column(JSON)     # {codigo: nota} atribuída pela IA
+    ai_total: Mapped[float | None] = mapped_column(Numeric(5, 2))
+    ai_feedback: Mapped[dict | None] = mapped_column(JSON)   # {codigo: justificativa da nota}
+    ai_comentario: Mapped[str | None] = mapped_column(Text)  # comentário geral da correção
+    ai_provider: Mapped[str | None] = mapped_column(String(40))  # provedor que corrigiu
+
+    case: Mapped[DiscursiveCase] = relationship()
+
+
+class Feedback(UUIDMixin, TimestampMixin, Base):
+    """Mensagem de ajuda/reclamação/sugestão enviada pelo widget 'Fale conosco'.
+    Pública (não exige login); grava quem enviou quando há sessão."""
+    __tablename__ = "feedback_messages"
+
+    category: Mapped[str] = mapped_column(String(20), default="ajuda", index=True)
+    message: Mapped[str] = mapped_column(Text)
+    contact_email: Mapped[str | None] = mapped_column(String(320))
+    page: Mapped[str | None] = mapped_column(String(255))
+    user_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), index=True
+    )
+    user_email: Mapped[str | None] = mapped_column(String(320))  # snapshot do e-mail logado
+    status: Mapped[str] = mapped_column(String(20), default="new", index=True)
+
+
+class TrialEvent(UUIDMixin, TimestampMixin, Base):
+    """Telemetria ANÔNIMA do teste grátis (test-drive), SEPARADA dos dados de usuário.
+    Serve só para medir uso/funil: quantos simulam, até onde vão e o nível do texto
+    escrito na dissertativa demo. `anon_id` é um UUID gerado no navegador
+    (localStorage) — não identifica pessoa. Append-only; retenção limitada
+    (expurgo por idade no startup — LGPD: finalidade + minimização)."""
+    __tablename__ = "trial_events"
+
+    anon_id: Mapped[str] = mapped_column(String(64), index=True)
+    event_type: Mapped[str] = mapped_column(String(40), index=True)
+    payload: Mapped[dict | None] = mapped_column(JSON)
