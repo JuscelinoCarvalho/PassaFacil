@@ -3,15 +3,17 @@ import random
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import or_, select
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import DbSession, get_owner_user
+from app.api.deps import DbSession, get_admin_user, get_owner_user
 from app.models import Question, QuestionProvenance, Simulation, SimulationAnswer, Topic
 from app.schemas.simulation import SimulationAnswerRequest
 
-router = APIRouter(prefix="/simulations", tags=["simulations"])
+router = APIRouter(
+    prefix="/simulations", tags=["simulations"], dependencies=[Depends(get_admin_user)]
+)
 
 
 def owner_question_filter():

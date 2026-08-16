@@ -4,18 +4,20 @@ import re
 from pathlib import Path
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy import func, select
 
-from app.api.deps import DbSession, get_owner_user
+from app.api.deps import DbSession, get_admin_user, get_owner_user
 from app.core.config import settings
 from app.models import Question, QuestionDraft, QuestionImportJob, QuestionProvenance, Topic
 from app.schemas.question_drafts import AssociateDocuments, DraftBulkAction, DraftUpdate
 from app.schemas.question_bank import ImportBatch
 from app.services.pdf_questions import extract_pdf_preview
 
-router = APIRouter(prefix="/question-bank", tags=["question-bank"])
+router = APIRouter(
+    prefix="/question-bank", tags=["question-bank"], dependencies=[Depends(get_admin_user)]
+)
 
 
 def content_hash(statement: str, options: list[str]) -> str:

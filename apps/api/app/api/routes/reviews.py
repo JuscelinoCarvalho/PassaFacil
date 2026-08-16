@@ -2,15 +2,15 @@ import json
 from datetime import UTC, date, datetime, timedelta
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import DbSession, get_owner_user
+from app.api.deps import DbSession, get_admin_user, get_owner_user
 from app.models import Attempt, Question, ReviewItem, Topic
 from app.schemas.study import AnswerRequest
 
-router = APIRouter(prefix="/reviews", tags=["reviews"])
+router = APIRouter(prefix="/reviews", tags=["reviews"], dependencies=[Depends(get_admin_user)])
 
 
 def serialize_question(question: Question) -> dict:

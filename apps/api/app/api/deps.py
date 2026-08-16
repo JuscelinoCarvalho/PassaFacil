@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import Annotated
 from uuid import UUID
 
@@ -10,7 +11,7 @@ from sqlalchemy.orm import Session
 from app.core.security import decode_access_token
 from app.core.config import settings
 from app.db.session import get_db
-from app.models import User
+from app.models import SubscriptionPlan, SubscriptionStatus, User
 
 DbSession = Annotated[Session, Depends(get_db)]
 bearer = HTTPBearer(auto_error=False)
@@ -40,3 +41,65 @@ def get_current_user(
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def get_admin_user(user: CurrentUser) -> User:
+    if not user.is_admin:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso restrito ao administrador")
+    return user
+
+
+AdminUser = Annotated[User, Depends(get_admin_user)]
+
+PAID_PLANS = {SubscriptionPlan.plus, SubscriptionPlan.pro}
+
+
+def user_has_access(user: User) -> bool:
+    if user.is_admin:
+        return True
+    sub = user.subscription
+    if not (
+        sub
+        and sub.plan in PAID_PLANS
+        and sub.status in {SubscriptionStatus.active, SubscriptionStatus.trialing}
+    ):
+        return False
+    # current_period_end None = acesso sem prazo (concessões antigas/admin); caso
+    # contrário, o acesso vale até a data de expiração (pagamento = 2 anos).
+    end = sub.current_period_end
+    if end is None:
+        return True
+    if end.tzinfo is None:
+        end = end.replace(tzinfo=timezone.utc)
+    return end >= datetime.now(timezone.utc)
+
+
+def pending_conversion(user: User) -> dict | None:
+    """Conversão Google Ads pendente (pagamento confirmado ainda não enviado ao
+    Google). Só existe para pagamentos reais — admin/concessões antigas nunca
+    setam a flag. Consumido por /auth/me e /billing/status."""
+    sub = user.subscription
+    if sub and sub.conversion_pending and not sub.conversion_reported:
+        return {
+            "transaction_id": sub.provider_subscription_id or "",
+            "value": settings.price_reais,
+            "currency": "BRL",
+        }
+    return None
+
+
+def get_paid_user(user: CurrentUser) -> User:
+    if not user.is_admin and not user.email_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Confirme seu e-mail para ativar a conta. Verifique sua caixa de entrada.",
+        )
+    if not user_has_access(user):
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail="Acesso exclusivo para assinantes. Faça o teste grátis ou libere o acesso completo.",
+        )
+    return user
+
+
+PaidUser = Annotated[User, Depends(get_paid_user)]

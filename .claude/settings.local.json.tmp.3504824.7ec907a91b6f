@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(robocopy \"D:\\\\Development\\\\passa_facil\" \"Z:\\\\development\\\\passa_facil\" /E /XD node_modules .venv venv __pycache__ dist build .next target /XJ /R:2 /W:2 /NFL /NDL /NP)",
+      "Bash(echo \"ROBOCOPY_EXIT=$?\")",
+      "Bash(ls .venv/bin/python)",
+      "Bash(.venv/bin/python -c \"import ast,sys; [ast.parse\\(open\\(f\\).read\\(\\), f\\) for f in ['app/services/grading.py','app/api/routes/discursive.py','app/core/config.py','app/models/entities.py','app/main.py']]; print\\('AST OK'\\)\")",
+      "Bash(DATABASE_URL=sqlite:///./_probe.db .venv/bin/python -c ' *)",
+      "Bash(.venv/bin/python *)",
+      "Bash(PYTHONPATH=. .venv/bin/python *)",
+      "Bash(node_modules/.bin/tsc --noEmit -p tsconfig.json)",
+      "Bash(rm -f _e2e.db)",
+      "Bash(DATABASE_URL=\"sqlite:///./_e2e.db\" GRADING_ENABLED=true .venv/bin/python -m uvicorn app.main:app --port 9077 --log-level warning)",
+      "Bash(echo \"started pid $!\")",
+      "Bash(curl -s localhost:9077/health)",
+      "Bash(curl -s localhost:9077/api/v1/discursive/demo)",
+      "Bash(curl -s -X POST localhost:9077/api/v1/discursive/demo/submit -H 'Content-Type: application/json' -d '{\"texto_resposta\":\"Minha resposta de teste com pelo menos cem caracteres para simular uma resposta real do candidato na prova.\"}')",
+      "Bash(kill 3534366)",
+      "Bash(git checkout *)",
+      "Bash(git add *)"
+    ]
+  }
+}

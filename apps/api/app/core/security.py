@@ -25,3 +25,35 @@ def decode_access_token(token: str) -> str:
     payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
     return str(payload["sub"])
 
+
+def create_email_verification_token(subject: str) -> str:
+    expires = datetime.now(UTC) + timedelta(hours=settings.email_verify_token_hours)
+    return jwt.encode(
+        {"sub": subject, "purpose": "email_verify", "exp": expires},
+        settings.jwt_secret,
+        algorithm=settings.jwt_algorithm,
+    )
+
+
+def decode_email_verification_token(token: str) -> str:
+    payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    if payload.get("purpose") != "email_verify":
+        raise jwt.InvalidTokenError("purpose inválido")
+    return str(payload["sub"])
+
+
+def create_password_reset_token(subject: str) -> str:
+    expires = datetime.now(UTC) + timedelta(hours=1)
+    return jwt.encode(
+        {"sub": subject, "purpose": "password_reset", "exp": expires},
+        settings.jwt_secret,
+        algorithm=settings.jwt_algorithm,
+    )
+
+
+def decode_password_reset_token(token: str) -> str:
+    payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    if payload.get("purpose") != "password_reset":
+        raise jwt.InvalidTokenError("purpose inválido")
+    return str(payload["sub"])
+

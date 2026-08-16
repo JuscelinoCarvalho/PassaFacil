@@ -21,17 +21,18 @@ from app.models import (
 
 def seed_tce_sp(db: Session) -> None:
     exam = db.scalar(select(Exam).where(Exam.slug == "tce-sp-2026-ti"))
+    # (slug, nome, categoria, peso, especialidade, [tópicos]); especialidade None = comum
     catalog = [
-        ("portugues", "Língua Portuguesa", "general", 2, ["Interpretação de textos", "Gramática e redação"]),
-        ("logica", "Raciocínio Lógico", "general", 2, ["Proposições e equivalências", "Análise combinatória"]),
-        ("legislacao", "Legislação e Ética", "general", 2, ["Controle externo", "Ética e administração pública"]),
-        ("seguranca", "Segurança da Informação", "specific", 5, ["ISO 27001 e 27002", "Criptografia e controles"]),
-        ("governanca", "Governança e Auditoria de TI", "specific", 5, ["COBIT", "ITIL e auditoria"]),
-        ("redes", "Redes e Infraestrutura", "specific", 4, ["TCP/IP e roteamento", "Cloud e virtualização"]),
-        ("banco-dados", "Banco de Dados", "specific", 4, ["Modelagem e normalização", "SQL e transações"]),
-        ("engenharia-software", "Engenharia de Software", "specific", 3, ["Arquitetura e padrões", "DevOps e qualidade"]),
-        ("desenvolvimento", "Desenvolvimento de Sistemas", "specific", 3, ["APIs e web", "Algoritmos e linguagens"]),
-        ("lgpd", "LGPD", "specific", 4, ["Princípios e bases legais", "Agentes e segurança"]),
+        ("portugues", "Língua Portuguesa", "general", 2, None, ["Interpretação de textos", "Gramática e redação"]),
+        ("logica", "Raciocínio Lógico", "general", 2, None, ["Proposições e equivalências", "Análise combinatória"]),
+        ("legislacao", "Legislação e Ética", "general", 2, None, ["Controle externo", "Ética e administração pública"]),
+        ("seguranca", "Segurança da Informação", "specific", 5, "ti", ["ISO 27001 e 27002", "Criptografia e controles"]),
+        ("governanca", "Governança e Auditoria de TI", "specific", 5, "ti", ["COBIT", "ITIL e auditoria"]),
+        ("redes", "Redes e Infraestrutura", "specific", 4, "ti", ["TCP/IP e roteamento", "Cloud e virtualização"]),
+        ("banco-dados", "Banco de Dados", "specific", 4, "ti", ["Modelagem e normalização", "SQL e transações"]),
+        ("engenharia-software", "Engenharia de Software", "specific", 3, "ti", ["Arquitetura e padrões", "DevOps e qualidade"]),
+        ("desenvolvimento", "Desenvolvimento de Sistemas", "specific", 3, "ti", ["APIs e web", "Algoritmos e linguagens"]),
+        ("lgpd", "LGPD", "specific", 4, "ti", ["Princípios e bases legais", "Agentes e segurança"]),
     ]
     if not exam:
         exam = Exam(
@@ -42,9 +43,10 @@ def seed_tce_sp(db: Session) -> None:
             exam_date=date(2026, 10, 11),
             is_published=True,
         )
-        for order, (slug, name, category, weight, topics) in enumerate(catalog):
+        for order, (slug, name, category, weight, specialty, topics) in enumerate(catalog):
             subject = Subject(
-                slug=slug, name=name, category=category, weight=weight, display_order=order
+                slug=slug, name=name, category=category, weight=weight,
+                display_order=order, specialty=specialty,
             )
             subject.topics = [
                 Topic(slug=f"{slug}-{index}", name=topic, difficulty=3 + (weight >= 5))
@@ -61,6 +63,7 @@ def seed_tce_sp(db: Session) -> None:
             full_name="Juscelino Carvalho",
             password_hash=hash_password("owner-mode-disabled-password"),
             is_admin=True,
+            email_verified=True,
         )
         db.add(owner)
         db.flush()
