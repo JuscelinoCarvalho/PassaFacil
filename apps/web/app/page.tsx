@@ -1448,11 +1448,19 @@ function TrialAudio() {
 
 // Painel da correção automática por IA (read-only), reaproveitado no teste grátis
 // e na área logada. Mostra a nota de cada critério + a justificativa + o comentário.
+// formata nota com no máximo 1 casa, vírgula decimal (ex.: 2 -> "2", 1.3 -> "1,3")
+function fmtNota(n: number): string {
+  return (Math.round(n * 10) / 10).toString().replace(".", ",");
+}
+
+// Correção da IA reaproveitando a MESMA tela/ícones da autoavaliação: os três
+// botões (Não completou / Em parte / Completou) agora são marcados pela IA e ficam
+// somente-leitura; a nota apurada é realista (soma das notas por critério).
 function DiscCorrecaoPanel({ correcao, criteria, max }: { correcao: DiscCorrecao; criteria: DiscCriterion[]; max: number }) {
   const pct = max ? Math.round((correcao.total / max) * 100) : 0;
   return (
     <article className="card">
-      <div className="card-heading"><div><span className="section-kicker">CORREÇÃO DA IA</span><h2>Sua nota, critério a critério</h2></div></div>
+      <div className="card-heading"><div><span className="section-kicker">CORREÇÃO DA IA</span><h2>Quanto você cobriu de cada critério</h2></div></div>
       <div className="disc-criteria">
         {criteria.map((cr) => {
           const nota = correcao.scores[cr.codigo] ?? 0;
@@ -1460,18 +1468,32 @@ function DiscCorrecaoPanel({ correcao, criteria, max }: { correcao: DiscCorrecao
           const level = nota >= cr.pontuacao_maxima ? "ok" : nota <= 0 ? "no" : "mid";
           return (
             <div className="disc-crit" key={cr.codigo}>
-              <div className="disc-crit-head"><b>{cr.codigo} · {cr.descricao}</b><span className={`disc-crit-nota ${level}`}>{nota} / {cr.pontuacao_maxima}</span></div>
+              <div className="disc-crit-head"><b>{cr.codigo} · {cr.descricao}</b><span className={`disc-crit-nota ${level}`}>{fmtNota(nota)} / {fmtNota(cr.pontuacao_maxima)}</span></div>
               <p className="disc-crit-esperado">{cr.conteudo_esperado}</p>
+              <div className="disc-crit-buttons ia">
+                <button className={level === "no" ? "on no" : ""} disabled>Não completou</button>
+                <button className={level === "mid" ? "on mid" : ""} disabled>Em parte</button>
+                <button className={level === "ok" ? "on ok" : ""} disabled>Completou</button>
+              </div>
               {just && <p className="disc-crit-feedback">{just}</p>}
             </div>
           );
         })}
       </div>
       <div className="disc-total">
-        <div className="score-ring big" style={{ "--progress": `${pct}%` } as React.CSSProperties}><span>{correcao.total}</span></div>
-        <div><b>{correcao.total} de {max} pontos</b><p>Correção automática por IA — nota final da sua resposta.</p></div>
+        <div className="score-ring big" style={{ "--progress": `${pct}%` } as React.CSSProperties}><span>{fmtNota(correcao.total)}</span></div>
+        <div><b>{fmtNota(correcao.total)} de {fmtNota(max)} pontos</b><p>Nota apurada pela IA comparando sua resposta com o espelho da banca.</p></div>
       </div>
       {correcao.comentario && <p className="disc-comentario"><Sparkles size={13} /> {correcao.comentario}</p>}
+    </article>
+  );
+}
+
+// Mostrado quando a IA não conseguiu corrigir (raro) — sem autoavaliação manual.
+function DiscCorrecaoIndisponivel() {
+  return (
+    <article className="card">
+      <div className="disc-ia-fail"><CircleAlert size={18} /> <span>Não foi possível gerar a correção automática agora. Volte e envie sua resposta novamente em instantes.</span></div>
     </article>
   );
 }
@@ -1482,7 +1504,6 @@ function TrialDiscursive({ onBack, onCreate }: { onBack: () => void; onCreate: (
   const [texto, setTexto] = useState("");
   const [espelho, setEspelho] = useState<DiscEspelho | null>(null);
   const [correcao, setCorrecao] = useState<DiscCorrecao | null>(null);
-  const [selfScores, setSelfScores] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -1513,8 +1534,6 @@ function TrialDiscursive({ onBack, onCreate }: { onBack: () => void; onCreate: (
       setError("Não foi possível revelar o espelho.");
     } finally { setBusy(false); }
   };
-
-  const liveTotal = Object.values(selfScores).reduce((a, b) => a + b, 0);
 
   if (loading) return <section className="card empty-state"><LoaderCircle className="spin" /><h2>Carregando o exemplo...</h2></section>;
   if (!current) return (
@@ -1552,48 +1571,21 @@ function TrialDiscursive({ onBack, onCreate }: { onBack: () => void; onCreate: (
     );
   }
 
-  const pct = espelho && espelho.pontuacao_maxima ? Math.round((liveTotal / espelho.pontuacao_maxima) * 100) : 0;
   return (
     <section className="disc-layout">
       <div className="question-top">
-        <div><span className="eyebrow">CORREÇÃO COMENTADA · EXEMPLO</span><h1>{current.tema}</h1><p>{correcao ? "Sua resposta foi corrigida pela IA critério a critério — compare com o espelho da banca." : "Compare sua resposta com o espelho e pontue-se, critério a critério."}</p></div>
+        <div><span className="eyebrow">CORREÇÃO COMENTADA · EXEMPLO</span><h1>{current.tema}</h1><p>Sua resposta foi corrigida pela IA critério a critério — compare com o espelho da banca.</p></div>
         <button className="ghost compact" onClick={onBack}>Voltar</button>
       </div>
       <article className="card">
         <div className="card-heading"><div><span className="section-kicker">SUA RESPOSTA</span><h2>O que você escreveu</h2></div></div>
         <div className="disc-your-answer">{texto}</div>
       </article>
-      {correcao && <DiscCorrecaoPanel correcao={correcao} criteria={espelho!.criteria} max={espelho!.pontuacao_maxima} />}
+      {correcao ? <DiscCorrecaoPanel correcao={correcao} criteria={espelho!.criteria} max={espelho!.pontuacao_maxima} /> : <DiscCorrecaoIndisponivel />}
       <article className="card">
         <div className="card-heading"><div><span className="section-kicker">ESPELHO DA BANCA</span><h2>Resposta-modelo</h2></div></div>
         <div className="disc-model">{espelho!.model_answer}</div>
       </article>
-      {!correcao && (
-      <article className="card">
-        <div className="card-heading"><div><span className="section-kicker">AUTOAVALIAÇÃO</span><h2>Quanto você cobriu de cada critério</h2></div></div>
-        <div className="disc-criteria">
-          {espelho!.criteria.map((cr) => {
-            const half = Math.round((cr.pontuacao_maxima / 2) * 10) / 10;
-            const val = selfScores[cr.codigo];
-            return (
-              <div className="disc-crit" key={cr.codigo}>
-                <div className="disc-crit-head"><b>{cr.codigo} · {cr.descricao}</b><span className="disc-crit-max">até {cr.pontuacao_maxima}</span></div>
-                <p className="disc-crit-esperado">{cr.conteudo_esperado}</p>
-                <div className="disc-crit-buttons">
-                  <button className={val === 0 ? "on no" : ""} onClick={() => setSelfScores((s) => ({ ...s, [cr.codigo]: 0 }))}>Não contemplei (0)</button>
-                  <button className={val === half ? "on mid" : ""} onClick={() => setSelfScores((s) => ({ ...s, [cr.codigo]: half }))}>Em parte ({half})</button>
-                  <button className={val === cr.pontuacao_maxima ? "on ok" : ""} onClick={() => setSelfScores((s) => ({ ...s, [cr.codigo]: cr.pontuacao_maxima }))}>Contemplei ({cr.pontuacao_maxima})</button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="disc-total">
-          <div className="score-ring big" style={{ "--progress": `${pct}%` } as React.CSSProperties}><span>{liveTotal}</span></div>
-          <div><b>{liveTotal} de {espelho!.pontuacao_maxima} pontos</b><p>Prévia — no acesso completo sua nota fica salva no histórico.</p></div>
-        </div>
-      </article>
-      )}
       <article className="card">
         <div className="micro-aula"><span className="micro-aula-label"><BookOpen size={13} /> Micro Aula — como estruturar</span>{espelho!.micro_aula}</div>
       </article>
@@ -2282,8 +2274,6 @@ function DiscursiveView() {
   const [espelho, setEspelho] = useState<DiscEspelho | null>(null);
   const [correcao, setCorrecao] = useState<DiscCorrecao | null>(null);
   const [submissionId, setSubmissionId] = useState<string | null>(null);
-  const [selfScores, setSelfScores] = useState<Record<string, number>>({});
-  const [savedTotal, setSavedTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -2310,7 +2300,7 @@ function DiscursiveView() {
       const r = await authFetch(`${API_URL}/discursive/cases/${id}`, { cache: "no-store" });
       if (!r.ok) throw new Error();
       setCurrent(await r.json());
-      setTexto(""); setEspelho(null); setCorrecao(null); setSubmissionId(null); setSelfScores({}); setSavedTotal(null);
+      setTexto(""); setEspelho(null); setCorrecao(null); setSubmissionId(null);
       setPhase("answer");
     } catch {
       setError("Não foi possível abrir o caso.");
@@ -2333,24 +2323,6 @@ function DiscursiveView() {
       setPhase("reveal");
     } catch {
       setError("Não foi possível registrar sua resposta.");
-    } finally { setBusy(false); }
-  };
-
-  const liveTotal = Object.values(selfScores).reduce((a, b) => a + b, 0);
-
-  const saveSelf = async () => {
-    if (!submissionId) return;
-    setBusy(true); setError("");
-    try {
-      const r = await authFetch(`${API_URL}/discursive/submissions/${submissionId}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scores: selfScores }),
-      });
-      if (!r.ok) throw new Error();
-      const data = await r.json();
-      setSavedTotal(data.self_total);
-    } catch {
-      setError("Não foi possível salvar sua autoavaliação.");
     } finally { setBusy(false); }
   };
 
@@ -2427,11 +2399,10 @@ function DiscursiveView() {
 
   // ---- REVELAR (espelho + autoavaliação + micro-aula) ----
   if (phase === "reveal" && current && espelho) {
-    const pct = espelho.pontuacao_maxima ? Math.round((liveTotal / espelho.pontuacao_maxima) * 100) : 0;
     return (
       <section className="disc-layout">
         <div className="question-top">
-          <div><span className="eyebrow">CORREÇÃO COMENTADA</span><h1>{current.tema}</h1><p>{correcao ? "Sua resposta foi corrigida pela IA critério a critério; a nota fica salva no seu histórico." : "Compare sua resposta com o espelho e pontue-se, critério a critério."}</p></div>
+          <div><span className="eyebrow">CORREÇÃO COMENTADA</span><h1>{current.tema}</h1><p>Sua resposta foi corrigida pela IA critério a critério; a nota fica salva no seu histórico.</p></div>
           <button className="ghost compact" onClick={() => setPhase("list")}>Outros casos</button>
         </div>
 
@@ -2440,47 +2411,12 @@ function DiscursiveView() {
           <div className="disc-your-answer">{texto}</div>
         </article>
 
-        {correcao && <DiscCorrecaoPanel correcao={correcao} criteria={espelho.criteria} max={espelho.pontuacao_maxima} />}
+        {correcao ? <DiscCorrecaoPanel correcao={correcao} criteria={espelho.criteria} max={espelho.pontuacao_maxima} /> : <DiscCorrecaoIndisponivel />}
 
         <article className="card">
           <div className="card-heading"><div><span className="section-kicker">ESPELHO DA BANCA</span><h2>Resposta-modelo</h2></div></div>
           <div className="disc-model">{espelho.model_answer}</div>
         </article>
-
-        {!correcao && (
-        <article className="card">
-          <div className="card-heading"><div><span className="section-kicker">AUTOAVALIAÇÃO</span><h2>Quanto você cobriu de cada critério</h2></div></div>
-          <div className="disc-criteria">
-            {espelho.criteria.map((cr) => {
-              const half = Math.round((cr.pontuacao_maxima / 2) * 10) / 10;
-              const val = selfScores[cr.codigo];
-              return (
-                <div className="disc-crit" key={cr.codigo}>
-                  <div className="disc-crit-head">
-                    <b>{cr.codigo} · {cr.descricao}</b>
-                    <span className="disc-crit-max">até {cr.pontuacao_maxima}</span>
-                  </div>
-                  <p className="disc-crit-esperado">{cr.conteudo_esperado}</p>
-                  <div className="disc-crit-buttons">
-                    <button className={val === 0 ? "on no" : ""} onClick={() => setSelfScores((s) => ({ ...s, [cr.codigo]: 0 }))}>Não contemplei (0)</button>
-                    <button className={val === half ? "on mid" : ""} onClick={() => setSelfScores((s) => ({ ...s, [cr.codigo]: half }))}>Em parte ({half})</button>
-                    <button className={val === cr.pontuacao_maxima ? "on ok" : ""} onClick={() => setSelfScores((s) => ({ ...s, [cr.codigo]: cr.pontuacao_maxima }))}>Contemplei ({cr.pontuacao_maxima})</button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="disc-total">
-            <div className="score-ring big" style={{ "--progress": `${pct}%` } as React.CSSProperties}><span>{liveTotal}</span></div>
-            <div>
-              <b>{liveTotal} de {espelho.pontuacao_maxima} pontos</b>
-              <p>{savedTotal !== null ? "Autoavaliação salva no seu histórico." : "Pontue todos os critérios e salve para guardar no histórico."}</p>
-            </div>
-            <button className="primary compact" disabled={busy} onClick={saveSelf}>{busy ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />} Salvar minha nota</button>
-          </div>
-          {error && <p className="test-error"><CircleAlert size={16} /> {error}</p>}
-        </article>
-        )}
 
         <article className="card">
           <div className="micro-aula"><span className="micro-aula-label"><BookOpen size={13} /> Micro Aula — como estruturar</span>{espelho.micro_aula}</div>

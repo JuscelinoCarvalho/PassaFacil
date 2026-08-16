@@ -38,13 +38,21 @@
 
 - **O dono testa SEMPRE em produção, no servidor** (não usar `.env` local; não criar `apps/api/.env`).
 - Aplicar mudança de backend no ar: salvar o código → `sudo systemctl restart passafacil-api` → validar `curl -s http://127.0.0.1:9000/health`.
+- **Aplicar mudança de FRONTEND no ar (não esquecer — mudança em `apps/web` NÃO aparece sem rebuild!):**
+  ```bash
+  export PATH="/home/jussa/.nvm/versions/node/v24.1.0/bin:$PATH"
+  cd apps/web && ./node_modules/.bin/next build            # 1) build standalone
+  rm -rf .next/standalone/.next/static && cp -r .next/static .next/standalone/.next/static  # 2) copiar assets
+  sudo systemctl restart passafacil-web                     # 3) reiniciar
+  ```
+  Conferir no ar: `curl -s http://127.0.0.1:9001/ -o /dev/null -w "%{http_code}\n"` e checar strings novas em `.next/static/chunks/`.
 - Adicionar/rotacionar um segredo: editar `/etc/passafacil.env` → `sudo systemctl restart passafacil-api`.
 - Ver o ambiente que o processo enxerga: `sudo tr '\0' '\n' < /proc/$(systemctl show passafacil-api -p MainPID --value)/environ`.
 
 ## 4. Estado atual das features
 
 - **Auth** (JWT), **billing** (Asaas Pix — `asaas_sandbox=true` por padrão), **conversão Google Ads server-side** (desligada por padrão), **feedback** (widget "Fale conosco"), **banco de questões / import de PDF**, **simulados**, **revisões**, **estudo do dia**, **teste grátis** (telemetria anônima, retenção 180 dias — LGPD).
-- **Correção por IA das discursivas (Fase 2) — ✅ NO AR (2026-08-16).** `apps/api/app/services/grading.py`: cascata de provedores gratuitos (Groq → Gemini → OpenRouter → Cerebras) via endpoint compatível com a API OpenAI. Corrige critério a critério com **crédito parcial**; nota salva em `discursive_submissions.ai_*`. Sem chaves/falha → **degrada para a autoavaliação manual** (Fase 1). Hoje ativa com **Groq (principal) + Gemini (`gemini-flash-latest`, fallback)** — cascata validada no ar (Groq 503 simulado → cai no Gemini e corrige). Cerebras e OpenRouter ficam **fora da cascata** (exigem crédito/cartão); chaves/modelos prontos para retomar depois.
+- **Correção por IA das discursivas (Fase 2) — ✅ NO AR (2026-08-16).** `apps/api/app/services/grading.py`: cascata de provedores gratuitos (Groq → Gemini → OpenRouter → Cerebras) via endpoint compatível com a API OpenAI. Corrige critério a critério com **crédito parcial**; nota salva em `discursive_submissions.ai_*`. Sem chaves/falha → **degrada para a autoavaliação manual** (Fase 1). Hoje ativa com **Groq (principal) + Gemini (`gemini-flash-latest`, fallback)** — cascata validada no ar (Groq 503 simulado → cai no Gemini e corrige). Cerebras e OpenRouter ficam **fora da cascata** (exigem crédito/cartão); chaves/modelos prontos para retomar depois. **A autoavaliação manual foi REMOVIDA da tela** (confundia): agora a IA marca os três botões (Não completou / Em parte / Completou) com nota realista por critério. Se a IA falhar (raro), mostra aviso "correção indisponível" — sem self-scoring.
 - **Áudio-piloto:** 8 MP3 estáticos (voz ElevenLabs) em `apps/api/media/audio_pilot/`, servidos em `/api/v1/study/audio-pilot` só para o dono revisar. Menu "Áudios" segue **"em breve"**. A chave **`ELEVENLABS_API_KEY` está guardada em `/etc/passafacil.env`** (o app **não a consome** — os áudios são pré-gerados e servidos estáticos). O que **não** está versionado é o *script* de geração (foi descartável); a chave nunca se perdeu.
 
 ## 5. Pendências / próximos passos
@@ -66,6 +74,11 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-16 (UI) — autoavaliação removida; IA marca os botões + REBUILD do front
+- **Causa de o dono ainda ver a autoavaliação:** o frontend nunca tinha sido reconstruído — o build em produção era de 14/ago, anterior às mudanças. **Lição:** mudança em `apps/web` só aparece após `next build` + copiar `.next/static` + `restart passafacil-web` (ver seção 3). Documentado para não repetir.
+- **Nova tela de correção:** removida a autoavaliação manual (`selfScores`, `saveSelf`, botão "Salvar minha nota", endpoint PATCH deixou de ser usado pelo front). A IA agora **marca os três botões** (Não completou / Em parte / Completou) em modo read-only, com nota realista por critério (`fmtNota`, vírgula decimal) e total apurado. Componentes: `DiscCorrecaoPanel` (reescrito) e `DiscCorrecaoIndisponivel` (fallback quando a IA falha). Vale para a área logada e o teste grátis.
+- Front reconstruído e no ar (bundle confirmado: tem "CORREÇÃO DA IA"/"Não completou"; sem "Salvar minha nota").
 
 ### 2026-08-16 (cerebras) — validado mas parado (exige pagamento)
 - Chave Cerebras (`csk-…`) adicionada e **validada** (autentica). Modelos da conta: `gpt-oss-120b`, `zai-glm-4.7`, `gemma-4-31b` (sem Llama — corrigido o default `llama-3.3-70b` → `gpt-oss-120b`).

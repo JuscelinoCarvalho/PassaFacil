@@ -566,6 +566,19 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .disc-total p { color: var(--muted); font-size: 11px; margin: 4px 0 0; }
 .disc-total .primary { margin-top: 0; width: auto; }
 
+/* Botões marcados pela IA (mesma aparência da autoavaliação, porém read-only):
+   o escolhido fica destacado; os demais esmaecidos; nada é clicável. */
+.disc-crit-buttons.ia button { cursor: default; opacity: 1; }
+.disc-crit-buttons.ia button:not(.on) { opacity: .45; }
+.disc-crit-buttons.ia button:disabled { color: var(--muted); }
+.disc-crit-buttons.ia button.on.no,
+.disc-crit-buttons.ia button.on.mid,
+.disc-crit-buttons.ia button.on.ok { opacity: 1; }
+
+/* Aviso quando a IA não conseguiu corrigir (sem autoavaliação manual) */
+.disc-ia-fail { display: flex; gap: 9px; align-items: center; color: #b56e31; font-size: 13px; font-weight: 600; }
+.disc-ia-fail svg { flex-shrink: 0; }
+
 /* Correção por IA — nota e justificativa por critério */
 .disc-crit-nota { font: 800 12px var(--font-manrope); white-space: nowrap; padding: 2px 9px; border-radius: 999px; }
 .disc-crit-nota.no { background: #fdeaea; color: #c0392b; }
