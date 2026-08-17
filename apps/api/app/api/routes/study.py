@@ -13,9 +13,10 @@ from sqlalchemy.orm import selectinload
 
 from app.api.deps import AdminUser, CurrentUser, DbSession, PaidUser
 from app.models import (
-    Attempt, Question, QuestionProvenance, ReviewItem, StudyTask, Subject, Topic, TrialEvent
+    Attempt, LearningEvent, Question, QuestionProvenance, ReviewItem, StudyTask, Subject, Topic, TrialEvent
 )
 from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
+from app.services.feedback import build_answer_feedback, normalize_confidence
 
 router = APIRouter(prefix="/study", tags=["study"])
 
@@ -525,6 +526,10 @@ def test_submit(payload: TestSubmitRequest, user: PaidUser, db: DbSession):
         sub = q.topic.subject.name
         by_subject[sub]["total"] += 1
         by_subject[sub]["correct"] += int(is_correct)
+        # Diagnóstico por questão (só após terminar o simulado, spec §16/§17): quando
+        # há alternativa válida marcada, anexa why_wrong/misconception detectados.
+        valid_pick = ans.selected_option is not None and 0 <= ans.selected_option < len(options)
+        diag = build_answer_feedback(db, q, ans.selected_option) if valid_pick else None
         details.append({
             "question_id": q.id,
             "is_correct": is_correct,
@@ -532,6 +537,8 @@ def test_submit(payload: TestSubmitRequest, user: PaidUser, db: DbSession):
             "correct_option": q.correct_option,
             "explanation": q.explanation,
             "micro_aula": q.topic.description if q.topic else None,
+            "why_wrong": diag["why_wrong"] if diag else None,
+            "misconception": diag["misconception"] if diag else None,
             "topic": q.topic.name,
             "subject": sub,
         })
@@ -560,15 +567,35 @@ def answer(question_id: UUID, payload: AnswerRequest, user: PaidUser, db: DbSess
         raise HTTPException(status_code=404, detail="Questão não encontrada")
     if payload.selected_option >= len(json.loads(question.options)):
         raise HTTPException(status_code=422, detail="Alternativa inválida")
-    is_correct = payload.selected_option == question.correct_option
+    # Feedback adaptativo (Fase 2): diagnóstico por alternativa + microaula em camadas.
+    feedback = build_answer_feedback(db, question, payload.selected_option)
+    is_correct = feedback["is_correct"]
+    confidence = normalize_confidence(payload.confidence)
     attempt = Attempt(
         user_id=user.id,
         question_id=question.id,
         selected_option=payload.selected_option,
         is_correct=is_correct,
         response_time_seconds=payload.response_time_seconds,
+        confidence=confidence,
+        hints_used=payload.hints_used,
+        session_id=payload.session_id,
+        skill_id=question.primary_skill_id,  # denormalizado (F1); NULL enquanto não classificada
     )
     db.add(attempt)
+    # Evento bruto append-only (spec §34/§35) — base p/ o motor adaptativo (F3) recalibrar.
+    db.add(LearningEvent(
+        user_id=user.id,
+        question_id=question.id,
+        skill_id=question.primary_skill_id,
+        event_type="QUESTION_ANSWERED",
+        selected_option=payload.selected_option,
+        correct=is_correct,
+        confidence=confidence,
+        response_time=payload.response_time_seconds,
+        hints=payload.hints_used,
+        session_id=payload.session_id,
+    ))
     review = db.scalar(
         select(ReviewItem).where(
             ReviewItem.user_id == user.id, ReviewItem.question_id == question.id
@@ -582,12 +609,7 @@ def answer(question_id: UUID, payload: AnswerRequest, user: PaidUser, db: DbSess
         review.interval_days = 1
         review.last_result = False
     db.commit()
-    return {
-        "is_correct": is_correct,
-        "correct_option": question.correct_option,
-        "explanation": question.explanation,
-        "micro_aula": question.topic.description if question.topic else None,
-    }
+    return feedback
 
 
 # ===================== TEST-DRIVE (público, sem login) =====================
@@ -683,12 +705,9 @@ def trial_answer(question_id: UUID, payload: AnswerRequest, db: DbSession):
         raise HTTPException(status_code=404, detail="Questão não encontrada")
     if payload.selected_option >= len(json.loads(question.options)):
         raise HTTPException(status_code=422, detail="Alternativa inválida")
-    return {
-        "is_correct": payload.selected_option == question.correct_option,
-        "correct_option": question.correct_option,
-        "explanation": question.explanation,
-        "micro_aula": question.topic.description if question.topic else None,
-    }
+    # Usuário gratuito também recebe o feedback adaptativo (spec §2.1 do doc de acesso);
+    # só não persistimos tentativa/evento (test-drive anônimo).
+    return build_answer_feedback(db, question, payload.selected_option)
 
 
 # Telemetria anônima do test-drive — para medir se há gente simulando e até onde vão.

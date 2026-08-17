@@ -60,6 +60,8 @@ def _ensure_columns() -> None:
         # Preservação do conteúdo original (spec §51) — populados só na Fase 8.
         "original_explanation": "TEXT",
         "original_micro_lesson": "TEXT",
+        # Microaula em camadas (Fase 2, spec §8).
+        "micro_lesson": "JSON",
     }
     attempt_additions = {
         "confidence": "VARCHAR(20)",          # chutei|duvida|confiante (spec §6)

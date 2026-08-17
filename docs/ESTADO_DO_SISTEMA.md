@@ -60,7 +60,8 @@
 ## 5. Pendências / próximos passos
 
 - [x] **Full remake — F1 aplicada em produção** (2026-08-17, commit `079275e`; 8 tabelas + colunas criadas, 1074 questões preservadas). Branch `feat/full-remake-adaptativo` **não mesclada na `main` ainda**.
-- [ ] **Full remake — Sessão B = F2**: confiança (chutei/dúvida/confiante), feedback adaptativo por alternativa/misconception, microaula em camadas 1/2/3 — para **pagos logados + gratuitos** (nunca owner-only, ver §2.1 do doc de arquitetura). Mexe em rotas + `page.tsx` → exige rebuild de front.
+- [x] **Full remake — Sessão B = F2 NO AR** (confiança + feedback adaptativo + microaula em camadas; backend `services/feedback.py` + `page.tsx`). Falta **autorar conteúdo** (misconceptions por alternativa + microaula estruturada `essential`/`deep`) — vem na F8/autoria; hoje degrada gracioso.
+- [ ] **Full remake — Sessão C = F3+F4**: `AdaptiveLearningEngine` + `MemoryScheduler` (FSRS via adapter ou camada própria) + `ReviewQueue` + sessão inteligente / "Memória de hoje". Migrar `/reviews/*` de owner-only → `PaidUser`+gratuito.
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
 - [ ] **Escalar a cascata quando crescer a base de assinantes:** Cerebras (chave `csk-…` já no `/etc`, modelo `gpt-oss-120b`) e/ou OpenRouter — ambos exigem crédito/cartão. Retomar é só incluir o nome no `GRADING_ORDER` + garantir crédito na conta.
@@ -78,6 +79,18 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-17 (full-remake · Sessão B) — F2 questões: confiança + feedback adaptativo + microaula em camadas
+- **Fase 2 implementada e NO AR** (branch `feat/full-remake-adaptativo`, backend + frontend). Modo aprendizagem (o `QuestionsView` rotulado "SIMULADO", que dá feedback imediato) e o **teste grátis** ganharam a experiência adaptativa; o **Modo teste** (prova real, sem gabarito na ida) segue sem feedback, conforme spec §16.
+- **Backend:**
+  - Coluna JSON **`questions.micro_lesson`** (camadas `essential`/`deep`/`mastery`) — ORM + `_ensure_columns`. Aplicada no Postgres.
+  - Novo **`app/services/feedback.py::build_answer_feedback`** (desacoplado da UI): monta `is_correct`, `explanation` (por que a correta está certa), **`why_wrong`** (diagnóstico da alternativa marcada via `option_misconceptions`/`misconceptions`, linguagem não acusatória "Seu raciocínio pode ter seguido…"), `misconception {code,name}` e **microaula em camadas** com **fallback gracioso** (camada 1 = `explanation`; camada 3 `mastery` cai para `topic.description` — o que hoje é a "micro-aula"). Nada autorado ainda ⇒ `why_wrong`/`essential` nulos, nada quebra.
+  - `AnswerRequest` estendido (`confidence`/`hints_used`/`session_id`, opcionais/retrocompatíveis). Endpoints `answer` (pago) e `trial_answer` (gratuito) usam o serviço; `answer` **persiste a confiança no `Attempt`** e grava um **`LearningEvent` (QUESTION_ANSWERED)** bruto (spec §34/§35). `test/submit` anexa `why_wrong`/`misconception` ao diagnóstico pós-simulado (§17).
+- **Frontend (`apps/web/app/page.tsx` + `globals.css`):**
+  - **Pills de confiança** (Chutei / Em dúvida / Confiante) — 1 clique, opcional, só no modo aprendizagem e no trial; enviadas no corpo. `session_id` gerado por visita (agrupa os eventos).
+  - Componente **`QuestionTeach`**: "Por que a correta está certa" → "Por que sua resposta pode estar errada" (+ nome do misconception) → **microaula camada 1** (estruturada, quando autorada) → **camada 2 "Entender melhor"** e **camada 3 "Dominar este assunto"** (colapsáveis; a 3 revela o conteúdo amplo do tópico, que antes ficava inline). Reusado no fluxo pago e no trial. Tema claro/escuro coberto.
+- **Validação:** serviço testado em SQLite nos 3 cenários (acerto, erro com misconception, fallback) + persistência de `Attempt`/`LearningEvent`; `tsc --noEmit` limpo; endpoint testado em produção (resposta com camadas/`micro_aula`); build do front sem `localhost:9000`; web 200, API health 200. Sem regressão (falhas de `test_auth` seguem pré-existentes: owner 401 / reportlab).
+- **Deploy:** API reiniciada (migração `micro_lesson`) + front reconstruído/copiado/reiniciado. **Próximo: Sessão C = F3 (motor adaptativo + MemoryScheduler + ReviewQueue) + F4 (sessão inteligente)** — e aí as rotas `/reviews/*` migram de owner-only para `PaidUser`+gratuito (ver §2.1 do doc de arquitetura).
 
 ### 2026-08-17 (full-remake · Sessão A) — F0 auditoria + F1 modelo de dados
 - Início do **"full remake"** (plataforma adaptativa; spec em `full_remake/full-remake.txt`, 10 fases). Trabalho por **blocos de sessão** para economizar créditos — esta é a **Sessão A = F0 + F1**. **Branch dedicada `feat/full-remake-adaptativo`**, **commit `079275e`** (ainda não mesclado/pushado).

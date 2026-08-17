@@ -138,6 +138,10 @@ class Question(UUIDMixin, TimestampMixin, Base):
     # Preservação do conteúdo original (spec §51) — populados só na Fase 8.
     original_explanation: Mapped[str | None] = mapped_column(Text)
     original_micro_lesson: Mapped[str | None] = mapped_column(Text)
+    # Microaula em camadas (Fase 2, spec §8): {essential:{titulo,regra,aplicacao,
+    # pegadinha,macete}, deep:str, mastery:str}. NULL/ausente → fallback gracioso
+    # (camada 1 = explanation; camada 3 = topic.description). Ver services/feedback.py.
+    micro_lesson: Mapped[dict | None] = mapped_column(JSON)
 
     topic: Mapped[Topic] = relationship(back_populates="questions")
     attempts: Mapped[list["Attempt"]] = relationship(back_populates="question")

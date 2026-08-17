@@ -249,11 +249,23 @@ function greeting() {
   return "Boa noite";
 }
 
+type MicroLesson = {
+  essential?: {
+    titulo?: string; regra?: string; aplicacao?: string; pegadinha?: string; macete?: string;
+  } | null;
+  deep?: string | null;
+  mastery?: string | null;
+};
+
 type AnswerResult = {
   is_correct: boolean;
   correct_option: number;
   explanation: string;
   micro_aula?: string | null;
+  // Fase 2 — feedback adaptativo + microaula em camadas (todos opcionais/retrocompatíveis)
+  why_wrong?: string | null;
+  misconception?: { code: string; name: string } | null;
+  micro_lesson?: MicroLesson | null;
 };
 
 type ResultsData = {
@@ -527,6 +539,10 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answer, setAnswer] = useState<AnswerResult | null>(null);
+  // Id da sessão de estudo (agrupa os LearningEvents desta visita — spec §34/§35).
+  const [studySessionId] = useState(() =>
+    typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : String(Date.now())
+  );
   // Guarda o que já foi marcado/respondido por questão (id → seleção + resultado),
   // para preservar o estado ao navegar Anterior/Próxima entre as questões do lote.
   const [answersMap, setAnswersMap] = useState<Record<string, { selected: number | null; result: AnswerResult | null }>>({});
@@ -685,7 +701,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
     }
   };
 
-  const submitAnswer = async () => {
+  const submitAnswer = async (confidence: string | null) => {
     const question = questions[questionIndex];
     if (!question || selectedOption === null) return;
     if (typeof navigator !== "undefined" && !navigator.onLine) {
@@ -696,7 +712,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
       const response = await authFetch(`${API_URL}/study/questions/${question.id}/answer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selected_option: selectedOption }),
+        body: JSON.stringify({ selected_option: selectedOption, confidence, session_id: studySessionId }),
       });
       if (!response.ok) {
         setError("Não foi possível registrar a resposta.");
@@ -1074,6 +1090,68 @@ function ScopeBar({
   );
 }
 
+// Confiança do modo aprendizagem (spec §6): 1 clique, opcional. Valores casam com o back.
+const CONFIDENCE_OPTIONS: { value: string; label: string }[] = [
+  { value: "chutei", label: "Chutei" },
+  { value: "duvida", label: "Em dúvida" },
+  { value: "confiante", label: "Confiante" },
+];
+
+// Parte pedagógica do feedback (spec §7/§8): por que a correta está certa, por que a sua
+// pode estar errada (misconception) e a microaula em camadas 1/2/3 (2 e 3 colapsadas).
+function QuestionTeach({ result }: { result: AnswerResult }) {
+  const [showDeep, setShowDeep] = useState(false);
+  const [showMastery, setShowMastery] = useState(false);
+  const ml = result.micro_lesson || {};
+  const ess = ml.essential || null;
+  return (
+    <>
+      {/* Por que a correta está certa */}
+      <div className="teach"><span className="teach-label">Por que a correta está certa</span>{result.explanation}</div>
+
+      {/* Por que a SUA resposta pode estar errada (não acusatório) */}
+      {!result.is_correct && result.why_wrong && (
+        <div className="teach diag">
+          <span className="teach-label">Por que sua resposta pode estar errada</span>
+          {result.misconception && <b className="mis-tag">{result.misconception.name}</b>}
+          <span>{result.why_wrong}</span>
+        </div>
+      )}
+
+      {/* Camada 1 — essencial (estruturada), quando autorada */}
+      {ess && (
+        <div className="micro-aula layer1">
+          <span className="micro-aula-label"><BookOpen size={13} /> {ess.titulo || "Micro Aula — o essencial"}</span>
+          {ess.regra && <p><b>Regra:</b> {ess.regra}</p>}
+          {ess.aplicacao && <p><b>Nesta questão:</b> {ess.aplicacao}</p>}
+          {ess.pegadinha && <p><b>Pegadinha:</b> {ess.pegadinha}</p>}
+          {ess.macete && <p><b>Macete:</b> {ess.macete}</p>}
+        </div>
+      )}
+
+      {/* Camada 2 — Entender melhor (colapsada) */}
+      {ml.deep && (
+        <div className="layer-more">
+          <button className="ghost compact layer-toggle" onClick={() => setShowDeep((v) => !v)}>
+            {showDeep ? "Ocultar" : "Entender melhor"}
+          </button>
+          {showDeep && <div className="micro-aula layer2">{ml.deep}</div>}
+        </div>
+      )}
+
+      {/* Camada 3 — Dominar este assunto (colapsada); cai p/ a descrição do tópico */}
+      {ml.mastery && (
+        <div className="layer-more">
+          <button className="ghost compact layer-toggle" onClick={() => setShowMastery((v) => !v)}>
+            {showMastery ? "Ocultar" : "Dominar este assunto"}
+          </button>
+          {showMastery && <div className="micro-aula layer3">{ml.mastery}</div>}
+        </div>
+      )}
+    </>
+  );
+}
+
 function QuestionsView({
   question, index, total, loading, selected, result, onSelect, onSubmit, onNext,
   onPrev, onJumpNext, canPrev, canNext,
@@ -1085,13 +1163,16 @@ function QuestionsView({
   selected: number | null;
   result: AnswerResult | null;
   onSelect: (value: number) => void;
-  onSubmit: () => void;
+  onSubmit: (confidence: string | null) => void;
   onNext: () => void;
   onPrev?: () => void;
   onJumpNext?: () => void;
   canPrev?: boolean;
   canNext?: boolean;
 }) {
+  // Confiança (modo aprendizagem) — local à questão; zera ao trocar de questão.
+  const [confidence, setConfidence] = useState<string | null>(null);
+  useEffect(() => { setConfidence(null); }, [question?.id]);
   if (loading) return <section className="card empty-state"><LoaderCircle className="spin" /><h2>Carregando questões...</h2></section>;
   if (!question) return (
     <section className="card empty-state">
@@ -1146,18 +1227,29 @@ function QuestionsView({
               <span className="tag">Resposta correta</span>
               <b>{String.fromCharCode(65 + result.correct_option)}</b> {question.options[result.correct_option]}
             </p>
-            <div className="teach"><span className="teach-label">Por quê</span>{result.explanation}</div>
-            {result.micro_aula && (
-              <div className="micro-aula">
-                <span className="micro-aula-label"><BookOpen size={13} /> Micro Aula</span>
-                {result.micro_aula}
-              </div>
-            )}
+            <QuestionTeach result={result} />
+          </div>
+        )}
+        {/* Confiança: aparece após escolher a alternativa e antes de confirmar (1 clique, opcional) */}
+        {!result && selected !== null && (
+          <div className="confidence-row" role="group" aria-label="Qual sua confiança?">
+            <span className="confidence-label">Confiança:</span>
+            {CONFIDENCE_OPTIONS.map((c) => (
+              <button
+                key={c.value}
+                type="button"
+                className={`confidence-pill ${confidence === c.value ? "on" : ""}`}
+                aria-pressed={confidence === c.value}
+                onClick={() => setConfidence((cur) => (cur === c.value ? null : c.value))}
+              >
+                {c.label}
+              </button>
+            ))}
           </div>
         )}
         <div className="question-actions">
           {!result ? (
-            <button className="primary compact" disabled={selected === null} onClick={onSubmit}>Confirmar resposta</button>
+            <button className="primary compact" disabled={selected === null} onClick={() => onSubmit(confidence)}>Confirmar resposta</button>
           ) : (
             <button className="primary compact" onClick={onNext}>Próxima questão <ArrowRight size={16} /></button>
           )}
@@ -1199,13 +1291,13 @@ function TrialView({ onBack }: { onBack: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
 
-  const submit = async () => {
+  const submit = async (confidence: string | null) => {
     const question = questions[index];
     if (!question || selected === null) return;
     const response = await fetch(`${API_URL}/study/trial/${question.id}/answer`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ selected_option: selected }),
+      body: JSON.stringify({ selected_option: selected, confidence }),
     });
     if (response.ok) {
       const data: AnswerResult = await response.json();

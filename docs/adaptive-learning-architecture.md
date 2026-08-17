@@ -146,8 +146,8 @@ Regra de ouro: **UI desacoplada dos algoritmos de aprendizagem**. Nenhuma lógic
 
 | Sessão | Fases | Status |
 |---|---|---|
-| **A** | **F0 auditoria + F1 modelo de dados/migrations** | **em andamento (este doc)** |
-| B | F2 questões (confiança, feedback adaptativo, microaula em camadas) | pendente |
+| **A** | **F0 auditoria + F1 modelo de dados/migrations** | **concluída + aplicada em prod** |
+| **B** | **F2 questões (confiança, feedback adaptativo, microaula em camadas)** | **concluída + no ar** (`services/feedback.py`, `micro_lesson`, pills de confiança, `QuestionTeach`; conteúdo a autorar depois) |
 | C | F3 motor + scheduler + fila / F4 sessão inteligente | pendente |
 | D | F5 dashboard | pendente |
 | E | F6 aulas/áudio interativo | pendente |
