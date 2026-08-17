@@ -21,8 +21,27 @@ from app.models.entities import (
     TrialEvent,
     User,
 )
+from app.models.adaptive import (
+    Confidence,
+    LearningEvent,
+    Misconception,
+    OptionMisconception,
+    QuestionFamily,
+    QuestionSkill,
+    QuestionSkillRole,
+    Skill,
+    SkillRelation,
+    SkillRelationType,
+    SkillState,
+    SkillStatus,
+    UserSkillState,
+)
 
 __all__ = [
     "Attempt", "DiscursiveCase", "DiscursiveCriterion", "DiscursiveSubmission", "Exam", "Feedback", "Question", "QuestionDraft", "QuestionImportJob", "QuestionProvenance", "ReviewItem", "Simulation", "SimulationAnswer",
     "StudyTask", "Subject", "Subscription", "SubscriptionPlan", "SubscriptionStatus", "Topic", "TrialEvent", "User",
+    # Plataforma adaptativa (Fase 1)
+    "Skill", "SkillRelation", "QuestionSkill", "Misconception", "OptionMisconception",
+    "UserSkillState", "LearningEvent", "QuestionFamily",
+    "SkillRelationType", "SkillStatus", "QuestionSkillRole", "SkillState", "Confidence",
 ]

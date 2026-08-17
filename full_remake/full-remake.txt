@@ -1,0 +1,2139 @@
+# OBJETIVO
+
+Quero reestruturar o aplicativo atual de preparação para concursos, inicialmente focado no TCE-SP/VUNESP, transformando-o de um banco de questões comentadas em uma **plataforma adaptativa de aprendizagem, retenção e preparação para prova**.
+
+IMPORTANTE:
+
+* NÃO reescreva o projeto do zero.
+* NÃO destrua funcionalidades existentes.
+* NÃO exclua questões, explicações, microaulas, aulas, áudios, simulados ou dissertativas existentes.
+* Analise primeiro a arquitetura atual, banco de dados, stack, componentes, rotas e conteúdo.
+* Faça migrations compatíveis.
+* Reaproveite a identidade visual existente sempre que possível.
+* Componentes antigos podem ser refatorados gradualmente.
+* Sempre que possível, mantenha compatibilidade com os dados existentes.
+* Se houver Git, crie uma branch específica para esta evolução.
+* Antes de qualquer alteração destrutiva, preserve os dados.
+* Não pare apenas em um plano: depois da análise, implemente as fases abaixo.
+* Se alguma decisão desta especificação conflitar tecnicamente com a stack atual, adapte a implementação sem eliminar o objetivo pedagógico.
+
+---
+
+# 1. NOVO MODELO CONCEITUAL DO PRODUTO
+
+O aplicativo deixa de ter como núcleo:
+
+QUESTÃO → GABARITO → EXPLICAÇÃO
+
+e passa a ter:
+
+QUESTÃO
+↓
+HABILIDADE AVALIADA
+↓
+RESPOSTA DO ALUNO
+↓
+TIPO DE ERRO
+↓
+FEEDBACK
+↓
+INTERVENÇÃO PEDAGÓGICA
+↓
+NOVA RECUPERAÇÃO
+↓
+REVISÃO ESPAÇADA
+↓
+TRANSFERÊNCIA PARA QUESTÃO DIFERENTE
+↓
+DOMÍNIO
+
+O sistema deve distinguir:
+
+1. desempenho imediato;
+2. domínio conceitual;
+3. retenção ao longo do tempo;
+4. capacidade de aplicar o conhecimento em uma questão diferente.
+
+Nunca considerar simplesmente:
+
+`acertou = aprendeu`
+
+---
+
+# 2. MAPA DE CONHECIMENTO
+
+Criar uma taxonomia hierárquica.
+
+Estrutura mínima:
+
+```text
+Concurso
+ └── Disciplina
+      └── Tópico
+           └── Habilidade
+                └── Sub-habilidade
+```
+
+Exemplo:
+
+```text
+TCE-SP
+└── Raciocínio Lógico
+    └── Lógica Proposicional
+        ├── Conjunção
+        ├── Disjunção
+        ├── Condicional
+        ├── Negação
+        │   ├── Negação da conjunção
+        │   ├── Negação da disjunção
+        │   └── Negação da condicional
+        └── Equivalências
+```
+
+Adicionar também relações entre habilidades:
+
+```text
+prerequisite_of
+related_to
+depends_on
+commonly_confused_with
+```
+
+Exemplo:
+
+`NEGACAO_CONJUNCAO → prerequisite_of → DE_MORGAN`
+
+---
+
+# 3. ENTIDADE HABILIDADE
+
+Cada habilidade deve possuir pelo menos:
+
+```text
+id
+code
+name
+description
+subject_id
+topic_id
+parent_skill_id
+difficulty_base
+importance
+exam_relevance
+prerequisites
+status
+```
+
+Exemplo:
+
+```text
+code: LOG-PROP-NEG-COND
+
+name:
+Negação da proposição condicional
+
+description:
+Reconhecer e aplicar ¬(P → Q) ≡ P ∧ ¬Q
+```
+
+Uma questão poderá avaliar várias habilidades, mas deverá possuir:
+
+```text
+primary_skill
+secondary_skills[]
+```
+
+---
+
+# 4. MISCONCEPTIONS — ERROS CONCEITUAIS
+
+Criar uma entidade para erros recorrentes.
+
+Exemplo:
+
+```text
+MIS-LOG-001
+
+Nome:
+Negar antecedente e consequente da condicional
+
+Padrão incorreto:
+P → Q
+transformado em
+¬P → ¬Q
+
+Correção:
+¬(P → Q) ≡ P ∧ ¬Q
+```
+
+As alternativas erradas poderão ser relacionadas a misconceptions.
+
+Exemplo:
+
+```text
+QuestionOption B
+→ MIS-LOG-001
+```
+
+Isso permitirá descobrir não apenas que o candidato errou, mas **por que provavelmente errou**.
+
+A relação não precisa existir para todas as alternativas inicialmente.
+
+---
+
+# 5. NOVO MODELO DAS QUESTÕES OBJETIVAS
+
+Adicionar às questões, quando aplicável:
+
+```text
+primary_skill_id
+secondary_skill_ids
+difficulty
+question_family
+question_type
+source
+exam
+year
+board
+official_answer
+explanation
+review_status
+content_version
+```
+
+Cada alternativa deve poder armazenar:
+
+```text
+is_correct
+explanation
+misconception_id
+```
+
+Questões pertencentes ao mesmo princípio podem possuir:
+
+```text
+question_family
+```
+
+mas não devem necessariamente possuir enunciados semelhantes.
+
+Exemplo:
+
+```text
+family:
+NEGACAO_CONDICIONAL_TRANSFER
+```
+
+Isso permitirá selecionar uma questão diferente para testar transferência.
+
+---
+
+# 6. FLUXO DE UMA QUESTÃO — MODO APRENDIZAGEM
+
+Quando o usuário responde:
+
+## ETAPA A — Resposta
+
+Registrar:
+
+```text
+question_id
+selected_option
+correct
+response_time
+timestamp
+hints_used
+session_id
+```
+
+No modo de aprendizagem, adicionar escolha rápida de confiança:
+
+```text
+Chutei
+Em dúvida
+Confiante
+```
+
+Ela deve exigir apenas um clique e não pode tornar a UX cansativa.
+
+No modo Simulado/Prova, NÃO mostrar essa etapa durante a prova.
+
+---
+
+# 7. FEEDBACK ADAPTATIVO
+
+Após confirmar a resposta no modo aprendizagem:
+
+Mostrar imediatamente:
+
+```text
+✓ Você acertou
+```
+
+ou
+
+```text
+✗ Você marcou B
+Resposta correta: D
+```
+
+Depois apresentar:
+
+### Por que a correta está certa?
+
+Explicação específica da questão.
+
+### Por que sua resposta está errada?
+
+Se houver explicação/misconception associado à alternativa escolhida, mostrar um diagnóstico específico.
+
+Exemplo:
+
+> Você provavelmente transformou a negação de P → Q em ¬P → ¬Q.
+> Essa transformação não representa a negação da condicional.
+
+Evitar acusações absolutas.
+
+Usar:
+
+> "Seu raciocínio pode ter seguido..."
+
+e não:
+
+> "Você pensou..."
+
+---
+
+# 8. MICROAULA EM CAMADAS
+
+Substituir o grande bloco monolítico de microaula por conteúdo progressivo.
+
+## CAMADA 1 — ESSENCIAL
+
+Exibição padrão.
+
+Objetivo: resolver e compreender a habilidade usada na questão.
+
+Estrutura:
+
+```text
+Título
+Regra central
+Aplicação à questão
+Pegadinha principal
+Macete
+```
+
+Exemplo:
+
+### Negação da condicional
+
+**Regra**
+
+`¬(P → Q) ≡ P ∧ ¬Q`
+
+**Nesta questão**
+
+P = trabalhadora e honesta
+
+Q = realizada e olha com admiração
+
+Logo:
+
+`P ∧ ¬Q`
+
+**Pegadinha**
+
+Não transforme:
+
+`P → Q`
+
+em:
+
+`¬P → ¬Q`
+
+**Macete**
+
+MANTÉM P + E + NEGA Q
+
+---
+
+## CAMADA 2 — ENTENDA MELHOR
+
+Colapsada inicialmente.
+
+Botão:
+
+`Entender melhor`
+
+Conteúdo:
+
+* origem da regra;
+* explicação conceitual;
+* exemplos adicionais;
+* De Morgan quando pertinente;
+* comparação com estruturas parecidas.
+
+---
+
+## CAMADA 3 — DOMINE O ASSUNTO
+
+Botão:
+
+`Dominar este assunto`
+
+Aqui pode entrar o conteúdo amplo já existente.
+
+Exemplo:
+
+* condicional;
+* equivalências;
+* contrapositiva;
+* negações;
+* modus ponens;
+* modus tollens;
+* falácias;
+* relações com outras habilidades.
+
+Assim, o conteúdo abrangente existente NÃO deve ser eliminado.
+
+Ele deverá ser reorganizado.
+
+---
+
+# 9. TESTE DE FIXAÇÃO IMEDIATO
+
+Após:
+
+* erro;
+* acerto por chute;
+* acerto com baixa confiança;
+* abertura da microaula;
+
+o sistema deve, quando houver conteúdo disponível, apresentar posteriormente uma **questão diferente da mesma habilidade**.
+
+Não repetir imediatamente a mesma questão.
+
+Preferência:
+
+```text
+mesma habilidade
++
+contexto/enunciado diferente
+```
+
+Objetivo do sistema:
+
+determinar se o usuário aprendeu o princípio ou apenas reconheceu a resposta anterior.
+
+Exemplo:
+
+Questão original:
+
+`Se P então Q`
+
+Nova questão:
+
+usar personagens, termos e construção diferentes, preservando a habilidade.
+
+---
+
+# 10. NÃO GERAR QUESTÕES NÃO VALIDADAS DIRETAMENTE AO USUÁRIO
+
+A IA pode auxiliar na criação de novas questões.
+
+Porém:
+
+```text
+AI_GENERATED
+→ DRAFT
+→ REVIEW
+→ APPROVED
+→ PUBLISHED
+```
+
+Uma questão criada automaticamente pela IA NÃO deverá ser apresentada como questão oficial ou validada sem passar pelo processo definido para publicação.
+
+Principalmente para:
+
+* Direito;
+* legislação;
+* jurisprudência;
+* contabilidade;
+* normas;
+* conteúdo técnico sensível à versão.
+
+Registrar:
+
+```text
+source
+ai_generated
+review_status
+reviewed_at
+reviewed_by
+```
+
+---
+
+# 11. ESTADO DO CONHECIMENTO DO ALUNO
+
+Criar:
+
+```text
+UserSkillState
+```
+
+Campos conceituais:
+
+```text
+user_id
+skill_id
+
+mastery_score
+memory_stability
+difficulty_estimate
+retrievability
+
+first_seen_at
+last_seen_at
+last_success_at
+next_review_at
+
+attempts
+correct_attempts
+wrong_attempts
+
+consecutive_successes
+consecutive_failures
+
+high_confidence_errors
+low_confidence_corrects
+
+transfer_successes
+last_response_time
+
+state
+```
+
+Estados possíveis:
+
+```text
+UNSEEN
+EXPOSED
+LEARNING
+CONSOLIDATING
+MASTERED
+FRAGILE
+LAPSED
+```
+
+Não utilizar apenas percentual bruto de acertos para definir `mastery_score`.
+
+---
+
+# 12. DOMÍNIO ≠ MEMÓRIA
+
+Implementar dois conceitos diferentes.
+
+## DOMÍNIO
+
+Representa evidência de que a pessoa compreendeu e consegue aplicar a habilidade.
+
+Considerar:
+
+* acertos;
+* erros;
+* dificuldade das questões;
+* questões diferentes;
+* transferência;
+* uso de dica;
+* nível de confiança;
+* recorrência de erros;
+* desempenho ao longo do tempo.
+
+## MEMÓRIA
+
+Representa a probabilidade estimada de conseguir recuperar o conhecimento depois de determinado intervalo.
+
+Usar um scheduler baseado em modelo moderno de repetição espaçada.
+
+Preferencialmente:
+
+* verificar se existe biblioteca FSRS adequada à stack atual;
+* se houver uma implementação madura e compatível, criar um adapter;
+* caso contrário, criar camada abstrata de scheduler para permitir substituição posterior.
+
+Não misturar o scheduler diretamente à UI.
+
+Criar algo conceitualmente como:
+
+```text
+MemoryScheduler
+  calculateState()
+  registerReview()
+  calculateNextReview()
+  calculateRetrievability()
+```
+
+Manter o mecanismo desacoplado.
+
+---
+
+# 13. MAPEAMENTO DA RESPOSTA PARA O SCHEDULER
+
+Internamente o sistema poderá mapear eventos para categorias equivalentes a:
+
+```text
+AGAIN
+HARD
+GOOD
+EASY
+```
+
+Exemplo inicial:
+
+```text
+ERRO
+→ AGAIN
+
+ACERTO COM DICA
+→ HARD
+
+ACERTO POR CHUTE / BAIXA CONFIANÇA
+→ HARD
+
+ACERTO NORMAL
+→ GOOD
+
+ACERTO CONFIANTE
++ sem dica
++ questão compatível com dificuldade do usuário
++ conhecimento recuperado após intervalo relevante
+→ candidato a EASY
+```
+
+Tempo de resposta pode ajudar, mas NÃO deve decidir sozinho.
+
+Os pesos devem ficar configuráveis e não espalhados pelo código.
+
+Registrar o evento bruto para possibilitar recalibração futura.
+
+---
+
+# 14. FILA DE REVISÃO
+
+Criar um mecanismo:
+
+```text
+ReviewQueue
+```
+
+Prioridade aproximada:
+
+1. conhecimento vencido/em risco;
+2. habilidades frágeis;
+3. erros conceituais de alta confiança;
+4. conhecimento em consolidação;
+5. habilidades importantes no edital;
+6. transferência;
+7. novos conteúdos.
+
+Evitar apresentar várias questões praticamente idênticas em sequência.
+
+Misturar habilidades quando pedagogicamente adequado.
+
+---
+
+# 15. SESSÃO INTELIGENTE
+
+Criar na home:
+
+# Estudar agora
+
+Exemplo:
+
+> 🧠 Sua sessão de hoje
+> 18 minutos
+> 14 revisões + 5 novos desafios
+
+Botão:
+
+`Começar sessão inteligente`
+
+A sessão deve combinar:
+
+```text
+revisão vencida
++
+habilidades frágeis
++
+transferência
++
+pequena quantidade de conteúdo novo
+```
+
+O aluno não precisa escolher manualmente tudo que deve revisar.
+
+---
+
+# 16. MODOS DIFERENTES
+
+Manter claramente separados:
+
+## MODO APRENDIZAGEM
+
+Pode mostrar:
+
+* feedback imediato;
+* confiança;
+* microaula;
+* diagnóstico;
+* pegadinhas;
+* reforço.
+
+## MODO REVISÃO
+
+Prioriza recuperação.
+
+Primeiro pergunta.
+
+Explicação somente depois.
+
+## MODO SIMULADO
+
+Imita a prova.
+
+Durante o simulado:
+
+* não mostrar feedback;
+* não mostrar microaula;
+* não mostrar se acertou;
+* não interromper com confiança;
+* respeitar cronômetro;
+* permitir navegação compatível com o modelo existente.
+
+Somente após terminar:
+
+fazer diagnóstico completo.
+
+---
+
+# 17. RESULTADO DO SIMULADO
+
+Não mostrar somente:
+
+`78% de acertos`
+
+Mostrar também:
+
+## Resultado
+
+```text
+Acertos
+Erros
+Tempo
+Desempenho por disciplina
+```
+
+## Diagnóstico
+
+Exemplo:
+
+```text
+Raciocínio Lógico
+
+92% — Proposições simples
+84% — Equivalências
+61% — Lei de De Morgan
+42% — Negação da condicional
+```
+
+## Erros conceituais detectados
+
+Exemplo:
+
+> Você repetiu 3 vezes o padrão de negar antecedente e consequente de uma condicional.
+
+## Próxima ação
+
+Botão:
+
+`Corrigir minhas lacunas`
+
+O botão deve gerar uma sessão adaptativa diretamente a partir dos erros do simulado.
+
+---
+
+# 18. DASHBOARD — MAPA DE CONHECIMENTO
+
+Criar visualização por disciplina/tópico/habilidade.
+
+Exemplo:
+
+```text
+RACIOCÍNIO LÓGICO         72%
+
+Proposições               91%
+Equivalências             81%
+De Morgan                 63%
+Negação condicional       44%
+Argumentação              78%
+```
+
+Possíveis estados visuais:
+
+```text
+Dominado
+Consolidando
+Frágil
+Precisa estudar
+Ainda não avaliado
+```
+
+Não apresentar precisão científica falsa.
+
+`mastery_score` é uma estimativa do sistema.
+
+---
+
+# 19. PAINEL “O QUE ESTÁ ME FAZENDO PERDER PONTOS?”
+
+Criar uma visão de alto valor para o usuário.
+
+Exemplo:
+
+# Seus maiores riscos hoje
+
+### 1. Negação da condicional
+
+Domínio estimado: 44%
+
+Você errou 4 de 7 questões recentes.
+
+Em 2 delas você respondeu com alta confiança.
+
+`Corrigir agora`
+
+### 2. Competência legislativa
+
+...
+
+### 3. Crase antes de pronomes
+
+...
+
+Esse painel deve priorizar ação, não simplesmente estatística.
+
+---
+
+# 20. AULAS E ÁUDIO
+
+Preservar todo conteúdo existente.
+
+Criar estrutura:
+
+```text
+Lesson
+LessonSection
+AudioLesson
+AudioSegment
+RetrievalCheckpoint
+```
+
+Dividir aulas longas em unidades semânticas.
+
+Não quebrar arbitrariamente apenas por número de minutos.
+
+---
+
+# 21. MODO AULA INTERATIVA
+
+Quando houver áudio/aula:
+
+```text
+Trecho de aula
+↓
+checkpoint
+↓
+pergunta curta
+↓
+feedback
+↓
+continuação
+```
+
+Não precisa ocorrer a cada poucos minutos rigidamente.
+
+Os checkpoints devem acontecer após conceitos relevantes.
+
+Criar dois modos:
+
+```text
+▶ Ouvir continuamente
+
+🧠 Aula interativa
+```
+
+Assim o usuário pode escolher.
+
+---
+
+# 22. TRANSCRIÇÃO
+
+Se existir transcrição:
+
+* preservar;
+* permitir abrir/fechar;
+* permitir acompanhar o áudio;
+* permitir busca;
+* destacar tópicos quando possível.
+
+Evitar obrigatoriamente encher a tela com:
+
+```text
+áudio
++
+transcrição integral
++
+explicações
++
+questões
++
+outros elementos
+```
+
+ao mesmo tempo.
+
+---
+
+# 23. RELACIONAR AULA A HABILIDADES
+
+Uma aula não deve estar ligada apenas à disciplina.
+
+Criar relacionamento:
+
+```text
+LessonSkill
+```
+
+Assim:
+
+`Negação da condicional`
+
+pode apontar para:
+
+* aula completa;
+* trecho específico do áudio;
+* microaula;
+* questões;
+* revisão.
+
+Quando o usuário errar aquela habilidade:
+
+`Rever explicação`
+
+pode levá-lo exatamente ao trecho pertinente.
+
+---
+
+# 24. DISSERTATIVAS — PRINCÍPIO CENTRAL
+
+As dissertativas não devem funcionar como:
+
+```text
+pergunta
+↓
+mostrar resposta modelo
+```
+
+Devem treinar:
+
+```text
+planejamento
+↓
+produção
+↓
+correção
+↓
+identificação de lacunas
+↓
+reescrita
+↓
+nova recuperação futura
+```
+
+---
+
+# 25. MODO DISSERTATIVA — PRIMEIRA TENTATIVA
+
+Mostrar:
+
+* enunciado;
+* instruções oficiais;
+* limite de linhas/caracteres, se existir;
+* cronômetro opcional ou obrigatório conforme modo;
+* editor limpo.
+
+NÃO mostrar o espelho antes da entrega.
+
+Permitir dois modos:
+
+```text
+Treino
+Simulação de prova
+```
+
+---
+
+# 26. ESPELHO COMO FONTE DE VERDADE
+
+As duas questões reais/exemplos de banca já existentes deverão ser preservadas.
+
+Quando existir espelho oficial:
+
+```text
+OfficialRubric
+```
+
+deve ser a principal referência de correção.
+
+Estruturar o espelho em itens.
+
+Exemplo:
+
+```text
+RubricItem
+
+id
+essay_question_id
+description
+max_points
+required
+keywords
+semantic_concepts
+official_notes
+```
+
+Não depender somente de palavras-chave.
+
+A comparação deve ser semântica.
+
+---
+
+# 27. CORREÇÃO DA DISSERTATIVA
+
+Depois do envio, mostrar algo semelhante a:
+
+# Sua correção
+
+### Item 1 — conceito X
+
+✅ Atendido
+
+Evidência encontrada na sua resposta:
+
+> trecho escrito pelo aluno
+
+Pontuação estimada:
+
+`2,0 / 2,0`
+
+---
+
+### Item 2 — conceito Y
+
+🟡 Parcial
+
+Você mencionou X, mas não desenvolveu Y.
+
+Pontuação estimada:
+
+`1,0 / 2,0`
+
+---
+
+### Item 3 — conceito Z
+
+❌ Ausente
+
+O espelho esperava abordagem de Z.
+
+`0 / 2,0`
+
+---
+
+Sempre vincular a crítica a:
+
+* item do espelho;
+* trecho do candidato;
+* justificativa.
+
+---
+
+# 28. NOTA DE DISSERTATIVA
+
+Qualquer correção feita por IA deve ser rotulada como:
+
+`Nota estimada`
+
+e não:
+
+`Nota oficial`
+
+Quando o espelho não definir objetivamente a distribuição de pontos:
+
+NÃO inventar precisão.
+
+Usar, se necessário:
+
+```text
+Atendido
+Parcialmente atendido
+Não atendido
+```
+
+antes de tentar criar números artificiais.
+
+---
+
+# 29. REESCRITA ATIVA
+
+Esta funcionalidade é obrigatória.
+
+Depois da correção:
+
+não mostrar apenas o que faltou.
+
+Solicitar:
+
+> Reescreva somente o trecho necessário para incluir corretamente este ponto.
+
+Exemplo:
+
+```text
+Você perdeu o item referente a X.
+
+Reescreva seu segundo parágrafo incluindo X:
+[editor]
+```
+
+Corrigir novamente.
+
+Objetivo:
+
+transformar feedback em nova produção do aluno.
+
+---
+
+# 30. SEGUNDA TENTATIVA FUTURA DA DISSERTATIVA
+
+Depois de determinado intervalo, a habilidade poderá voltar à fila de revisão.
+
+O sistema pode apresentar:
+
+> Você já respondeu uma questão envolvendo este tema anteriormente.
+> Tente novamente sem consultar sua resposta anterior.
+
+Evitar mostrar antecipadamente:
+
+* resposta antiga;
+* espelho;
+* resposta modelo.
+
+Depois da nova tentativa, comparar evolução.
+
+---
+
+# 31. ESQUELETO DE RESPOSTA
+
+Depois de o aluno tentar a dissertativa, poderá oferecer:
+
+`Ver estrutura ideal`
+
+Exemplo:
+
+```text
+1. Introdução / enquadramento
+2. Conceito X
+3. Fundamento Y
+4. Consequência Z
+5. Fechamento
+```
+
+Isso é diferente de entregar imediatamente uma redação pronta.
+
+A resposta modelo completa pode continuar existindo, mas deve ser uma camada posterior.
+
+---
+
+# 32. EVITAR “EFEITO COPIAR A IA”
+
+A IA deve preferencialmente:
+
+* diagnosticar;
+* apontar;
+* perguntar;
+* pedir reconstrução;
+* solicitar nova tentativa.
+
+E não simplesmente substituir o aluno produzindo a resposta perfeita antes que ele tente.
+
+---
+
+# 33. CONTEÚDO LEGAL/TÉCNICO — VERSIONAMENTO
+
+Para conteúdos sujeitos a alteração:
+
+```text
+source
+source_reference
+valid_from
+valid_until
+content_version
+last_verified_at
+reviewed_by
+```
+
+Não sobrescrever silenciosamente versões anteriores.
+
+A mesma habilidade poderá ter conteúdo atualizado sem destruir histórico de tentativas anteriores.
+
+---
+
+# 34. EVENTOS DE APRENDIZAGEM
+
+Criar logging estruturado.
+
+Exemplos:
+
+```text
+QUESTION_PRESENTED
+QUESTION_ANSWERED
+ANSWER_CONFIDENCE
+FEEDBACK_VIEWED
+MICROLESSON_OPENED
+DEEP_DIVE_OPENED
+TRANSFER_QUESTION_ANSWERED
+LESSON_STARTED
+LESSON_COMPLETED
+AUDIO_CHECKPOINT_ANSWERED
+ESSAY_STARTED
+ESSAY_SUBMITTED
+ESSAY_FEEDBACK_VIEWED
+ESSAY_REWRITE_SUBMITTED
+REVIEW_COMPLETED
+```
+
+Isso permitirá melhorar o algoritmo posteriormente sem perder histórico.
+
+---
+
+# 35. NÃO GUARDAR APENAS O RESULTADO FINAL
+
+Para cada tentativa, guardar o evento bruto.
+
+Exemplo:
+
+```text
+user
+question
+skill
+selected_option
+correct
+confidence
+response_time
+hints
+timestamp
+review_interval
+scheduler_state_before
+scheduler_state_after
+```
+
+Não depender apenas de tabelas agregadas.
+
+---
+
+# 36. ALGORITMO DE ADAPTAÇÃO
+
+Criar um serviço desacoplado:
+
+```text
+AdaptiveLearningEngine
+```
+
+Responsabilidades:
+
+```text
+selectNextActivity()
+evaluateAttempt()
+updateSkillState()
+detectMisconception()
+requestReinforcement()
+scheduleReview()
+selectTransferQuestion()
+```
+
+Não colocar toda essa lógica dentro dos componentes de UI.
+
+---
+
+# 37. SELEÇÃO DA PRÓXIMA ATIVIDADE
+
+Considerar:
+
+```text
+urgência da revisão
+retrievability
+mastery
+importância no edital
+erros recentes
+misconceptions
+questões já vistas
+question_family
+pré-requisitos
+dificuldade
+tempo disponível
+```
+
+Evitar repetição excessiva do mesmo enunciado.
+
+---
+
+# 38. DIFICULDADE ADAPTATIVA
+
+Não aumentar dificuldade apenas porque houve um acerto.
+
+Preferir evidência acumulada.
+
+Exemplo:
+
+```text
+iniciante:
+exemplo resolvido
+→ questão simples
+→ questão de transferência
+
+intermediário:
+questão
+→ feedback
+→ transferência
+
+avançado:
+questões complexas
+→ mistura de tópicos
+→ feedback mínimo
+```
+
+O nível deve ser por HABILIDADE.
+
+Um usuário pode ser:
+
+```text
+avançado em Português
+iniciante em Auditoria
+```
+
+---
+
+# 39. EXEMPLOS RESOLVIDOS
+
+Criar suporte a:
+
+```text
+WorkedExample
+```
+
+Útil especialmente em habilidades novas ou complexas.
+
+Estrutura:
+
+```text
+Problema
+Passo 1
+Passo 2
+Passo 3
+Princípio
+Questão para tentar sozinho
+```
+
+Não mostrar exemplo resolvido indefinidamente depois que o aluno já demonstra domínio.
+
+---
+
+# 40. HOME REDESENHADA
+
+Priorizar quatro ações.
+
+## 1. Estudar agora
+
+Sessão adaptativa.
+
+## 2. Simulado
+
+Experiência de prova.
+
+## 3. Meu conhecimento
+
+Mapa de habilidades.
+
+## 4. Aulas / Conteúdo
+
+Estudo voluntário.
+
+Adicionar acesso a:
+
+`Dissertativas`
+
+sem transformar a home em uma tela excessivamente carregada.
+
+---
+
+# 41. COMPONENTE “MEMÓRIA DE HOJE”
+
+Exemplo:
+
+> 🧠 Memória de hoje
+> 14 conhecimentos precisam ser recuperados
+> ~12 min
+
+Botão:
+
+`Fortalecer memória`
+
+Evitar apresentar:
+
+> Leia novamente 14 aulas.
+
+Primeiro exigir recuperação.
+
+---
+
+# 42. INDICADORES
+
+Criar indicadores pedagogicamente úteis.
+
+Exemplos:
+
+```text
+Domínio estimado
+Retenção estimada
+Habilidades dominadas
+Habilidades frágeis
+Erros conceituais recorrentes
+Questões de transferência
+Tempo médio por questão
+Evolução por disciplina
+```
+
+Evitar criar números sem base.
+
+---
+
+# 43. DIFERENCIAR CHUTE DE CONHECIMENTO
+
+Exemplo:
+
+Usuário acerta 4 questões.
+
+Mas:
+
+```text
+3 = confiante
+1 = chute
+```
+
+O sistema não deve tratá-las exatamente da mesma maneira.
+
+Criar análise futura:
+
+> Você está acertando algumas questões desta habilidade, mas com baixa confiança.
+
+---
+
+# 44. ERRO CONFIANTE
+
+Dar prioridade especial ao padrão:
+
+```text
+ERRADO + CONFIANTE
+```
+
+Isso pode indicar misconception.
+
+Exemplo no dashboard:
+
+> ⚠️ Possível conceito incorreto consolidado.
+
+Sem afirmar diagnóstico absoluto.
+
+---
+
+# 45. GAMIFICAÇÃO
+
+Caso já exista ou seja criada:
+
+recompensar principalmente:
+
+* revisões realizadas;
+* conhecimento consolidado;
+* evolução;
+* recuperação após intervalo;
+* correção de lacunas.
+
+Evitar premiar apenas:
+
+* minutos logados;
+* cliques;
+* quantidade de telas abertas.
+
+Streak pode existir, mas não deve ser o objetivo central do produto.
+
+---
+
+# 46. EXPERIÊNCIA PREMIUM
+
+Estruturar arquitetura para permitir diferenciação futura sem definir preço agora.
+
+Possíveis recursos Premium:
+
+```text
+sessão adaptativa ilimitada
+motor de memória
+mapa avançado de conhecimento
+diagnóstico de misconceptions
+correção de dissertativas
+reescrita guiada
+aulas interativas
+analytics avançado
+plano até a prova
+```
+
+Não alterar cobrança atual sem necessidade.
+
+Usar feature flags se já existir estrutura de planos.
+
+---
+
+# 47. ONBOARDING / DIAGNÓSTICO
+
+Para novo usuário:
+
+```text
+Escolher concurso
+↓
+opcionalmente informar data da prova
+↓
+tempo de estudo disponível
+↓
+diagnóstico
+↓
+mapa inicial
+↓
+primeira sessão
+```
+
+O diagnóstico deve usar questões variadas.
+
+Não precisa avaliar absolutamente todas as habilidades no primeiro acesso.
+
+O sistema poderá refinar o mapa progressivamente.
+
+---
+
+# 48. PLANO ATÉ A PROVA
+
+Se houver data da prova:
+
+calcular:
+
+```text
+dias restantes
+conteúdo não avaliado
+habilidades frágeis
+revisões futuras
+tempo disponível
+```
+
+Gerar plano adaptativo.
+
+O plano deve mudar com o desempenho real.
+
+Não criar simplesmente um cronograma estático.
+
+---
+
+# 49. EDITAL / BLUEPRINT
+
+Criar suporte a:
+
+```text
+ExamBlueprint
+```
+
+Relacionar:
+
+```text
+disciplina
+tópico
+peso
+quantidade estimada/prevista
+relevância
+```
+
+Se não houver peso oficial, não inventar.
+
+Permitir peso editorial configurável claramente identificado como tal.
+
+---
+
+# 50. AUTORIA DE CONTEÚDO
+
+Criar painel ou estrutura interna para:
+
+1. importar questão;
+2. selecionar disciplina;
+3. selecionar tópico;
+4. identificar primary skill;
+5. identificar secondary skills;
+6. identificar misconception de alternativas;
+7. escrever explicação;
+8. criar microaula essencial;
+9. criar aprofundamento;
+10. associar aula/áudio;
+11. associar questões da mesma família;
+12. revisar;
+13. publicar.
+
+Claude/IA pode sugerir preenchimentos.
+
+Mas revisão deve permanecer possível antes da publicação.
+
+---
+
+# 51. MIGRAR O CONTEÚDO EXISTENTE
+
+Criar rotina para analisar o material já existente.
+
+Para cada questão existente:
+
+inferir/sugerir:
+
+```text
+primary_skill
+secondary_skills
+difficulty
+question_family
+misconceptions
+microLessonEssential
+deepDive
+```
+
+IMPORTANTE:
+
+não substituir automaticamente o material original.
+
+Preservar:
+
+```text
+original_explanation
+original_micro_lesson
+```
+
+Criar os novos campos ao lado.
+
+Marcar conteúdo migrado por IA como:
+
+```text
+NEEDS_REVIEW
+```
+
+quando necessário.
+
+---
+
+# 52. QA AUTOMÁTICO DO CONTEÚDO
+
+Criar verificações.
+
+Exemplos:
+
+* questão sem alternativa correta;
+* mais de uma alternativa correta onde não deveria;
+* questão publicada sem primary skill;
+* microaula vazia;
+* espelho sem critérios;
+* questão sem fonte;
+* conteúdo AI_GENERATED publicado sem revisão;
+* question_family duplicada incorretamente;
+* referência quebrada;
+* resposta oficial incompatível com gabarito cadastrado.
+
+---
+
+# 53. ACESSIBILIDADE
+
+Preservar/implementar:
+
+* navegação por teclado;
+* screen reader;
+* labels;
+* contraste;
+* transcrição de áudio;
+* tamanho de texto;
+* fórmulas legíveis;
+* foco correto nos modais;
+* responsividade.
+
+---
+
+# 54. PERFORMANCE
+
+A reestruturação não deve deixar a experiência lenta.
+
+Evitar carregar:
+
+* histórico completo;
+* aulas completas;
+* áudio;
+* analytics;
+
+sempre junto com cada questão.
+
+Usar lazy loading quando adequado.
+
+---
+
+# 55. TESTES
+
+Criar testes para pelo menos:
+
+### Question flow
+
+```text
+acerto
+erro
+confiança
+feedback
+misconception
+```
+
+### Scheduler
+
+```text
+novo item
+acerto
+erro
+revisão atrasada
+revisão correta
+```
+
+### Adaptive engine
+
+```text
+skill frágil tem prioridade
+questão já respondida não é repetida indevidamente
+transfer question pertence à habilidade
+```
+
+### Simulado
+
+```text
+não mostra feedback antes do final
+```
+
+### Dissertativa
+
+```text
+espelho não aparece antes da submissão
+rubric funciona
+reescrita é persistida
+```
+
+### Migration
+
+garantir que conteúdo existente não seja perdido.
+
+---
+
+# 56. TELEMETRIA DE EFICÁCIA
+
+Preparar métricas que realmente permitam saber se o sistema ensina.
+
+Exemplos:
+
+```text
+Delayed Retention
+```
+
+acerto na mesma habilidade depois de intervalo.
+
+```text
+Transfer Accuracy
+```
+
+acerto em questão inédita da mesma habilidade.
+
+```text
+Error Recurrence
+```
+
+quantas vezes o mesmo misconception reaparece.
+
+```text
+Time to Mastery
+```
+
+tempo/eventos até consolidação.
+
+```text
+Relearning Rate
+```
+
+habilidades dominadas que voltaram a falhar.
+
+Também guardar métricas tradicionais:
+
+```text
+DAU
+sessões
+questões respondidas
+conclusão de simulados
+```
+
+mas não usá-las como substituto para aprendizagem.
+
+---
+
+# 57. ARQUITETURA DE SERVIÇOS
+
+Adaptar os nomes à stack atual.
+
+Separação conceitual desejada:
+
+```text
+QuestionService
+ContentService
+KnowledgeGraphService
+UserSkillService
+AdaptiveLearningEngine
+MemoryScheduler
+MisconceptionService
+SimulationService
+EssayEvaluationService
+LessonService
+AnalyticsService
+```
+
+Evitar acoplamento entre:
+
+UI
+
+e
+
+algoritmos de aprendizagem.
+
+---
+
+# 58. FASES DE IMPLEMENTAÇÃO
+
+Executar de forma incremental.
+
+## FASE 0 — Auditoria
+
+* analisar projeto;
+* stack;
+* banco;
+* rotas;
+* autenticação;
+* questão atual;
+* simulados;
+* áudio;
+* microaulas;
+* dissertativas;
+* pagamentos;
+* analytics;
+* testes.
+
+Gerar um arquivo:
+
+`docs/adaptive-learning-architecture.md`
+
+documentando o estado atual e decisões adotadas.
+
+Depois continuar a implementação.
+
+---
+
+## FASE 1 — Modelo de dados
+
+Implementar:
+
+```text
+Skill
+SkillRelation
+QuestionSkill
+Misconception
+OptionMisconception
+UserSkillState
+LearningEvent
+QuestionFamily
+```
+
+e migrations.
+
+---
+
+## FASE 2 — Questões
+
+Implementar:
+
+```text
+confidence
+feedback adaptativo
+explicação da alternativa
+microaula em camadas
+misconception
+```
+
+---
+
+## FASE 3 — Motor adaptativo
+
+Implementar:
+
+```text
+AdaptiveLearningEngine
+MemoryScheduler
+ReviewQueue
+TransferQuestionSelector
+```
+
+---
+
+## FASE 4 — Sessão inteligente
+
+Criar:
+
+```text
+Estudar agora
+Memória de hoje
+Fila adaptativa
+```
+
+---
+
+## FASE 5 — Dashboard
+
+Criar:
+
+```text
+Mapa de conhecimento
+Riscos
+Habilidades frágeis
+Erros conceituais
+Evolução
+```
+
+---
+
+## FASE 6 — Aulas e áudio
+
+Implementar:
+
+```text
+LessonSection
+AudioSegment
+RetrievalCheckpoint
+modo interativo
+```
+
+---
+
+## FASE 7 — Dissertativas
+
+Implementar:
+
+```text
+OfficialRubric
+RubricItem
+EssayAttempt
+EssayEvaluation
+EssayRewrite
+```
+
+---
+
+## FASE 8 — Migração de conteúdo
+
+Reclassificar conteúdo atual sem apagá-lo.
+
+---
+
+## FASE 9 — QA
+
+Executar:
+
+```text
+tests
+lint
+typecheck
+build
+migration validation
+```
+
+Corrigir regressões encontradas.
+
+---
+
+# 59. CRITÉRIOS MÍNIMOS DE ACEITE
+
+Ao final quero conseguir fazer o seguinte:
+
+### Cenário 1
+
+Responder uma questão errada.
+
+O aplicativo identifica:
+
+```text
+habilidade
+alternativa escolhida
+possível misconception
+```
+
+e mostra feedback específico.
+
+---
+
+### Cenário 2
+
+Abrir a microaula.
+
+Ver primeiro apenas o essencial.
+
+Poder optar por aprofundamento.
+
+---
+
+### Cenário 3
+
+Depois de aprender algo, receber uma questão diferente cobrando o mesmo princípio.
+
+---
+
+### Cenário 4
+
+Fechar o aplicativo e voltar posteriormente.
+
+O conhecimento aparece para revisão conforme o scheduler.
+
+---
+
+### Cenário 5
+
+Fazer várias questões.
+
+O mapa de conhecimento passa a refletir habilidades fortes e frágeis.
+
+---
+
+### Cenário 6
+
+Fazer um simulado.
+
+Nenhuma resposta é revelada até a conclusão.
+
+Depois recebo diagnóstico por habilidade e misconceptions.
+
+---
+
+### Cenário 7
+
+Ouvir uma aula em modo interativo.
+
+Responder checkpoints durante o conteúdo.
+
+---
+
+### Cenário 8
+
+Responder uma dissertativa.
+
+Não vejo o espelho antes.
+
+Depois recebo:
+
+```text
+item do espelho
+meu trecho correspondente
+atendido/parcial/ausente
+feedback
+```
+
+e posso reescrever a parte insuficiente.
+
+---
+
+### Cenário 9
+
+Dias depois, o sistema pode solicitar nova recuperação daquele conhecimento.
+
+---
+
+# 60. PRINCÍPIO DE PRODUTO
+
+Todas as decisões futuras devem respeitar esta regra:
+
+O aplicativo não existe para maximizar quantidade de conteúdo consumido.
+
+Ele existe para maximizar:
+
+```text
+COMPREENSÃO
++
+RECUPERAÇÃO
++
+RETENÇÃO
++
+TRANSFERÊNCIA
++
+DESEMPENHO NA PROVA
+```
+
+A pergunta principal do produto não é:
+
+> Quantas questões o candidato respondeu?
+
+É:
+
+> Quais conhecimentos ele consegue recuperar e aplicar corretamente hoje, e quais estão prestes a fazê-lo perder pontos?
+
+---
+
+# 61. IMPORTANTE PARA A EXECUÇÃO AGORA
+
+Comece analisando o projeto existente.
+
+Depois:
+
+1. apresente resumidamente a arquitetura atual encontrada;
+2. identifique incompatibilidades com esta especificação;
+3. escolha a estratégia de migration;
+4. implemente por fases;
+5. execute testes após cada fase relevante;
+6. preserve funcionalidades existentes;
+7. documente novas estruturas;
+8. não pare apenas criando documentação;
+9. continue até que o maior número possível das fases esteja funcional;
+10. ao final, informe exatamente:
+
+* arquivos criados;
+* arquivos alterados;
+* migrations;
+* novos componentes;
+* novos endpoints/actions;
+* funcionalidades concluídas;
+* funcionalidades que eventualmente não puderam ser concluídas;
+* passos necessários para testar manualmente.
+
+Não simplifique silenciosamente requisitos pedagógicos sem registrar a razão técnica.

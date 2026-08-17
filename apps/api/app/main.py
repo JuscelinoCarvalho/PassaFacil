@@ -21,6 +21,11 @@ def _ensure_columns() -> None:
     Postgres (produção) e SQLite (dev)."""
     is_sqlite = engine.dialect.name == "sqlite"
     false_default = "0" if is_sqlite else "false"
+    # DDL dependente de dialeto para casar com os tipos que o ORM gera em bases novas
+    # (SQLAlchemy: UUID → CHAR(32) no SQLite, UUID nativo no Postgres; DateTime(timezone=True)
+    # → TIMESTAMP WITH TIME ZONE no Postgres). Evita divergência entre prod e bases novas.
+    uuid_ddl = "CHAR(32)" if is_sqlite else "UUID"
+    ts_tz_ddl = "TIMESTAMP" if is_sqlite else "TIMESTAMP WITH TIME ZONE"
     additions = {
         "gclid": "VARCHAR(512)",
         "conversion_uploaded": f"BOOLEAN DEFAULT {false_default}",
@@ -35,7 +40,40 @@ def _ensure_columns() -> None:
         "ai_comentario": "TEXT",
         "ai_provider": "VARCHAR(40)",
     }
-    plan = [("subscriptions", additions), ("discursive_submissions", disc_additions)]
+    # ---- Plataforma adaptativa (Fase 1 do full remake) ----
+    # As TABELAS novas (skills, misconceptions, user_skill_states, learning_events…)
+    # são criadas por create_all. Aqui vão só as COLUNAS novas em tabelas existentes.
+    # Todas nullable ou com default → inserts atuais seguem funcionando; nenhum dado
+    # antigo é tocado. FK não vai no DDL (padrão do projeto) — a relação é declarada no
+    # ORM (app/models/adaptive.py) e vale para bases novas via create_all.
+    # Ver docs/adaptive-learning-architecture.md §3/§4.
+    question_additions = {
+        "primary_skill_id": uuid_ddl,         # espelho de conveniência (verdade: question_skills)
+        "question_family_id": uuid_ddl,       # transferência (spec §5)
+        "difficulty": "INTEGER",              # 1–5
+        "question_type": "VARCHAR(40) DEFAULT 'multiple_choice'",
+        "review_status": "VARCHAR(30) DEFAULT 'legacy'",   # AI_GENERATED→DRAFT→…→PUBLISHED (spec §10)
+        "content_version": "INTEGER DEFAULT 1",
+        "ai_generated": f"BOOLEAN DEFAULT {false_default}",
+        "reviewed_at": ts_tz_ddl,
+        "reviewed_by": "VARCHAR(120)",
+        # Preservação do conteúdo original (spec §51) — populados só na Fase 8.
+        "original_explanation": "TEXT",
+        "original_micro_lesson": "TEXT",
+    }
+    attempt_additions = {
+        "confidence": "VARCHAR(20)",          # chutei|duvida|confiante (spec §6)
+        "hints_used": "INTEGER DEFAULT 0",
+        "session_id": "VARCHAR(64)",
+        "skill_id": uuid_ddl,                 # habilidade primária avaliada (denormalizada)
+        "is_transfer": f"BOOLEAN DEFAULT {false_default}",
+    }
+    plan = [
+        ("subscriptions", additions),
+        ("discursive_submissions", disc_additions),
+        ("questions", question_additions),
+        ("attempts", attempt_additions),
+    ]
     for table, cols in plan:
         try:
             existing = {c["name"] for c in inspect(engine).get_columns(table)}

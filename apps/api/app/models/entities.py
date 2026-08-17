@@ -122,6 +122,23 @@ class Question(UUIDMixin, TimestampMixin, Base):
     source: Mapped[str] = mapped_column(String(160), default="Autoral Passa Fácil")
     is_published: Mapped[bool] = mapped_column(Boolean, default=False)
 
+    # ---- Plataforma adaptativa (Fase 1) — campos AO LADO dos originais ----
+    # primary_skill_id espelha a habilidade primária (verdade: question_skills).
+    primary_skill_id: Mapped[UUID | None] = mapped_column(ForeignKey("skills.id", ondelete="SET NULL"))
+    question_family_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("question_families.id", ondelete="SET NULL")
+    )
+    difficulty: Mapped[int | None] = mapped_column(Integer)  # 1–5
+    question_type: Mapped[str] = mapped_column(String(40), default="multiple_choice")
+    review_status: Mapped[str] = mapped_column(String(30), default="legacy")  # spec §10
+    content_version: Mapped[int] = mapped_column(Integer, default=1)
+    ai_generated: Mapped[bool] = mapped_column(Boolean, default=False)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    reviewed_by: Mapped[str | None] = mapped_column(String(120))
+    # Preservação do conteúdo original (spec §51) — populados só na Fase 8.
+    original_explanation: Mapped[str | None] = mapped_column(Text)
+    original_micro_lesson: Mapped[str | None] = mapped_column(Text)
+
     topic: Mapped[Topic] = relationship(back_populates="questions")
     attempts: Mapped[list["Attempt"]] = relationship(back_populates="question")
     provenance: Mapped["QuestionProvenance | None"] = relationship(
@@ -196,6 +213,12 @@ class Attempt(UUIDMixin, Base):
     answered_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now().astimezone()
     )
+    # ---- Plataforma adaptativa (Fase 1) — enriquecimento do evento de resposta ----
+    confidence: Mapped[str | None] = mapped_column(String(20))  # chutei|duvida|confiante (spec §6)
+    hints_used: Mapped[int] = mapped_column(Integer, default=0)
+    session_id: Mapped[str | None] = mapped_column(String(64))
+    skill_id: Mapped[UUID | None] = mapped_column(ForeignKey("skills.id", ondelete="SET NULL"))
+    is_transfer: Mapped[bool] = mapped_column(Boolean, default=False)  # questão de transferência (spec §9)
 
     user: Mapped[User] = relationship(back_populates="attempts")
     question: Mapped[Question] = relationship(back_populates="attempts")

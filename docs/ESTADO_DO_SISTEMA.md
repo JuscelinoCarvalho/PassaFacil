@@ -59,6 +59,7 @@
 
 ## 5. Pendências / próximos passos
 
+- [ ] **Full remake — aplicar a F1 em produção** (quando o dono pedir): `sudo systemctl restart passafacil-api` cria as 8 tabelas novas + colunas (aditivo, seguro). Depois, **Sessão B = F2** (confiança, feedback adaptativo, microaula em camadas). Branch `feat/full-remake-adaptativo` — **não commitado ainda**. Ver `docs/adaptive-learning-architecture.md`.
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
 - [ ] **Escalar a cascata quando crescer a base de assinantes:** Cerebras (chave `csk-…` já no `/etc`, modelo `gpt-oss-120b`) e/ou OpenRouter — ambos exigem crédito/cartão. Retomar é só incluir o nome no `GRADING_ORDER` + garantir crédito na conta.
@@ -76,6 +77,18 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-17 (full-remake · Sessão A) — F0 auditoria + F1 modelo de dados
+- Início do **"full remake"** (plataforma adaptativa; spec em `full_remake/full-remake.txt`, 10 fases). Trabalho por **blocos de sessão** para economizar créditos — esta é a **Sessão A = F0 + F1**. **Branch dedicada `feat/full-remake-adaptativo`** (regra da spec). Nada commitado/pushado ainda (aguardando o dono).
+- **F0 (auditoria):** criado **`docs/adaptive-learning-architecture.md`** — estado atual, incompatibilidades com a spec (I1–I14), estratégia de migration e o modelo de dados da F1. Leitura obrigatória para as próximas fases.
+- **F1 (modelo de dados + migrations), aditivo e seguro:**
+  - **8 tabelas novas** em **`apps/api/app/models/adaptive.py`**: `skills`, `skill_relations`, `question_skills`, `misconceptions`, `option_misconceptions`, `user_skill_states`, `learning_events`, `question_families` (criadas por `create_all`). Registradas em `models/__init__.py`.
+  - **Colunas novas** (ao lado das originais, todas nullable/com default): em `questions` (`primary_skill_id`, `question_family_id`, `difficulty`, `question_type`, `review_status`, `content_version`, `ai_generated`, `reviewed_at/by`, **`original_explanation`**, **`original_micro_lesson`**) e em `attempts` (`confidence`, `hints_used`, `session_id`, `skill_id`, `is_transfer`). Adicionadas ao ORM (`entities.py`) **e** ao `main.py::_ensure_columns` (padrão do projeto — mesma dupla de `gclid`/`ai_*`).
+  - **DDL do `_ensure_columns` agora é dialect-aware** (UUID → `UUID` no Postgres / `CHAR(32)` no SQLite; timestamp tz correto) para casar com o tipo que o ORM gera em bases novas.
+  - **Enums das entidades novas como `String` + constantes** (não Enum nativo do Postgres): sem Alembic, `ALTER TYPE ADD VALUE` seria doloroso e esses vocabulários vão evoluir. Rationale no doc §3.
+- **Validação real (SQLite scratch):** cenário *base nova* (create_all cria as 8 tabelas + colunas) e cenário *upgrade de banco existente* (colunas entram numa tabela antiga **sem perder a linha existente**, defaults aplicados); `_ensure_columns` **idempotente** (roda 2× sem erro). Import da app OK. Testes: as 4 falhas de `test_auth.py` são **pré-existentes/ambientais** (owner 401 sem OWNER; `reportlab` ausente) — confirmado por baseline com meu código em stash; **sem regressão**.
+- **F1 NÃO altera comportamento** de nenhuma rota/UI. Aplicar em produção = só `sudo systemctl restart passafacil-api` (roda `create_all` + `_ensure_columns`); **sem rebuild de front**. Ainda **não aplicado** (aguarda o dono).
+- **Próxima sessão (B):** F2 — confiança (chutei/dúvida/confiante), feedback adaptativo por alternativa/misconception e microaula em camadas 1/2/3.
 
 ### 2026-08-17 (acervo) — ingestão das 64 imagens de `novas/` (pipeline resumível)
 - Criado o **acervo** em `docs/acervo/` a partir das 64 imagens JPG de estudo (Gran Concursos, Maratona TCE-SP 2026 — Conhecimentos Gerais: Português, RLM, Ética/OCDE, Legislação; + estudos de caso). Pipeline **anti-quebra-de-sessão**: cada imagem lida vira JSON em disco + checkpoint em `ingest/_manifest.json` (retomável). Ver `docs/acervo/README.md`.
