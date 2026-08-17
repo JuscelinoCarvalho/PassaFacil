@@ -9,9 +9,9 @@
   "organization": "TCE-SP",
   "board": "VUNESP/CESPE (estilo)",
   "exam_year": 2026,
-  "rights_status": "owner_only",
+  "rights_status": "authorial",
   "import_batch": "acervo-txt-ti-2026-08",
-  "escopo_nota": "NOÇÕES DE INFORMÁTICA (básico) — abaixo do nível de Conhecimentos Específicos de TI-auditor. Dono decide se entra na prova.",
+  "escopo_nota": "NOÇÕES DE INFORMÁTICA (básico). Dono aprovou manter e PUBLICAR (rights_status=authorial -> is_published=true no import), mesmo sendo conteúdo mais fraco.",
   "topics": [
     {
       "slug": "info-ia",

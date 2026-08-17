@@ -103,6 +103,9 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .question-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; }
 .question-top p { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
 .question-count { font: 800 31px var(--font-manrope); color: var(--purple); }.question-count span { font-size: 14px; color: var(--muted); }
+.question-nav { display: flex; align-items: center; gap: 12px; }
+.nav-arrow { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 10px; }
+.nav-arrow:disabled { opacity: .35; cursor: not-allowed; }
 .question-card { padding: 32px; }.question-meta { display: flex; gap: 9px; align-items: center; margin-bottom: 18px; }
 .question-meta span { background: #f0edff; color: var(--purple); border-radius: 30px; padding: 6px 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
 .question-meta i { color: var(--muted); font-size: 10px; font-style: normal; }

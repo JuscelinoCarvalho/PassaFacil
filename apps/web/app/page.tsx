@@ -527,6 +527,9 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answer, setAnswer] = useState<AnswerResult | null>(null);
+  // Guarda o que já foi marcado/respondido por questão (id → seleção + resultado),
+  // para preservar o estado ao navegar Anterior/Próxima entre as questões do lote.
+  const [answersMap, setAnswersMap] = useState<Record<string, { selected: number | null; result: AnswerResult | null }>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -561,17 +564,19 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
       const response = await authFetch(`${API_URL}/study/practice?${params.toString()}`, { cache: "no-store" });
       if (!response.ok) throw new Error();
       const data: Question[] = await response.json();
-      // Retoma exatamente na última questão aberta e não respondida (se ainda estiver no lote).
-      let ordered = data;
+      // Mantém a ORDEM natural (numeração estável) e apenas ABRE na última questão
+      // aberta e não respondida (mesmo ID), se ela ainda estiver no lote.
+      let startIndex = 0;
       try {
         const resumeId = localStorage.getItem(RESUME_KEY);
         if (resumeId) {
           const i = data.findIndex((q) => q.id === resumeId);
-          if (i > 0) ordered = [data[i], ...data.slice(0, i), ...data.slice(i + 1)];
+          if (i >= 0) startIndex = i;
         }
-      } catch { /* localStorage indisponível — segue na ordem padrão */ }
-      setQuestions(ordered);
-      setQuestionIndex(0);
+      } catch { /* localStorage indisponível — começa na primeira */ }
+      setQuestions(data);
+      setAnswersMap({});
+      setQuestionIndex(startIndex);
       setSelectedOption(null);
       setAnswer(null);
       setError("");
@@ -698,7 +703,10 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
         return;
       }
       setError("");
-      setAnswer(await response.json());
+      const data: AnswerResult = await response.json();
+      setAnswer(data);
+      // memoriza para preservar ao navegar Anterior/Próxima
+      setAnswersMap((current) => ({ ...current, [question.id]: { selected: selectedOption, result: data } }));
       // já respondida → não é mais "aberta e não respondida"; limpa o marcador de retomada.
       try { localStorage.removeItem(RESUME_KEY); } catch { /* ignora */ }
       await loadDashboard();
@@ -708,15 +716,28 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
     }
   };
 
+  // Navega para uma questão pelo índice, salvando o estado da atual e
+  // restaurando o estado (seleção/resultado) da questão de destino, se houver.
+  const goToIndex = (target: number) => {
+    if (target < 0 || target >= questions.length) return;
+    const cur = questions[questionIndex];
+    if (cur) setAnswersMap((current) => ({ ...current, [cur.id]: { selected: selectedOption, result: answer } }));
+    const dest = questions[target];
+    const saved = dest ? answersMap[dest.id] : undefined;
+    setSelectedOption(saved?.selected ?? null);
+    setAnswer(saved?.result ?? null);
+    setQuestionIndex(target);
+  };
+
   const nextQuestion = () => {
     if (questionIndex + 1 >= questions.length) {
-      loadQuestions();
+      loadQuestions(); // fim do lote → busca mais questões
       return;
     }
-    setQuestionIndex((current) => current + 1);
-    setSelectedOption(null);
-    setAnswer(null);
+    goToIndex(questionIndex + 1);
   };
+
+  const prevQuestion = () => goToIndex(questionIndex - 1);
 
   const currentQuestion = questions[questionIndex];
   const firstName = me.full_name.split(" ")[0] || "Estudante";
@@ -857,6 +878,10 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
                 onSelect={setSelectedOption}
                 onSubmit={submitAnswer}
                 onNext={nextQuestion}
+                onPrev={prevQuestion}
+                onJumpNext={() => goToIndex(questionIndex + 1)}
+                canPrev={questionIndex > 0}
+                canNext={questionIndex + 1 < questions.length}
               />
             </>
           ) : view === "test" ? (
@@ -1051,6 +1076,7 @@ function ScopeBar({
 
 function QuestionsView({
   question, index, total, loading, selected, result, onSelect, onSubmit, onNext,
+  onPrev, onJumpNext, canPrev, canNext,
 }: {
   question?: Question;
   index: number;
@@ -1061,6 +1087,10 @@ function QuestionsView({
   onSelect: (value: number) => void;
   onSubmit: () => void;
   onNext: () => void;
+  onPrev?: () => void;
+  onJumpNext?: () => void;
+  canPrev?: boolean;
+  canNext?: boolean;
 }) {
   if (loading) return <section className="card empty-state"><LoaderCircle className="spin" /><h2>Carregando questões...</h2></section>;
   if (!question) return (
@@ -1074,7 +1104,15 @@ function QuestionsView({
     <section className="question-layout">
       <div className="question-top">
         <div><span className="eyebrow">SIMULADO</span><h1>Treine e aprenda a cada questão</h1><p>Errou? A explicação ensina na hora — assim você fixa rápido.</p></div>
-        <div className="question-count">{index + 1}<span>/{total}</span></div>
+        <div className="question-nav">
+          {onPrev && (
+            <button className="ghost compact nav-arrow" onClick={onPrev} disabled={!canPrev} aria-label="Questão anterior" title="Questão anterior"><ArrowLeft size={16} /></button>
+          )}
+          <span className="question-count">{index + 1}<span>/{total}</span></span>
+          {onJumpNext && (
+            <button className="ghost compact nav-arrow" onClick={onJumpNext} disabled={!canNext} aria-label="Próxima questão" title="Próxima questão"><ArrowRight size={16} /></button>
+          )}
+        </div>
       </div>
       <article className="card question-card">
         <div className="question-meta"><span>{question.subject}</span><i>{question.topic}</i></div>

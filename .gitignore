@@ -14,6 +14,9 @@ coverage/
 apps/api/data/imports/
 docs/infos/
 
+# Material de estudo de terceiros (slides/transcrições) — não versionar (direitos autorais)
+novas/
+
 # Config local / temporários do Claude Code (não versionar)
 .claude/settings.local.json
 .claude/settings.local.json.*
