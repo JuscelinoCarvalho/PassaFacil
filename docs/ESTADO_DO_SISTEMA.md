@@ -88,6 +88,11 @@
 - **Como aplicar no banco:** `apps/api/scripts/importar_acervo.py` (versionado, idempotente, dedup). `--dry-run` para simular. Questões entram **owner_only / não publicadas** (revisão do dono antes de publicar). **AINDA NÃO EXECUTADO** — aguarda o dono revisar os artefatos.
 - Nenhuma alteração em produção nesta fase (só arquivos no repo).
 
+### 2026-08-17 (deploy) — acervo aplicado no banco + front reconstruído
+- **Import aplicado em produção:** `importar_acervo.py` gravou **32 questões** (0 duplicatas, 12 tópicos novos). 13 de Noções de Informática entraram **publicadas** (authorial); as 19 do acervo de imagens entraram **owner_only** (revisão). Matéria `etica` criada no banco (o seed de produção era o antigo, com Ética junto de Legislação).
+- **Front reconstruído e no ar** com a navegação do simulado (Anterior/Próxima + retomada estável). Bundle com a URL de produção (sem localhost); web 200.
+- **Questão do mnemônico MANÉ** (para conferência do dono): ID `2e058342-377e-4988-a640-5116f239a1a7` (Raciocínio Lógico → Estruturas lógicas; negação de condicional "trabalhadora e honesta"). A `rlm-q05` (jovens/sociedade) também traz o MANÉ.
+
 ### 2026-08-17 (simulado) — navegação anterior/próxima + retomada estável
 - **Simulado (`apps/web/app/page.tsx`, componente `QuestionsView`):** cada questão numerada (N/total) com botões **Anterior/Próxima** (setas) para revisitar qualquer questão do lote; o estado (seleção/resultado) é preservado por questão via `answersMap` ao navegar.
 - **Retomada:** ao sair e voltar, o simulado abre na **última questão aberta e não respondida** (localStorage `RESUME_KEY`, por ID), agora **sem reordenar** o lote (numeração estável — antes a questão de retomada era movida para a posição 1). Front sem mudança de backend.
