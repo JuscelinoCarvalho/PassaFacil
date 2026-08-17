@@ -2,6 +2,8 @@
 
 > Base do tema 'Ética Pública e Integridade'. Para cada princípio: a recomendação da OCDE e sua correspondência no direito brasileiro (Lei 14.133/2021).
 
+**Natureza e histórico:** Natureza SOFT LAW: recomendação SEM força vinculante — serve de parâmetro interpretativo e fonte de inspiração (citada por TCU/CGU; incorporada pela Lei 14.133/2021). Origem: princípios publicados em 2009 (a partir de recomendação de 2008). A contratação pública é ~12-20% do PIB dos países da OCDE, sendo a atividade estatal mais exposta a fraude/conluio/corrupção. Em 2015 a matéria foi ampliada para 12 princípios integrados, mas a matriz de 2009 (10 princípios / 4 pilares) permanece a referência de estudo.
+
 ## Estrutura (4 pilares)
 
 | Pilar | Princípios | Foco |
@@ -98,3 +100,4 @@ Ampla divulgação de informações em formato acessível à sociedade civil, im
 - Restringir a transparência à fase competitiva ou ao edital (o princípio 1 abrange TODO o ciclo)
 - Dizer que a OCDE VEDA dispensa/inexigibilidade (não veda; exige controles reforçados)
 - Limitar 'Responsabilização e Controle' ao controle externo, excluindo o controle social (sociedade civil e imprensa)
+- Tratar os princípios da OCDE como norma vinculante — são SOFT LAW (recomendação sem força obrigatória)

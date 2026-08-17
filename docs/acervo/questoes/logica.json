@@ -50,7 +50,7 @@
         "Se a pessoa se sente realizada e olha para si mesma com admiração, então a pessoa é trabalhadora e honesta."
       ],
       "correct_option": 3,
-      "explanation": "Gabarito: D.\n\nMICRO-AULA — negar um condicional. A afirmação tem a forma p → q, com p = (trabalhadora E honesta) e q = (realizada E admiração). A negação de um condicional NUNCA é outro condicional: ~(p → q) ≡ p E ~q (mantém o antecedente e nega o consequente).\n- Antecedente permanece: 'é trabalhadora e honesta'.\n- Consequente é negado com De Morgan: ~(realizada E admiração) = 'não se sente realizada OU não olha para si com admiração'.\nJuntando: 'é trabalhadora e honesta E (não se sente realizada OU não olha...)' = alternativa D.\n\n⚠️ PEGADINHA: (1) trocar a negação por uma contrapositiva/condicional (alternativas B e E) — negar não é inverter. (2) Ao negar 'realizada E admiração', esquecer o De Morgan e manter 'E' em vez de virar 'OU' (alternativa C). O 'E' vira 'OU' ao negar."
+      "explanation": "Gabarito: D.\n\nMICRO-AULA — negar um condicional. A afirmação tem a forma p → q, com p = (trabalhadora E honesta) e q = (realizada E admiração). A negação de um condicional NUNCA é outro condicional: ~(p → q) ≡ p E ~q (mantém o antecedente e nega o consequente).\n- Antecedente permanece: 'é trabalhadora e honesta'.\n- Consequente é negado com De Morgan: ~(realizada E admiração) = 'não se sente realizada OU não olha para si com admiração'.\nJuntando: 'é trabalhadora e honesta E (não se sente realizada OU não olha...)' = alternativa D.\n\n⚠️ PEGADINHA: (1) trocar a negação por uma contrapositiva/condicional (alternativas B e E) — negar não é inverter. (2) Ao negar 'realizada E admiração', esquecer o De Morgan e manter 'E' em vez de virar 'OU' (alternativa C). O 'E' vira 'OU' ao negar.\n\n🔑 MNEMÔNICO (da aula): 'MANÉ' — Mantém o Antecedente, NEga o consequente. É a regra da negação do condicional (p ∧ ~q)."
     },
     {
       "external_key": "vunesp-2025-tcesp-ace-rlm-q02",
@@ -133,7 +133,7 @@
         "Os jovens são a força da sociedade e os de meia idade não são a sustentação."
       ],
       "correct_option": 4,
-      "explanation": "Gabarito: E.\n\nMICRO-AULA — negar p → q dá p E ~q: mantém o antecedente e nega o consequente. p = 'os jovens são a força da sociedade' (permanece); ~q = 'os de meia idade NÃO são a sustentação'. Resultado: alternativa E.\n\n⚠️ PEGADINHA: a negação de um condicional é uma CONJUNÇÃO (p E ~q), nunca outro 'se...então'. Descarte de cara toda alternativa que começa com 'Se' (A, C, D — recíproca, contrapositiva e negação do antecedente)."
+      "explanation": "Gabarito: E.\n\nMICRO-AULA — negar p → q dá p E ~q: mantém o antecedente e nega o consequente. p = 'os jovens são a força da sociedade' (permanece); ~q = 'os de meia idade NÃO são a sustentação'. Resultado: alternativa E.\n\n⚠️ PEGADINHA: a negação de um condicional é uma CONJUNÇÃO (p E ~q), nunca outro 'se...então'. Descarte de cara toda alternativa que começa com 'Se' (A, C, D — recíproca, contrapositiva e negação do antecedente).\n\n🔑 MNEMÔNICO (da aula): 'MANÉ' — Mantém o Antecedente, NEga o consequente. É a regra da negação do condicional (p ∧ ~q)."
     },
     {
       "external_key": "vunesp-2023-tcmsp-ace-rlm-q06",

@@ -9,7 +9,7 @@
       "apelido": "O DNA do Controle",
       "ambito": "federal",
       "assunto": "Fiscalização contábil, financeira e orçamentária — abrangência",
-      "macro_resumo": "O art. 70 define O QUE e SOB QUAIS ASPECTOS se fiscaliza. São 5 fiscalizações (mnemônico CROFOP: Contábil, oRçamentária, Operacional, Financeira, Patrimonial) sob 5 aspectos (Legalidade, Legitimidade, Economicidade, aplicação de Subvenções e renúncia de Receitas). Parágrafo único: presta contas QUALQUER pessoa física ou jurídica, pública ou PRIVADA, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos.",
+      "macro_resumo": "O art. 70 define O QUE e SOB QUAIS ASPECTOS se fiscaliza. São 5 fiscalizações (mnemônico COFOP: Contábil, Orçamentária, Financeira, Operacional, Patrimonial) sob 5 aspectos (Legalidade, Legitimidade, Economicidade, aplicação de Subvenções e renúncia de Receitas). Parágrafo único: presta contas QUALQUER pessoa física ou jurídica, pública ou PRIVADA, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos.",
       "palavras_chave": [
         "CROFOP",
         "legalidade",
@@ -91,7 +91,7 @@
       "apelido": "Sustação e Título Executivo",
       "ambito": "federal",
       "assunto": "Sustação de atos e contratos; eficácia de título executivo das decisões",
-      "macro_resumo": "Sustar ATO: competência do PRÓPRIO TRIBUNAL (art. 71, X). Sustar CONTRATO: competência do LEGISLATIVO (§1º); se o Legislativo (ou o Executivo) ficar INERTE por 90 DIAS, o TRIBUNAL decide a respeito (§2º). As decisões do TC de que resulte imputação de DÉBITO ou MULTA têm eficácia de TÍTULO EXECUTIVO (§3º).",
+      "macro_resumo": "Sustar ATO: competência do PRÓPRIO TRIBUNAL (art. 71, X). Sustar CONTRATO: competência do LEGISLATIVO (§1º); se o Legislativo (ou o Executivo) ficar INERTE por 90 DIAS, o TRIBUNAL decide a respeito (§2º). As decisões do TC de que resulte imputação de DÉBITO ou MULTA têm eficácia de TÍTULO EXECUTIVO EXTRAJUDICIAL (§3º) — o TC não é órgão do Judiciário, mas sua decisão já é líquida e certa, dispensando ação de reconhecimento da dívida.",
       "palavras_chave": [
         "sustar ato",
         "sustar contrato",
@@ -106,7 +106,8 @@
       "pegadinhas": [
         "⭐ A INVERSÃO ATO/CONTRATO é a troca favorita das bancas: ATO = Tribunal · CONTRATO = Legislativo (só assume o contrato se houver inércia de 90 dias)",
         "Trocar o prazo de 90 dias",
-        "Dizer que a decisão do TC é título executivo em qualquer caso (só quando imputa débito/multa)"
+        "Dizer que a decisão do TC é título executivo em qualquer caso (só quando imputa débito/multa)",
+        "O título executivo é EXTRAJUDICIAL (o TC não integra o Judiciário)"
       ],
       "para_discursiva": "Fundamento para medidas do TC contra irregularidades: sustação de ato (autônoma) e a força executiva das condenações em débito/multa.",
       "fonte_imagem": "sustacao.jpg"
@@ -118,7 +119,7 @@
       "apelido": "Composição e Controle Interno",
       "ambito": "federal",
       "assunto": "Composição dos Tribunais de Contas; requisitos dos membros; controle interno",
-      "macro_resumo": "Composição: TCU = 9 MINISTROS; TCEs = 7 CONSELHEIROS (art. 75, p.ú.). Requisitos (art. 73, §1º): mais de 35 e menos de 70 anos (EC 122/2022 elevou o teto para 70); idoneidade moral e reputação ilibada; notórios conhecimentos jurídicos, contábeis, econômicos ou financeiros; mais de 10 anos de exercício de função/atividade. Art. 74 (Controle Interno): §1º — quem, ciente de irregularidade, não der ciência ao TC responde SOLIDARIAMENTE; §2º — legitimados para denúncia ao TC: qualquer CIDADÃO, PARTIDO político, ASSOCIAÇÃO ou SINDICATO.",
+      "macro_resumo": "Composição: TCU = 9 MINISTROS; TCEs = 7 CONSELHEIROS (art. 75, p.ú.). Requisitos (art. 73, §1º): mais de 35 e menos de 70 anos (EC 122/2022 elevou o teto para 70); idoneidade moral e reputação ilibada; notórios conhecimentos jurídicos, contábeis, econômicos OU financeiros (basta UM dos quatro, não os quatro); mais de 10 anos de exercício de função/atividade. Art. 74 (Controle Interno): §1º — quem, ciente de irregularidade, não der ciência ao TC responde SOLIDARIAMENTE; §2º — legitimados para denúncia ao TC: qualquer CIDADÃO, PARTIDO político, ASSOCIAÇÃO ou SINDICATO. A denúncia ao TC NÃO pode ser anônima — o denunciante (cidadão/partido/associação/sindicato) deve se qualificar. Contexto: o Brasil tem 33 Tribunais de Contas (TCU + 26 TCEs + TCDF + 3 TCM estaduais [BA, PA, GO] + 2 TCM municipais [SP e Rio capital]); só esses 2 TCM municipais podem existir — a CF proíbe criar novos.",
       "palavras_chave": [
         "9 ministros",
         "7 conselheiros",
@@ -134,7 +135,9 @@
       "pegadinhas": [
         "Trocar 9 Ministros (TCU) por 7, ou 7 Conselheiros (TCE) por 9",
         "Trocar a idade (antes era 65; EC 122/2022 = 70 anos)",
-        "Restringir os legitimados à denúncia (o rol inclui cidadão, partido, associação E sindicato)"
+        "Restringir os legitimados à denúncia (o rol inclui cidadão, partido, associação E sindicato)",
+        "Exigir os QUATRO conhecimentos (basta um: jurídico OU contábil OU econômico OU financeiro)",
+        "Aceitar denúncia ANÔNIMA ao TC — não pode; o denunciante deve se qualificar"
       ],
       "para_discursiva": "Base para discutir legitimidade democrática do controle (denúncia por qualquer cidadão) e responsabilização do controle interno (solidariedade do §1º).",
       "fonte_imagem": "art73_75.jpg"

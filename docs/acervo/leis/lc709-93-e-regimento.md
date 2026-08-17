@@ -20,11 +20,12 @@ Três resultados: (1) REGULARES — exatidão + legalidade + legitimidade + econ
 
 **Assunto:** Parecer prévio sobre contas do Governador e dos Municípios; quórum para rejeição
 
-CONTAS DO GOVERNADOR: abrangem todos os Poderes + MP + o próprio Tribunal de Contas (§1º) e representam a totalidade do exercício. CONTAS MUNICIPAIS: balanço remetido ao TC até 31 DE MARÇO; parecer emitido até o último dia do ano seguinte ao recebimento. QUÓRUM PARA DERRUBAR O PARECER (art. 24, §4º): o parecer prévio só deixa de prevalecer por decisão de 2/3 dos membros da CÂMARA MUNICIPAL.
+CONTAS DO GOVERNADOR: abrangem todos os Poderes + MP + o próprio Tribunal de Contas (§1º) e representam a totalidade do exercício. CONTAS MUNICIPAIS: balanço remetido ao TC até 31 DE MARÇO; parecer emitido até o último dia do ano seguinte ao recebimento. QUÓRUM PARA DERRUBAR O PARECER (art. 24, §4º): o parecer prévio só deixa de prevalecer por decisão de 2/3 dos membros da CÂMARA MUNICIPAL. QUEM emite: contas do GOVERNADOR = PLENÁRIO; contas dos PREFEITOS = CÂMARAS. Atenção (STF): a Câmara PRECISA votar para derrubar o parecer — se não votar (obstrução), fica SEM julgamento final; não prevalece o TC 'automaticamente'.
 
 **⚠️ Pegadinhas:**
 - Trocar o quórum de 2/3 (para rejeitar o parecer sobre contas de Prefeito)
 - Trocar a data-limite de 31 de março do balanço municipal
+- Dizer que, se a Câmara não votar, prevalece automaticamente o parecer do TC — o STF exige a votação
 
 **Para discursiva:** Base para diferenciar o rito das contas do Governador (todos os Poderes) e o quórum reforçado para rejeição de parecer municipal.
 
@@ -106,12 +107,13 @@ CONEXÃO CF -> LEI ORGÂNICA: o parecer prévio do TC sobre as contas do PREFEIT
 
 **Assunto:** Competência, alcance da jurisdição e funcionamento do TCESP
 
-COMPETÊNCIA (art. 1º): fiscaliza o ESTADO e os MUNICÍPIOS paulistas; é AUXILIAR do Legislativo; sede na capital; jurisdição em todo o território estadual. EXCEÇÃO CAPITAL (art. 2º, II): emite parecer sobre contas municipais, EXCETO o Município de São Paulo (que tem TCM próprio) — pegadinha favorita da banca. JURISDIÇÃO AMPLA (art. 14): alcança responsáveis, FIADORES, HERDEIROS e SUCESSORES; os sucessores respondem até o LIMITE do patrimônio transferido. SESSÕES (art. 8º, p.ú.): SEMPRE PÚBLICAS, salvo matéria administrativa interna ou quando a preservação de direitos individuais e o interesse público o exigirem.
+COMPETÊNCIA (art. 1º): fiscaliza o ESTADO e os MUNICÍPIOS paulistas; é AUXILIAR do Legislativo; sede na capital; jurisdição em todo o território estadual. EXCEÇÃO CAPITAL (art. 2º, II): emite parecer sobre contas municipais, EXCETO o Município de São Paulo (que tem TCM próprio) — pegadinha favorita da banca. JURISDIÇÃO AMPLA (art. 14): alcança responsáveis, FIADORES, HERDEIROS e SUCESSORES; os sucessores respondem até o LIMITE do patrimônio transferido. SESSÕES (art. 8º, p.ú.): SEMPRE PÚBLICAS, salvo matéria administrativa interna ou quando a preservação de direitos individuais e o interesse público o exigirem. A jurisdição do TC é IMPRÓPRIA: a decisão final pode ser revista pelo Judiciário quanto à LEGALIDADE (o Brasil não adota contencioso administrativo separado, como a França).
 
 **⚠️ Pegadinhas:**
 - EXCETO o Município de São Paulo (TCM próprio) — não confundir
 - Jurisdição alcança herdeiros/sucessores, mas até o LIMITE do patrimônio transferido
 - Sessões são públicas SALVO matéria administrativa interna / proteção de direitos
+- Tratar a jurisdição do TC como 'própria/definitiva' — é imprópria (revisível pelo Judiciário quanto à legalidade)
 
 **Para discursiva:** Delimitar o alcance subjetivo e territorial da jurisdição do TCESP e a publicidade das sessões.
 
