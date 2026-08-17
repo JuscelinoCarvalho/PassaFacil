@@ -80,6 +80,11 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-17 (full-remake · Sessão B, demo) — exemplo adaptativo autorado numa questão real
+- Para o dono **ver a F2 completa funcionando**, autorei o conteúdo adaptativo na questão da **negação da condicional** ("trabalhadora e honesta", mnemônico MANÉ; ID `2e058342-377e-4988-a640-5116f239a1a7`, Raciocínio Lógico). Script **versionado e idempotente**: `apps/api/scripts/seed_demo_adaptive.py` (referência de como a autoria da §50 mapeia no modelo).
+- **Gravado em produção:** 1 `Skill` (`LOG-PROP-NEG-COND`) + `QuestionSkill` primary + `questions.primary_skill_id`; 3 `Misconception` ligados às alternativas erradas — **B** inversa (`MIS-LOG-001` ¬P→¬Q), **E** recíproca (`MIS-LOG-002` Q→P), **A** "negar tudo" (`MIS-LOG-003`); **C fica sem** misconception de propósito (mostra que cobertura parcial é OK); `questions.micro_lesson` com camadas **essential** + **deep** (camada 3 cai no `topic.description`). Verificado end-to-end contra o banco de prod.
+- **Como o dono testa (logado):** Simulado → escopo **Raciocínio Lógico** → achar a questão "trabalhadora e honesta". Escolher uma alternativa **errada (B/E/A)** revela "Por que sua resposta pode estar errada" + o nome do erro conceitual; escolher **D (correta)** mostra a microaula em camadas ("Entender melhor" / "Dominar este assunto"). As **pills de confiança** aparecem ao selecionar uma alternativa.
+
 ### 2026-08-17 (full-remake · Sessão B) — F2 questões: confiança + feedback adaptativo + microaula em camadas
 - **Fase 2 implementada e NO AR** (branch `feat/full-remake-adaptativo`, backend + frontend). Modo aprendizagem (o `QuestionsView` rotulado "SIMULADO", que dá feedback imediato) e o **teste grátis** ganharam a experiência adaptativa; o **Modo teste** (prova real, sem gabarito na ida) segue sem feedback, conforme spec §16.
 - **Backend:**
