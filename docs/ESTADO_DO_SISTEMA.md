@@ -88,6 +88,12 @@
 - **Como aplicar no banco:** `apps/api/scripts/importar_acervo.py` (versionado, idempotente, dedup). `--dry-run` para simular. Questões entram **owner_only / não publicadas** (revisão do dono antes de publicar). **AINDA NÃO EXECUTADO** — aguarda o dono revisar os artefatos.
 - Nenhuma alteração em produção nesta fase (só arquivos no repo).
 
+### 2026-08-17 (simulado) — navegação anterior/próxima + retomada estável
+- **Simulado (`apps/web/app/page.tsx`, componente `QuestionsView`):** cada questão numerada (N/total) com botões **Anterior/Próxima** (setas) para revisitar qualquer questão do lote; o estado (seleção/resultado) é preservado por questão via `answersMap` ao navegar.
+- **Retomada:** ao sair e voltar, o simulado abre na **última questão aberta e não respondida** (localStorage `RESUME_KEY`, por ID), agora **sem reordenar** o lote (numeração estável — antes a questão de retomada era movida para a posição 1). Front sem mudança de backend.
+- **Deploy:** exige rebuild do front (`next build` COM `NEXT_PUBLIC_API_URL` + copiar `.next/static` + restart `passafacil-web`) — ver seção 3.
+- **Questões de Noções de Informática** (`docs/acervo/questoes/informatica.json`) marcadas `rights_status=authorial` → serão **publicadas** no import (dono aprovou). `.gitignore` passou a ignorar `novas/`. Seed inalterada.
+
 ### 2026-08-17 (acervo-txt) — transcrições de TI e das aulas processadas
 - **`novas/aula_ti.txt`** (Noções de Informática básica) → **13 questões** novas em `docs/acervo/questoes/informatica.json` (IA, redes, software, Word), matéria nova `informatica`. Escopo básico — abaixo do TI-auditor; dono decide se publica.
 - **`novas/transcricao_aulas.txt`** (transcrição das 64 aulas já importadas) → passo de **refino**: cruzei com o acervo e enriqueci micro-aulas/pegadinhas (particípio rejeita pronome átono; mnemônico MANÉ; título executivo extrajudicial; notórios conhecimentos = basta um; denúncia não anônima; jurisdição imprópria; sanção do Código = só censura ética + 4 processos autônomos; OCDE soft law). Registro do garimpo em `docs/acervo/observacoes/pegadinhas_transcricao.md`. **Validação:** as respostas das questões do acervo batem com o gabarito dos professores.
