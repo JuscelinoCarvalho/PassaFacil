@@ -154,6 +154,55 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 :root[data-theme="dark"] .micro-aula { background: #23203099; border-color: #3a3357; border-left-color: var(--purple); }
 :root[data-theme="dark"] .micro-aula-label { color: #c3b6f7; }
 .teach-label { display: block; font-size: 9px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--purple); margin-bottom: 4px; }
+/* Fase 5 — Meu conhecimento (mapa de habilidades) */
+.knowledge-layout { display: flex; flex-direction: column; gap: 16px; }
+.indicator-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.indicator { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.indicator span { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.indicator b { font: 800 22px var(--font-manrope), sans-serif; color: var(--purple); }
+:root[data-theme="dark"] .indicator { background: #21232c; border-color: #2c2e39; }
+.risk-list, .skill-rows, .misconception-list { list-style: none; margin: 10px 0 0; padding: 0; }
+.risk-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.risk-list li:first-child { border-top: 0; }
+.risk-info { flex: 1 1 220px; min-width: 0; }
+.risk-info b { display: block; font-size: 14px; }
+.risk-info small { color: var(--muted); font-size: 12px; }
+.risk-card { border-left: 3px solid #d98b53; }
+:root[data-theme="dark"] .risk-list li { border-top-color: #2c2e39; }
+.subject-map .card-heading { align-items: center; }
+.subject-mastery { font: 800 20px var(--font-manrope), sans-serif; color: var(--purple); }
+.skill-rows li { padding: 10px 0; border-top: 1px solid var(--line); }
+.skill-rows li:first-child { border-top: 0; }
+.skill-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.skill-head b { font-size: 13.5px; }
+.skill-meta { color: var(--muted); font-size: 11.5px; }
+.skill-bar { height: 7px; border-radius: 5px; background: #ececf3; overflow: hidden; margin-bottom: 5px; }
+:root[data-theme="dark"] .skill-bar { background: #2c2e39; }
+:root[data-theme="dark"] .skill-rows li { border-top-color: #2c2e39; }
+.bar-fill { display: block; height: 100%; border-radius: 5px; background: var(--purple); }
+.state-chip { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; padding: 3px 9px; border-radius: 30px; white-space: nowrap; }
+/* buckets: cores por estado */
+.state-chip.mastered, .bar-fill.mastered { }
+.state-chip.mastered { background: #dff3e7; color: #2f7d54; }
+.bar-fill.mastered { background: #3f9f66; }
+.state-chip.consolidating { background: #dfeafc; color: #2c5fa8; }
+.bar-fill.consolidating { background: #4b82d8; }
+.state-chip.fragile { background: #fbe4e1; color: #b45560; }
+.bar-fill.fragile { background: #d98b53; }
+.state-chip.learning { background: #efeafd; color: #6f54e8; }
+.bar-fill.learning { background: #8f79ef; }
+.state-chip.unseen { background: #edeef2; color: #6d7486; }
+.bar-fill.unseen { background: #b7bcc7; }
+:root[data-theme="dark"] .state-chip.mastered { background: #17311f; color: #7fcea4; }
+:root[data-theme="dark"] .state-chip.consolidating { background: #172336; color: #8fbdf5; }
+:root[data-theme="dark"] .state-chip.fragile { background: #331e21; color: #e08b8b; }
+:root[data-theme="dark"] .state-chip.learning { background: #221d3a; color: #c3b6f7; }
+:root[data-theme="dark"] .state-chip.unseen { background: #262834; color: #aeb2be; }
+.misconception-list li { display: flex; align-items: baseline; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.misconception-list li:first-child { border-top: 0; }
+:root[data-theme="dark"] .misconception-list li { border-top-color: #2c2e39; }
+.mis-count { flex: 0 0 auto; font-weight: 800; color: #b45560; font-size: 12px; }
+
 /* Fase 4 — card da sessão inteligente / memória de hoje */
 .smart-session-card { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-left: 3px solid var(--purple); }
 .smart-session-copy { flex: 1 1 260px; }

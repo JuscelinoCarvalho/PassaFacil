@@ -62,7 +62,8 @@
 - [x] **Full remake — F1 aplicada em produção** (2026-08-17, commit `079275e`; 8 tabelas + colunas criadas, 1074 questões preservadas). Branch `feat/full-remake-adaptativo` **não mesclada na `main` ainda**.
 - [x] **Full remake — Sessão B = F2 NO AR** (confiança + feedback adaptativo + microaula em camadas; backend `services/feedback.py` + `page.tsx`). Falta **autorar conteúdo** (misconceptions por alternativa + microaula estruturada `essential`/`deep`) — vem na F8/autoria; hoje degrada gracioso.
 - [x] **Full remake — Sessão C = F3+F4 NO AR**: `MemoryScheduler` (estilo-FSRS próprio) + `AdaptiveLearningEngine` + `ReviewQueue`/`TransferQuestionSelector` + sessão inteligente / "Memória de hoje"; `/reviews/*` migrado para `PaidUser`.
-- [ ] **Full remake — Sessão D = F5 (dashboard)**: mapa de conhecimento por disciplina/habilidade, painel "o que está me fazendo perder pontos" (riscos), erros conceituais recorrentes, evolução. Consome `UserSkillState`/`LearningEvent`.
+- [x] **Full remake — Sessão D = F5 (dashboard) NO AR**: aba "Meu conhecimento" (`services/knowledge_map.py` + `GET /study/knowledge-map` + `KnowledgeView`): indicadores, mapa por disciplina/habilidade, riscos, erros conceituais recorrentes.
+- [ ] **Full remake — Sessão E = F6 (aulas e áudio interativo)**: `LessonSection`/`AudioSegment`/`RetrievalCheckpoint` + modo interativo. Reaproveitar o áudio-piloto existente.
 - [ ] **Autorar conteúdo adaptativo** (skills + misconceptions + microaula em camadas) além da questão-demo — para o motor/fila/dashboard terem massa. Vem com a F8 / painel de autoria (§50).
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
@@ -81,6 +82,13 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-17 (full-remake · Sessão D, F5) — dashboard "Meu conhecimento" no ar
+- **Fase 5 (dashboard adaptativo)** completa e no ar (backend + frontend). Nova aba **"Meu conhecimento"** com mapa de habilidades, riscos e erros conceituais — consome `UserSkillState` + `LearningEvent`.
+- **Backend — `app/services/knowledge_map.py` + `GET /study/knowledge-map` (PaidUser):** `build_knowledge_map` (lógica fora da rota, §57) devolve **indicadores** (domínio/retenção estimados, dominadas, frágeis, transferências, erros confiantes, tempo médio §42), **mapa por disciplina→habilidade** com estado visual (Dominado/Consolidando/Frágil/Precisa estudar/Ainda não avaliado §18), **riscos** ("o que está me fazendo perder pontos" §19: ordena por (1-domínio)+frágil+erros confiantes+baixa retenção, top 5, com "errou X de Y") e **erros conceituais recorrentes** (§42: conta misconceptions nas respostas erradas via `LearningEvent`→`OptionMisconception`). Estimativas rotuladas como tais (§18 — sem precisão científica falsa).
+- **Frontend (`page.tsx` + `globals.css`):** nav **"Meu conhecimento"** → `KnowledgeView` (auto-busca): grade de indicadores, card de **riscos** com botão **"Corrigir agora"** (→ sessão inteligente), **mapa por disciplina** com barras de domínio + chips de estado coloridos por bucket, e **erros conceituais recorrentes**. **Estado vazio encorajador** quando o aluno ainda não tem habilidades vistas (caso do dono hoje). Tema claro/escuro.
+- **Validado:** `build_knowledge_map` e2e (SQLite: 3 habilidades em estados diferentes → indicadores/mapa/riscos ordenados/misconceptions contados; vazio gracioso) + read-only prod (dono: 0 habilidades → mapa vazio); `tsc` limpo; endpoint 401 sem token; front build sem `localhost`, web 200. Sem regressão.
+- **Deploy + push:** API restart + front rebuild; branch `feat/full-remake-adaptativo` pushada. **Progresso: A✓ B✓ C✓ D✓ de 7 blocos. Próximo: Sessão E = F6 (aulas e áudio interativo com checkpoints).**
 
 ### 2026-08-17 (full-remake · melhoria F2) — quadro "por que as demais estão erradas"
 - A pedido do dono, o feedback ganhou um **quadro resumido** logo depois de "Por que a correta está certa": **"Por que as demais estão erradas"**, listando **uma alternativa incorreta por linha** com um rótulo curto do erro. Compacto (não quebra a tela do celular/PC).

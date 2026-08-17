@@ -18,6 +18,7 @@ from app.models import (
 from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
 from app.services.adaptive_engine import default_engine
 from app.services.feedback import build_answer_feedback, normalize_confidence
+from app.services.knowledge_map import build_knowledge_map
 from app.services.review_queue import default_review_queue
 
 router = APIRouter(prefix="/study", tags=["study"])
@@ -217,6 +218,14 @@ def memory_today(user: PaidUser, db: DbSession):
         "due_skills": due,
         "estimated_minutes": max(1, round(due * 1.5)) if due else 0,
     }
+
+
+@router.get("/knowledge-map")
+def knowledge_map(user: PaidUser, db: DbSession):
+    """Mapa de conhecimento (F5, spec §18/§19/§42): indicadores, domínio por
+    disciplina/habilidade, riscos ('o que está me fazendo perder pontos') e erros
+    conceituais recorrentes. Vazio gracioso enquanto o aluno não tem habilidades vistas."""
+    return build_knowledge_map(db, user.id)
 
 
 @router.get("/session")

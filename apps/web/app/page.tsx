@@ -363,6 +363,7 @@ const nav = [
   ["Modo teste", ListChecks, "test", false],
   ["Estudo de caso", FileText, "discursive", false],
   ["Meus resultados", TrendingUp, "results", false],
+  ["Meu conhecimento", Target, "knowledge", false],
   ["Revisões", RotateCcw, "reviews", false],
   ["Caderno de erros", CircleAlert, "errors", false],
   ["Banco de questões", Database, "bank", true],
@@ -498,7 +499,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "reviews" | "errors" | "bank" | "trial" | "soon">("today");
+  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "reviews" | "errors" | "bank" | "trial" | "soon">("today");
   const [practiceFocus, setPracticeFocus] = useState<"all" | "gaps">("all");
   const [subjectsList, setSubjectsList] = useState<SubjectScope[]>([]);
   const [specialty, setSpecialty] = useState<string>("ti"); // especialidade escolhida
@@ -948,6 +949,8 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
               onFocusGaps={() => startPractice("gaps")}
               onRepeatAll={() => startPractice("all")}
             />
+          ) : view === "knowledge" ? (
+            <KnowledgeView onCorrigir={startSmartSession} />
           ) : view === "reviews" ? (
             <ReviewView />
           ) : view === "errors" ? (
@@ -1317,6 +1320,115 @@ function QuestionsView({
           )}
         </div>
       </article>
+    </section>
+  );
+}
+
+// ============================ MEU CONHECIMENTO (F5) ============================
+
+type KnowledgeMap = {
+  indicators: {
+    skills_seen: number; mastered: number; consolidating: number; fragile: number;
+    estimated_mastery: number; estimated_retention: number | null;
+    transfer_successes: number; high_confidence_errors: number; avg_response_time: number | null;
+  };
+  subjects: {
+    subject: string; mastery_pct: number;
+    skills: {
+      code: string | null; name: string; topic: string | null; mastery_pct: number | null;
+      retention_pct: number | null; state: string; label: string; bucket: string;
+      attempts: number; wrong_attempts: number;
+    }[];
+  }[];
+  risks: {
+    code: string | null; name: string; subject: string | null; mastery_pct: number | null;
+    attempts: number; wrong_attempts: number; high_confidence_errors: number; state: string; label: string;
+  }[];
+  misconceptions: { code: string; name: string; count: number }[];
+};
+
+function KnowledgeView({ onCorrigir }: { onCorrigir: () => void }) {
+  const [data, setData] = useState<KnowledgeMap | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    authFetch(`${API_URL}/study/knowledge-map`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setData)
+      .catch(() => setData(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <section className="card empty-state"><LoaderCircle className="spin" /><h2>Montando seu mapa...</h2></section>;
+  if (!data || data.indicators.skills_seen === 0) return (
+    <section className="card empty-state">
+      <Target size={34} />
+      <h1>Seu mapa de conhecimento está começando</h1>
+      <p>Responda questões no modo aprendizagem para o sistema estimar seu domínio por habilidade, sua retenção e o que está te fazendo perder pontos. O mapa se forma sozinho a cada resposta.</p>
+      <button className="primary compact" onClick={onCorrigir}><Play size={15} fill="currentColor" /> Começar sessão</button>
+    </section>
+  );
+  const ind = data.indicators;
+  return (
+    <section className="knowledge-layout">
+      <div className="question-top">
+        <div><span className="eyebrow">MEU CONHECIMENTO</span><h1>Mapa de habilidades</h1><p>Estimativas do sistema (não é nota oficial) — evoluem a cada resposta.</p></div>
+      </div>
+
+      <div className="indicator-grid">
+        <div className="indicator"><span>Domínio estimado</span><b>{ind.estimated_mastery}%</b></div>
+        <div className="indicator"><span>Retenção estimada</span><b>{ind.estimated_retention != null ? `${ind.estimated_retention}%` : "—"}</b></div>
+        <div className="indicator"><span>Dominadas</span><b>{ind.mastered}</b></div>
+        <div className="indicator"><span>Frágeis</span><b>{ind.fragile}</b></div>
+        <div className="indicator"><span>Transferências</span><b>{ind.transfer_successes}</b></div>
+        <div className="indicator"><span>Erros confiantes</span><b>{ind.high_confidence_errors}</b></div>
+      </div>
+
+      {data.risks.length > 0 && (
+        <section className="card risk-card">
+          <div className="card-heading"><div><span className="section-kicker">O QUE ESTÁ ME FAZENDO PERDER PONTOS</span><h2>Seus maiores riscos hoje</h2></div><AlertTriangle size={20} /></div>
+          <ul className="risk-list">
+            {data.risks.map((r) => (
+              <li key={r.code ?? r.name}>
+                <div className="risk-info">
+                  <b>{r.name}</b>
+                  <small>
+                    {r.subject ? `${r.subject} · ` : ""}{r.label} · domínio {r.mastery_pct ?? 0}%
+                    {r.attempts ? ` · errou ${r.wrong_attempts} de ${r.attempts}` : ""}
+                    {r.high_confidence_errors ? ` · ${r.high_confidence_errors} com alta confiança` : ""}
+                  </small>
+                </div>
+                <button className="ghost compact" onClick={onCorrigir}>Corrigir agora</button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {data.subjects.map((s) => (
+        <section className="card subject-map" key={s.subject}>
+          <div className="card-heading"><div><h2>{s.subject}</h2></div><span className="subject-mastery">{s.mastery_pct}%</span></div>
+          <ul className="skill-rows">
+            {s.skills.map((sk) => (
+              <li key={sk.code ?? sk.name}>
+                <div className="skill-head"><b>{sk.name}</b><span className={`state-chip ${sk.bucket}`}>{sk.label}</span></div>
+                <div className="skill-bar"><i className={`bar-fill ${sk.bucket}`} style={{ width: `${sk.mastery_pct ?? 0}%` }} /></div>
+                <small className="skill-meta">{sk.topic ? `${sk.topic} · ` : ""}domínio {sk.mastery_pct ?? 0}%{sk.retention_pct != null ? ` · retenção ${sk.retention_pct}%` : ""}</small>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      {data.misconceptions.length > 0 && (
+        <section className="card">
+          <div className="card-heading"><div><span className="section-kicker">ERROS CONCEITUAIS RECORRENTES</span><h2>Padrões que se repetem</h2></div><CircleAlert size={20} /></div>
+          <ul className="misconception-list">
+            {data.misconceptions.map((m) => (
+              <li key={m.code}><span className="mis-count">{m.count}×</span> {m.name}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </section>
   );
 }
