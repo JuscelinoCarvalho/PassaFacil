@@ -1,0 +1,57 @@
+{
+  "grupo": "Lei 10.261/68 (Estatuto dos Funcionários Públicos SP)",
+  "edital_ref": "Anexo I - Lei 10.261/1968 (arts. 241-250)",
+  "dispositivos": [
+    {
+      "slug": "lei10261-responsabilidades",
+      "norma": "Lei Estadual 10.261/68 (Estatuto dos Funcionários Públicos SP)",
+      "dispositivo": "arts. 245 a 250",
+      "apelido": "Responsabilidades e Independência das Instâncias",
+      "ambito": "estadual",
+      "assunto": "Reposição ao erário; independência das instâncias administrativa/civil/penal",
+      "macro_resumo": "REPOSIÇÃO AO ERÁRIO: prejuízo à Fazenda por DOLO OU CULPA (art. 245); reposição DE UMA SÓ VEZ nos casos de alcance, desfalque, remissão ou omissão de recolhimento (art. 247); nos DEMAIS casos, desconto de até 1/10 do vencimento (art. 248). INSTÂNCIAS (art. 250): as instâncias administrativa, civil e criminal são INDEPENDENTES (§1º, LC 942/2003); a absolvição pela Justiça que NEGUE a autoria ou a existência do fato gera REINTEGRAÇÃO do servidor (§2º); o sobrestamento do processo administrativo só por despacho motivado (§3º). A absolvição por FALTA DE PROVAS NÃO vincula as demais esferas.",
+      "palavras_chave": [
+        "dolo ou culpa",
+        "1/10 do vencimento",
+        "independência das instâncias",
+        "reintegração",
+        "falta de provas não vincula"
+      ],
+      "conexoes": [
+        "lc709-julgamento-contas"
+      ],
+      "pegadinhas": [
+        "'Independência das instâncias' é o conceito mais cobrado — só vincula a absolvição que NEGA fato/autoria; a por FALTA DE PROVAS NÃO vincula",
+        "Trocar 1/10 do vencimento (desconto nos demais casos)"
+      ],
+      "para_discursiva": "Fundamentar a responsabilização do servidor e os efeitos da esfera penal sobre a administrativa/civil.",
+      "fonte_imagem": "responsabilidades.jpg"
+    },
+    {
+      "slug": "lei10261-proibicoes",
+      "norma": "Lei Estadual 10.261/68 (Estatuto dos Funcionários Públicos SP)",
+      "dispositivo": "arts. 242 a 244",
+      "apelido": "Proibições — o mapa das exceções",
+      "ambito": "estadual",
+      "assunto": "Proibições ao servidor e suas exceções",
+      "macro_resumo": "PROIBIÇÕES e suas EXCEÇÕES: (a) atuar como PROCURADOR de partes junto à repartição — vedado, EXCETO cônjuge ou parente até 2º grau (art. 243, IX); (b) EMPRESA com relações com o Estado — a GERÊNCIA é vedada, mas ser acionista/quotista/comanditário PODE (art. 243, VI); (c) ter PARENTE sob suas ordens imediatas — vedado, EXCETO função de confiança/livre escolha, no máximo 2 auxiliares (art. 244); (d) FUNDAR SINDICATO (art. 243, XII) — NÃO recepcionado pela CF/88 (art. 37, VI, assegura a sindicalização). Art. 243-A (LC 1.361/2021): exceção ao inc. IV para o funcionário que atue como professor orientador de estágio. Art. 242, I: REVOGADO (LC 1.096/2009).",
+      "palavras_chave": [
+        "procurador",
+        "exceto parente 2º grau",
+        "gerência vedada",
+        "máx. 2 auxiliares",
+        "sindicato não recepcionado"
+      ],
+      "conexoes": [
+        "lei10261-responsabilidades"
+      ],
+      "pegadinhas": [
+        "Cobrar 'fundar sindicato' como proibição vigente — foi NÃO recepcionada pela CF/88",
+        "Esquecer as exceções (procurador: cônjuge/parente 2º grau; parente sob ordens: função de confiança, máx. 2)",
+        "Ser acionista/quotista PODE — só a GERÊNCIA é vedada"
+      ],
+      "para_discursiva": "Analisar impedimentos e exceções do servidor (nepotismo, conflito de interesses).",
+      "fonte_imagem": "prohibicao.jpg"
+    }
+  ]
+}

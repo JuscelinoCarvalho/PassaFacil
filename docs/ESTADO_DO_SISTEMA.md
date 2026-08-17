@@ -77,6 +77,17 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-17 (acervo) — ingestão das 64 imagens de `novas/` (pipeline resumível)
+- Criado o **acervo** em `docs/acervo/` a partir das 64 imagens JPG de estudo (Gran Concursos, Maratona TCE-SP 2026 — Conhecimentos Gerais: Português, RLM, Ética/OCDE, Legislação; + estudos de caso). Pipeline **anti-quebra-de-sessão**: cada imagem lida vira JSON em disco + checkpoint em `ingest/_manifest.json` (retomável). Ver `docs/acervo/README.md`.
+- **Resultado (64/64 processadas):** 62 concluídas, 1 duplicata descartada (`quest2bRaciocinio`), 1 bloqueada (`qUEST1b` — faltam alternativas D/E). Entregas:
+  - **19 questões objetivas** com micro-aula + pegadinha (`questoes/{logica,portugues,etica,legislacao}.json`), prontas para import, dedup por content_hash — **validadas** (hashes únicos, sem erros).
+  - **Acervo de leis** (`leis/*.json` + `.md`): 18 dispositivos (CF/88 70-75, LC 709/93, Regimento, Lei 10.261/68, Instruções 1/2024, LRF) com macro-resumo + pegadinhas + "para discursiva" — base do futuro módulo "decorar leis".
+  - **OCDE** (`etica/integridade-ocde.*`): 4 pilares + 10 princípios com correspondência na Lei 14.133/2021. + Código de Ética SP (Decreto 69.328/2025).
+  - **3 estudos de caso** (`estudos_caso/casos.json`) modelados como `DiscursiveCase` (enunciado + espelho + micro-aula + grade — **rascunho a revisar**).
+  - **Observações** (`observacoes/padroes.md`): ranking de probabilidade por norma, checklist "7 pontos", regra-mestra VUNESP (troca prazo/quórum/competência/órgão). Pendências em `observacoes/insumos_faltantes.md`.
+- **Como aplicar no banco:** `apps/api/scripts/importar_acervo.py` (versionado, idempotente, dedup). `--dry-run` para simular. Questões entram **owner_only / não publicadas** (revisão do dono antes de publicar). **AINDA NÃO EXECUTADO** — aguarda o dono revisar os artefatos.
+- Nenhuma alteração em produção nesta fase (só arquivos no repo).
+
 ### 2026-08-17 (edital) — estrutura oficial da prova de TI documentada
 - O dono passou a **divisão de matérias × quantidade de questões** da especialidade **Tecnologia da Informação (TI)**. Registrado em `docs/FUNCIONAL.md` §4.1 (catálogo do concurso) para não se perder:
   - **Prova Objetiva = 80 questões**: Conhecimentos Gerais **20** (Língua Portuguesa 12 · Raciocínio Lógico 4 · Ética Pública e Integridade 2 · Legislação 2) + Conhecimentos Específicos de TI **60**.

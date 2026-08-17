@@ -1,0 +1,143 @@
+{
+  "grupo": "CF/88 — Controle Externo (arts. 70-75)",
+  "edital_ref": "Anexo I - CF/88 arts. 70 a 75",
+  "dispositivos": [
+    {
+      "slug": "cf88-art70",
+      "norma": "Constituição Federal de 1988",
+      "dispositivo": "art. 70",
+      "apelido": "O DNA do Controle",
+      "ambito": "federal",
+      "assunto": "Fiscalização contábil, financeira e orçamentária — abrangência",
+      "macro_resumo": "O art. 70 define O QUE e SOB QUAIS ASPECTOS se fiscaliza. São 5 fiscalizações (mnemônico CROFOP: Contábil, oRçamentária, Operacional, Financeira, Patrimonial) sob 5 aspectos (Legalidade, Legitimidade, Economicidade, aplicação de Subvenções e renúncia de Receitas). Parágrafo único: presta contas QUALQUER pessoa física ou jurídica, pública ou PRIVADA, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos.",
+      "palavras_chave": [
+        "CROFOP",
+        "legalidade",
+        "legitimidade",
+        "economicidade",
+        "prestar contas",
+        "pessoa privada"
+      ],
+      "conexoes": [
+        "cf88-art71-apreciar-julgar",
+        "cf88-arts73-75"
+      ],
+      "pegadinhas": [
+        "Trocar um dos 5 aspectos (ex.: incluir 'eficiência' no lugar de 'economicidade')",
+        "Restringir o dever de prestar contas ao setor público — também alcança o PRIVADO que administra verba pública"
+      ],
+      "para_discursiva": "Fundamento para afirmar a amplitude do controle externo: qualquer gestor de recursos públicos (inclusive privados) se sujeita à fiscalização sob os cinco aspectos.",
+      "fonte_imagem": "dna_art70.jpg"
+    },
+    {
+      "slug": "cf88-art71-apreciar-julgar",
+      "norma": "Constituição Federal de 1988",
+      "dispositivo": "art. 71, I e II",
+      "apelido": "APRECIA × JULGA",
+      "ambito": "federal",
+      "assunto": "Competências do Tribunal de Contas: parecer prévio vs. julgamento de contas",
+      "macro_resumo": "Distinção-chave: o TC APRECIA (emite PARECER PRÉVIO) as contas do CHEFE DO EXECUTIVO (Governador/Prefeito) — quem JULGA essas contas é o LEGISLATIVO. Já o TC JULGA diretamente as contas dos ADMINISTRADORES e demais responsáveis por dinheiros, bens e valores públicos. Prazo do parecer prévio: 60 dias do recebimento (CF art. 71, I); na LC 709/93 (art. 23, §3º) o prazo conta do recebimento da CÓPIA das contas pelo TC.",
+      "palavras_chave": [
+        "parecer prévio",
+        "60 dias",
+        "Chefe do Executivo",
+        "Legislativo julga",
+        "administradores"
+      ],
+      "conexoes": [
+        "cf88-art70",
+        "cf88-art71-sustacao",
+        "cf88-art71-registro"
+      ],
+      "pegadinhas": [
+        "⭐ PEGADINHA Nº 1 DE PROVA DE TC: dizer que o TC JULGA as contas do Chefe do Executivo (ele apenas APRECIA/dá parecer prévio; quem julga é o Legislativo)",
+        "Trocar o prazo de 60 dias"
+      ],
+      "para_discursiva": "Para sustentar que o TC não julga o Chefe do Executivo: cite art. 71, I (parecer prévio, 60 dias) x art. 71, II (julgamento dos administradores).",
+      "fonte_imagem": "art71.jpg",
+      "fonte_imagem_extra": "pegadinha_art71.jpg"
+    },
+    {
+      "slug": "cf88-art71-registro",
+      "norma": "Constituição Federal de 1988",
+      "dispositivo": "art. 71, III",
+      "apelido": "REGISTRO (admissões e aposentadorias)",
+      "ambito": "federal",
+      "assunto": "Apreciação, para fins de registro, de admissões e concessões de aposentadoria/reforma/pensão",
+      "macro_resumo": "O TC aprecia, para fins de REGISTRO, a legalidade das admissões de pessoal e das concessões de aposentadorias, reformas e pensões. EXCEÇÕES ao registro: (a) nomeações para CARGO EM COMISSÃO; (b) melhorias posteriores que NÃO alterem o fundamento legal do ato. Súmula Vinculante 3: no TC assegura-se contraditório e ampla defesa quando a decisão puder anular/revogar ato que beneficie o interessado — EXCETO na apreciação inicial de aposentadoria, reforma e pensão. Tema 445 (RE 636.553): o TC tem 5 ANOS para apreciar o registro da aposentadoria (contados da chegada do processo); depois, considera-se REGISTRADO TACITAMENTE.",
+      "palavras_chave": [
+        "registro",
+        "cargo em comissão",
+        "Súmula Vinculante 3",
+        "Tema 445",
+        "5 anos",
+        "registro tácito"
+      ],
+      "conexoes": [
+        "cf88-art71-apreciar-julgar"
+      ],
+      "pegadinhas": [
+        "Afirmar que cabe contraditório na apreciação INICIAL da aposentadoria (a SV3 excetua justamente esse caso)",
+        "Trocar o prazo de 5 anos do Tema 445 / negar o registro tácito",
+        "Dizer que nomeação para cargo em comissão precisa de registro (é exceção)"
+      ],
+      "para_discursiva": "Base para discutir segurança jurídica e prazo do controle: Tema 445 (5 anos + registro tácito) e limites do contraditório (SV3).",
+      "fonte_imagem": "pegadinha2_art71.jpg"
+    },
+    {
+      "slug": "cf88-art71-sustacao",
+      "norma": "Constituição Federal de 1988",
+      "dispositivo": "art. 71, X e §§1º a 3º",
+      "apelido": "Sustação e Título Executivo",
+      "ambito": "federal",
+      "assunto": "Sustação de atos e contratos; eficácia de título executivo das decisões",
+      "macro_resumo": "Sustar ATO: competência do PRÓPRIO TRIBUNAL (art. 71, X). Sustar CONTRATO: competência do LEGISLATIVO (§1º); se o Legislativo (ou o Executivo) ficar INERTE por 90 DIAS, o TRIBUNAL decide a respeito (§2º). As decisões do TC de que resulte imputação de DÉBITO ou MULTA têm eficácia de TÍTULO EXECUTIVO (§3º).",
+      "palavras_chave": [
+        "sustar ato",
+        "sustar contrato",
+        "90 dias",
+        "título executivo",
+        "débito",
+        "multa"
+      ],
+      "conexoes": [
+        "cf88-art71-apreciar-julgar"
+      ],
+      "pegadinhas": [
+        "⭐ A INVERSÃO ATO/CONTRATO é a troca favorita das bancas: ATO = Tribunal · CONTRATO = Legislativo (só assume o contrato se houver inércia de 90 dias)",
+        "Trocar o prazo de 90 dias",
+        "Dizer que a decisão do TC é título executivo em qualquer caso (só quando imputa débito/multa)"
+      ],
+      "para_discursiva": "Fundamento para medidas do TC contra irregularidades: sustação de ato (autônoma) e a força executiva das condenações em débito/multa.",
+      "fonte_imagem": "sustacao.jpg"
+    },
+    {
+      "slug": "cf88-arts73-75",
+      "norma": "Constituição Federal de 1988",
+      "dispositivo": "arts. 73 a 75",
+      "apelido": "Composição e Controle Interno",
+      "ambito": "federal",
+      "assunto": "Composição dos Tribunais de Contas; requisitos dos membros; controle interno",
+      "macro_resumo": "Composição: TCU = 9 MINISTROS; TCEs = 7 CONSELHEIROS (art. 75, p.ú.). Requisitos (art. 73, §1º): mais de 35 e menos de 70 anos (EC 122/2022 elevou o teto para 70); idoneidade moral e reputação ilibada; notórios conhecimentos jurídicos, contábeis, econômicos ou financeiros; mais de 10 anos de exercício de função/atividade. Art. 74 (Controle Interno): §1º — quem, ciente de irregularidade, não der ciência ao TC responde SOLIDARIAMENTE; §2º — legitimados para denúncia ao TC: qualquer CIDADÃO, PARTIDO político, ASSOCIAÇÃO ou SINDICATO.",
+      "palavras_chave": [
+        "9 ministros",
+        "7 conselheiros",
+        "35 a 70 anos",
+        "EC 122/2022",
+        "responsabilidade solidária",
+        "legitimados denúncia"
+      ],
+      "conexoes": [
+        "cf88-art70",
+        "cf88-art71-apreciar-julgar"
+      ],
+      "pegadinhas": [
+        "Trocar 9 Ministros (TCU) por 7, ou 7 Conselheiros (TCE) por 9",
+        "Trocar a idade (antes era 65; EC 122/2022 = 70 anos)",
+        "Restringir os legitimados à denúncia (o rol inclui cidadão, partido, associação E sindicato)"
+      ],
+      "para_discursiva": "Base para discutir legitimidade democrática do controle (denúncia por qualquer cidadão) e responsabilização do controle interno (solidariedade do §1º).",
+      "fonte_imagem": "art73_75.jpg"
+    }
+  ]
+}

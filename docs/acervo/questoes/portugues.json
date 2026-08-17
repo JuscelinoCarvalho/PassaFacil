@@ -1,0 +1,138 @@
+{
+  "materia": "portugues",
+  "subject_slug": "portugues",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "VUNESP 2025/2026 - TCE-SP (via Gran Concursos, Maratona Pos-Edital)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2025,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-novas-2026-08",
+  "topics": [
+    {
+      "slug": "portugues-flexao-concordancia",
+      "name": "Flexão verbal e concordância",
+      "description": "Flexão verbal (tempos/modos), concordância nominal e verbal, verbos impessoais (haver, fazer), voz passiva."
+    },
+    {
+      "slug": "portugues-colocacao-pronominal",
+      "name": "Colocação pronominal",
+      "description": "Próclise, ênclise e mesóclise; fatores de atração (palavras negativas, 'que', advérbios)."
+    },
+    {
+      "slug": "portugues-substituicao-coesao",
+      "name": "Substituição de expressões e coesão",
+      "description": "Troca de conjunções/expressões mantendo sentido e norma-padrão; conectivos, tempos verbais e voz."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "vunesp-2025-tcesp-ace-port-q02",
+      "topic_slug": "portugues-flexao-concordancia",
+      "fonte_imagem": "quest2.jpg",
+      "difficulty": 4,
+      "tags": [
+        "norma-padrao",
+        "concordancia",
+        "flexao-verbal",
+        "haver-impessoal"
+      ],
+      "statement": "Assinale a alternativa que atende à norma-padrão, considerando-se os aspectos de flexão verbal, concordância nominal e concordância verbal.",
+      "options": [
+        "Supõe-se, com a política protecionista, que ocorrerá a redução de déficits comerciais, mas ela poderá ser maléfica.",
+        "O presidente norte-americano interviu na economia mundial, criando nela uma indisposição desnecessário.",
+        "Se o presidente norte-americano manter sua guerra comercial insano, haverão prejuízos em escala global.",
+        "No século passado, imaginaram-se que a economia latifundiária se desenvolveria com subsídios a produtores locais.",
+        "Fora custoso aos mais pobres as políticas protecionistas do presidente norte-americano em seu primeiro mandato."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A.\n\nMICRO-AULA — a única sem erro de flexão/concordância é a A. Erros das demais:\n- B: 'interviu' não existe (o correto é INTERVEIO, de intervir, que segue 'vir'); e 'indisposição desnecessário' fere a concordância nominal (desnecessáriA).\n- C: 'Se ele manter' está errado — futuro do subjuntivo de 'manter' é MANTIVER; 'guerra... insano' (insanA); e 'haverão prejuízos' — HAVER no sentido de existir é impessoal, fica no singular: HAVERÁ.\n- D: 'imaginaram-se que...' — com oração subjetiva ('que...'), o 'se' é partícula apassivadora/índice e o verbo fica no singular: IMAGINOU-SE que.\n- E: 'Fora custoso as políticas' — sujeito é 'as políticas' (plural, feminino): FORAM CUSTOSAS as políticas.\n\n⚠️ PEGADINHA (padrões VUNESP de flexão): (1) HAVER impessoal nunca vai ao plural ('haverá', não 'haverão'). (2) 'se' + oração iniciada por 'que' pede verbo no SINGULAR (supõe-se que, imaginou-se que). (3) futuro do subjuntivo dos verbos derivados de ter/vir/pôr (mantiver, intervier, dispuser)."
+    },
+    {
+      "external_key": "vunesp-2025-tcesp-ace-port-q03",
+      "topic_slug": "portugues-colocacao-pronominal",
+      "fonte_imagem": "quest3.jpg",
+      "difficulty": 4,
+      "tags": [
+        "colocacao-pronominal",
+        "proclise",
+        "flexao-verbal"
+      ],
+      "statement": "Considerando-se o sentido do texto e a norma-padrão de flexão verbal e de colocação pronominal, as passagens destacadas em \"...quando ele pensava conhecer uma, via que se enganara...\" (1º parágrafo) e \"Na rua não pensava em dona Rosalina, se esquecia inteiramente dela.\" (2º parágrafo) admitem as seguintes reescritas:",
+      "options": [
+        "via que se houvera enganado; não lembrava-se completamente dela.",
+        "via que se houve enganado; não se lembrava obviamente dela.",
+        "via que havia enganado-se; não se lembrava totalmente dela.",
+        "via que houvera enganado-se; não lembrava-se certamente dela.",
+        "via que se havia enganado; não se lembrava absolutamente dela."
+      ],
+      "correct_option": 4,
+      "explanation": "Gabarito: E.\n\nMICRO-AULA — dois testes: colocação pronominal + flexão do verbo.\n1) 'via QUE se enganara': o 'que' é palavra atrativa → exige PRÓCLISE ('que SE havia'). E 'se enganara' (mais-que-perfeito simples) equivale a 'se havia enganado' (mais-que-perfeito composto).\n2) 'NÃO se lembrava': o advérbio 'não' também atrai o pronome → PRÓCLISE obrigatória ('não SE lembrava'). Nunca 'não lembrava-se'.\nSó a E respeita as duas próclises e usa a forma verbal equivalente: 'via que se havia enganado; não se lembrava absolutamente dela.'\n\n⚠️ PEGADINHA: ênclise depois de 'que' e depois de 'não' é ERRO clássico plantado pela VUNESP — 'lembrava-se' após 'não' (alt. A e D) e 'enganado-se' após 'havia' (alt. C) estão todos errados. Palavra negativa e 'que' puxam o pronome para antes do verbo."
+    },
+    {
+      "external_key": "vunesp-2026-tcesp-ace-port-q04",
+      "topic_slug": "portugues-substituicao-coesao",
+      "fonte_imagem": "quest4.jpg",
+      "difficulty": 3,
+      "tags": [
+        "substituicao",
+        "conjuncao-conformativa",
+        "voz-passiva",
+        "mais-que-perfeito"
+      ],
+      "statement": "Em conformidade com a norma-padrão e o sentido original, na passagem \"Recentemente, conforme notificou a Organização Pan-Americana da Saúde, foram registrados em dez países das Américas surtos da doença, que já havia sido eliminada em grande parte do continente.\", as expressões destacadas (conforme; foram registrados; havia sido) podem ser substituídas, respectivamente, por:",
+      "options": [
+        "assim; registraram-se; fosse.",
+        "à medida que; registrou-se; foi.",
+        "segundo; registraram-se; era.",
+        "como; registraram-se; fora.",
+        "uma vez que; registrou-se; seja."
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D.\n\nMICRO-AULA — três substituições, mantendo sentido e norma:\n1) 'conforme' aqui é conjunção CONFORMATIVA (=de acordo com) → equivale a 'como' ou 'segundo'; NÃO a 'assim', 'à medida que' (proporção) nem 'uma vez que' (causa).\n2) 'foram registrados surtos' → voz passiva; o sujeito 'surtos' é plural, então a passiva sintética fica 'registraram-SE' (plural), não 'registrou-se'.\n3) 'havia sido eliminada' é mais-que-perfeito → equivale ao mais-que-perfeito simples 'FORA eliminada' (não 'era', que é pretérito imperfeito, nem subjuntivos).\nSó a D acerta as três: como; registraram-se; fora.\n\n⚠️ PEGADINHA: (1) trocar a conformativa 'conforme' por conectivo de sentido diferente (proporção/causa) muda a relação lógica. (2) Concordância da passiva sintética com 'se': 'registraram-se surtos' (o verbo concorda com o sujeito paciente plural)."
+    },
+    {
+      "external_key": "vunesp-2026-tcesp-ace-port-q05",
+      "topic_slug": "portugues-substituicao-coesao",
+      "fonte_imagem": "quest5.jpg",
+      "difficulty": 3,
+      "tags": [
+        "substituicao",
+        "mais-que-perfeito",
+        "conjuncao-causal",
+        "crase"
+      ],
+      "fonte_imagem_extra": "quest5b.jpg",
+      "statement": "Considere as passagens do texto (expressões destacadas):\n- \"Só nessa manhã TINHA ENCONTRADO um lugar vago num banco de jardim...\" (1º parágrafo)\n- \"Mas, saindo só nos meses mais bonitos, o passe ficava AINDA mais barato.\" (3º parágrafo)\n- \"Gostava SOBRETUDO do elétrico da circulação, dava a volta À cidade sem ter de sair...\" (4º parágrafo)\n- \"Não era só POR SER caro, é que às vezes as cadeiras estavam gastas...\" (5º parágrafo)\nSem prejuízo de sentido ao texto, as expressões destacadas (tinha encontrado; ainda; sobretudo; à; por ser) podem ser substituídas, correta e respectivamente, por:",
+      "options": [
+        "encontrou; também; principalmente; sobre; mas que fosse.",
+        "encontrara; até; mormente; pela; porque era.",
+        "encontrou; inclusive; certamente; na; para que era.",
+        "encontraria; especialmente; eventualmente; na; como fosse.",
+        "encontrara; certamente; absolutamente; pela; apesar de ser."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — cinco trocas mantendo o sentido:\n1) 'tinha encontrado' (mais-que-perfeito composto) = 'ENCONTRARA' (simples). Elimina 'encontrou' (perfeito) e 'encontraria' (futuro do pretérito).\n2) 'ainda mais barato' (ideia de inclusão/gradação) → 'ATÉ mais barato'. 'certamente/especialmente' mudam o sentido.\n3) 'sobretudo' (=principalmente) → 'MORMENTE' (sinônimo culto). 'absolutamente' muda o sentido.\n4) 'dava a volta À cidade' (a + a = crase) → 'PELA cidade' mantém a ideia de percurso.\n5) 'por ser caro' é CAUSA → 'PORQUE ERA'. 'apesar de ser' seria concessão (sentido oposto).\nSó a B fecha as cinco: encontrara; até; mormente; pela; porque era.\n\n⚠️ PEGADINHA: (1) 'por ser' causal vira 'porque era', nunca 'apesar de ser' (concessivo). (2) mais-que-perfeito 'tinha encontrado' = 'encontrara' (não 'encontrou'). (3) 'mormente' é sinônimo de 'sobretudo' — vocabulário culto que a VUNESP cobra."
+    },
+    {
+      "external_key": "vunesp-2026-tcesp-ace-port-q06",
+      "topic_slug": "portugues-substituicao-coesao",
+      "fonte_imagem": "quest6.jpg",
+      "difficulty": 4,
+      "tags": [
+        "regencia-verbal",
+        "substituicao"
+      ],
+      "statement": "A expressão destacada pode ser substituída pela entre colchetes mantendo-se a norma-padrão de regência verbal e o sentido do trecho em:",
+      "options": [
+        "São tantos e tão variados que adeus, confiança, ninguém mais ATENDE UMA [atende a uma] ligação de um número desconhecido.",
+        "Todo dia se ESCUTA UMA [escuta a uma] história sobre alguém que teve seu pé-de-meia raspado.",
+        "...chegou aos 70 anos sem nunca ter ido ao Rio de Janeiro e, para REALIZAR O [realizar ao] sonho, caiu na lábia de alguém que se passava por agente de turismo.",
+        "Beneficiar-se da inocência alheia é uma indignidade que REBAIXA A [rebaixa para a] condição humana.",
+        "De tal forma a tecnologia FACILITA ESSES [facilita com esses] golpes que eles se tornaram pandêmicos."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A.\n\nMICRO-AULA — REGÊNCIA VERBAL. 'Atender' admite dupla regência: transitivo direto ('atender uma ligação') OU transitivo indireto ('atender A uma ligação') com o mesmo sentido — por isso a troca da alt. A mantém norma e sentido. Nas demais, os verbos são transitivos DIRETOS e não regem preposição: escutar (algo), realizar (algo), facilitar (algo); e 'rebaixar a condição' (TD) vira 'rebaixar para a' alterando a regência.\n\n⚠️ PEGADINHA: só 'atender' aceita a variação com/sem 'a'. Inserir preposição em verbo transitivo direto (escuta a uma / realizar ao / facilita com) é erro de regência."
+    }
+  ]
+}

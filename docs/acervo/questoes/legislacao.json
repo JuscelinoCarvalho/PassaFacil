@@ -1,0 +1,41 @@
+{
+  "materia": "legislacao",
+  "subject_slug": "legislacao",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "VUNESP - Prefeitura de Sertãozinho 2025 (via Gran, Maratona de Questões)",
+  "organization": "Prefeitura de Sertãozinho",
+  "board": "VUNESP",
+  "exam_year": 2025,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-novas-2026-08",
+  "topics": [
+    {
+      "slug": "legislacao-orcamento-lrf",
+      "name": "Orçamento público e LRF",
+      "description": "Regra de ouro, limites da LRF, receitas/despesas — legislação orçamentária (verificar escopo p/ TI)."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "vunesp-2025-sertaozinho-orc-regra-ouro-q3659940",
+      "topic_slug": "legislacao-orcamento-lrf",
+      "fonte_imagem": "regra_ouro.jpg",
+      "difficulty": 3,
+      "tags": [
+        "regra-de-ouro",
+        "orcamento",
+        "operacoes-de-credito"
+      ],
+      "statement": "Conhecido frequentemente como \"regra de ouro\", tal procedimento evidencia:",
+      "options": [
+        "créditos tributários a receber.",
+        "adoção do regime de caixa para o ingresso das receitas públicas.",
+        "receitas recebidas a maior, indevidamente.",
+        "o uso de receitas de capital para financiamento de despesas correntes.",
+        "restituição de receitas orçamentárias, por conta de benefícios fiscais."
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D (confirmar gabarito oficial — ver insumos_faltantes).\n\nMICRO-AULA — a REGRA DE OURO (CF, art. 167, III) veda a realização de OPERAÇÕES DE CRÉDITO (receitas de capital originadas de dívida) que EXCEDAM o montante das DESPESAS DE CAPITAL. Ou seja: proíbe usar endividamento (receita de capital) para bancar DESPESA CORRENTE. Por isso o procedimento se relaciona justamente a 'o uso de receitas de capital para financiamento de despesas correntes' (que é o que a regra limita). Exceção: créditos suplementares/especiais com finalidade precisa, aprovados por MAIORIA ABSOLUTA do Legislativo.\n\n⚠️ PEGADINHA: confundir a regra de ouro com regime de caixa (alt. B) ou com créditos tributários (alt. A). A regra é sobre a relação operações de crédito × despesas de capital."
+    }
+  ]
+}

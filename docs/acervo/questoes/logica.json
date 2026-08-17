@@ -1,0 +1,222 @@
+{
+  "materia": "logica",
+  "subject_slug": "logica",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "VUNESP 2025 - TCE-SP (via Gran Concursos, Maratona Pos-Edital)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2025,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-novas-2026-08",
+  "topics": [
+    {
+      "slug": "logica-estruturas",
+      "name": "Estruturas lógicas (proposições, conectivos, equivalência e negação)",
+      "description": "Proposição, conectivos, tabela-verdade, equivalências e negação (De Morgan, negação do condicional)."
+    },
+    {
+      "slug": "logica-quantificadores",
+      "name": "Quantificadores e argumentação",
+      "description": "Quantificadores universais/existenciais, negação de proposições quantificadas e dedução lógica."
+    },
+    {
+      "slug": "logica-sequencias",
+      "name": "Raciocínio sequencial",
+      "description": "Sequências numéricas ou figurais: identificação de padrão e cálculo de termos por posição."
+    },
+    {
+      "slug": "logica-associacao",
+      "name": "Raciocínio de associação (verdades/mentiras, correlação)",
+      "description": "Problemas de correlação lógica (pessoas x atributos) e sequências figurais periódicas."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "vunesp-2025-tcesp-ace-rlm-q01",
+      "topic_slug": "logica-estruturas",
+      "fonte_imagem": "quest1Raciocinio.jpg",
+      "difficulty": 3,
+      "tags": [
+        "negacao",
+        "condicional",
+        "de-morgan"
+      ],
+      "statement": "Considere a seguinte afirmação:\n\"Se a pessoa é trabalhadora e honesta, então a pessoa se sente realizada e olha para si mesma com admiração.\"\nUma afirmação que corresponde à negação lógica dessa afirmação é:",
+      "options": [
+        "A pessoa não se sente realizada e não olha para si mesma com admiração e não é trabalhadora e não é honesta.",
+        "Se a pessoa não é trabalhadora e não é honesta, então a pessoa não se sente realizada e não olha para si mesma com admiração.",
+        "A pessoa é trabalhadora ou honesta e a pessoa não se sente realizada e não olha para si mesma com admiração.",
+        "A pessoa é trabalhadora e honesta e a pessoa não se sente realizada ou não olha para si mesma com admiração.",
+        "Se a pessoa se sente realizada e olha para si mesma com admiração, então a pessoa é trabalhadora e honesta."
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D.\n\nMICRO-AULA — negar um condicional. A afirmação tem a forma p → q, com p = (trabalhadora E honesta) e q = (realizada E admiração). A negação de um condicional NUNCA é outro condicional: ~(p → q) ≡ p E ~q (mantém o antecedente e nega o consequente).\n- Antecedente permanece: 'é trabalhadora e honesta'.\n- Consequente é negado com De Morgan: ~(realizada E admiração) = 'não se sente realizada OU não olha para si com admiração'.\nJuntando: 'é trabalhadora e honesta E (não se sente realizada OU não olha...)' = alternativa D.\n\n⚠️ PEGADINHA: (1) trocar a negação por uma contrapositiva/condicional (alternativas B e E) — negar não é inverter. (2) Ao negar 'realizada E admiração', esquecer o De Morgan e manter 'E' em vez de virar 'OU' (alternativa C). O 'E' vira 'OU' ao negar."
+    },
+    {
+      "external_key": "vunesp-2025-tcesp-ace-rlm-q02",
+      "topic_slug": "logica-sequencias",
+      "fonte_imagem": "quest2Raciocinio.jpg",
+      "difficulty": 4,
+      "tags": [
+        "sequencia",
+        "padrao",
+        "posicao"
+      ],
+      "statement": "A sequência a seguir foi criada com um padrão lógico:\n10, 20, 40, 20, 30, 60, 30, 40, 80, 40, 50, 100, 50, 60, 120, 60, ...\nConsidere a soma entre o 26º elemento e o 34º elemento. Subtraia essa soma do 33º elemento. O resultado dessa subtração é",
+      "options": [
+        "10.",
+        "50.",
+        "30.",
+        "20.",
+        "40."
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D (20).\n\nMICRO-AULA — a sequência anda em GRUPOS DE 3. O n-ésimo trio é (10n, 10n+10, 2·(10n+10)). Confira: trio 1 = 10,20,40; trio 2 = 20,30,60; trio 3 = 30,40,80...\nPara achar o elemento na posição p: o trio é k = teto(p/3) e a posição dentro do trio é (p-1) mod 3 (0=1º, 1=2º, 2=3º).\n- 26º: k=9, resto 1 → 2º do trio = 10·9+10 = 100.\n- 34º: k=12, resto 0 → 1º do trio = 10·12 = 120.\n- 33º: k=11, resto 2 → 3º do trio = 2·(10·11+10) = 240.\nSoma (26º+34º) = 100+120 = 220. 'Subtraia essa soma DO 33º' = 240 − 220 = 20.\n\n⚠️ PEGADINHA: (1) contar posição errada — use base 1 e teto(p/3). (2) A ordem da subtração: 'subtraia a soma DO 33º' = 33º − soma (e não soma − 33º, que daria −20)."
+    },
+    {
+      "external_key": "vunesp-2025-tcesp-ace-rlm-q03",
+      "topic_slug": "logica-quantificadores",
+      "fonte_imagem": "quest3Raciocinio.jpg",
+      "difficulty": 4,
+      "tags": [
+        "quantificadores",
+        "conversao",
+        "categorico"
+      ],
+      "statement": "Considere verdadeiras as afirmações:\nI. Qualquer professor sabe ler.\nII. Algumas pessoas que não frequentaram escola sabem ler.\nA partir dessas, e somente dessas informações, é logicamente correto concluir que",
+      "options": [
+        "Algumas pessoas que sabem ler são professores.",
+        "Pessoas que frequentaram escola sabem ler.",
+        "Algum professor não sabe ler.",
+        "Qualquer pessoa que sabe ler é professor.",
+        "Apenas quem frequentou escola sabe ler."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A (confirmar no gabarito oficial — ver insumos_faltantes).\n\nMICRO-AULA — de I ('todo professor é leitor', Todo P é L) vale a conversão parcial: se existem professores, então 'alguns leitores são professores' (Todo P é L ⇒ Algum L é P, com importação existencial). As demais contrariam as premissas:\n- C ('algum professor não sabe ler') contradiz I.\n- E ('apenas quem frequentou escola sabe ler') contradiz II.\n- B e D não decorrem (D é a recíproca inválida de I).\n\n⚠️ PEGADINHA: confundir 'Todo P é L' com a recíproca 'Todo L é P' (alternativa D). A conversão só garante 'ALGUM L é P', nunca 'todo'."
+    },
+    {
+      "external_key": "vunesp-2025-tcesp-ace-rlm-q04",
+      "topic_slug": "logica-estruturas",
+      "fonte_imagem": "quest4Raciocinio.jpg",
+      "difficulty": 3,
+      "tags": [
+        "equivalencia",
+        "condicional",
+        "quantificador"
+      ],
+      "statement": "Considere a afirmação:\n\"Se todas as pessoas são sensatas, então a convivência é pacífica e reina a felicidade.\"\nUma afirmação que seja equivalente lógica em relação à afirmação dada é:",
+      "options": [
+        "Se a convivência é pacífica e reina a felicidade, então todas as pessoas são sensatas.",
+        "Se a convivência não é pacífica e não reina a felicidade, então todas as pessoas não são sensatas.",
+        "Todas as pessoas sensatas convivem pacificamente e reinam na felicidade.",
+        "As pessoas não são sensatas e a convivência é pacífica e reina a felicidade.",
+        "Nem todas as pessoas são sensatas ou a convivência é pacífica e reina a felicidade."
+      ],
+      "correct_option": 4,
+      "explanation": "Gabarito: E.\n\nMICRO-AULA — todo condicional tem duas equivalências: a contrapositiva (~q → ~p) e a forma disjuntiva p → q ≡ ~p OU q. A alternativa E usa a forma disjuntiva: ~p = 'nem todas as pessoas são sensatas'; q = 'a convivência é pacífica e reina a felicidade'. Logo ~p OU q = alternativa E.\n\n⚠️ PEGADINHA: (1) a negação de 'TODAS são sensatas' é 'NEM TODAS/pelo menos uma não é' — NÃO é 'todas não são' (=nenhuma), erro da alternativa B. (2) A (recíproca q→p) não é equivalente. (3) Na contrapositiva o consequente vira 'ou' (De Morgan), e B mantém 'e' — outro erro de B."
+    },
+    {
+      "external_key": "vunesp-2025-tcesp-ace-rlm-q05",
+      "topic_slug": "logica-estruturas",
+      "fonte_imagem": "quest5Raciocinio.jpg",
+      "difficulty": 2,
+      "tags": [
+        "negacao",
+        "condicional"
+      ],
+      "statement": "Considere a afirmação:\n\"Se os jovens são a força da sociedade então os de meia idade são a sustentação.\"\nUma negação lógica para essa afirmação é:",
+      "options": [
+        "Se os de meia idade são a sustentação então os jovens são a força da sociedade.",
+        "Os jovens não são a força da sociedade e os de meia idade não são a sustentação.",
+        "Se os de meia idade não são a sustentação então os jovens não são a força da sociedade.",
+        "Se os jovens não são a força da sociedade então os de meia idade são a sustentação.",
+        "Os jovens são a força da sociedade e os de meia idade não são a sustentação."
+      ],
+      "correct_option": 4,
+      "explanation": "Gabarito: E.\n\nMICRO-AULA — negar p → q dá p E ~q: mantém o antecedente e nega o consequente. p = 'os jovens são a força da sociedade' (permanece); ~q = 'os de meia idade NÃO são a sustentação'. Resultado: alternativa E.\n\n⚠️ PEGADINHA: a negação de um condicional é uma CONJUNÇÃO (p E ~q), nunca outro 'se...então'. Descarte de cara toda alternativa que começa com 'Se' (A, C, D — recíproca, contrapositiva e negação do antecedente)."
+    },
+    {
+      "external_key": "vunesp-2023-tcmsp-ace-rlm-q06",
+      "topic_slug": "logica-estruturas",
+      "fonte_imagem": "quest6Raciocinio.jpg",
+      "difficulty": 3,
+      "tags": [
+        "modus-tollens",
+        "condicional",
+        "de-morgan"
+      ],
+      "statement": "Se a fiscalização é feita corretamente e as auditorias são consistentes, então os munícipes estão satisfeitos. Sabendo-se que os munícipes não estão satisfeitos, conclui-se corretamente que",
+      "options": [
+        "a fiscalização foi feita corretamente ou as auditorias foram consistentes.",
+        "a fiscalização foi feita corretamente, mas as auditorias não foram consistentes.",
+        "a fiscalização não foi feita corretamente, mas as auditorias foram consistentes.",
+        "a fiscalização não foi feita corretamente e as auditorias não foram consistentes.",
+        "a fiscalização não foi feita corretamente ou as auditorias não foram consistentes."
+      ],
+      "correct_option": 4,
+      "explanation": "Gabarito: E.\n\nMICRO-AULA — MODUS TOLLENS. A premissa é (F e A) -> S. Como ~S (munícipes não satisfeitos), nega-se o antecedente: ~(F e A). Por De Morgan, ~(F e A) = ~F OU ~A = 'a fiscalização não foi feita corretamente OU as auditorias não foram consistentes' (alt. E).\n\n⚠️ PEGADINHA: negar 'F e A' vira 'ou' (não 'e') — a alternativa D ('e') está errada. E não se pode afirmar QUAL das duas falhou (afasta B e C); apenas que pelo menos uma falhou."
+    },
+    {
+      "external_key": "vunesp-2023-tcmsp-ace-rlm-q07",
+      "topic_slug": "logica-estruturas",
+      "fonte_imagem": "quest7Rciocinio.jpg",
+      "difficulty": 4,
+      "tags": [
+        "valores-logicos",
+        "condicional",
+        "conjuncao"
+      ],
+      "statement": "Considere falsa a afirmação I e verdadeira a afirmação II:\nI. Camila é auditora de controle externo em Ciências Atuariais e Jorge é auditor de controle externo em Ciências Jurídicas.\nII. Se Camila é auditora de controle externo em Ciências Atuariais, então Jorge é auditor de controle externo em Ciências Jurídicas.\nNessas condições, é necessariamente",
+      "options": [
+        "verdade que Jorge é auditor de controle externo em Ciências Jurídicas.",
+        "falsidade que Jorge é auditor de controle externo em Ciências Jurídicas.",
+        "verdade que Camila é auditora de controle externo em Ciências Atuariais.",
+        "falsidade que Camila é auditora de controle externo em Ciências Atuariais.",
+        "verdade que Camila e Jorge não são auditores de controle externo."
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D.\n\nMICRO-AULA — sejam C = 'Camila é atuariais' e J = 'Jorge é jurídicas'. I (C e J) é FALSA; II (C -> J) é VERDADEIRA. Teste: se C fosse verdadeira, por II (verdadeira) J seria verdadeira, tornando 'C e J' verdadeira — mas I é falsa. Contradição. Logo C é necessariamente FALSA: 'é falsidade que Camila é auditora em Ciências Atuariais' (alt. D). O valor de J fica indeterminado.\n\n⚠️ PEGADINHA: querer concluir algo sobre Jorge (alts. A/B) — J não é determinado. O único valor forçado é C = falso."
+    },
+    {
+      "external_key": "vunesp-2023-tcmsp-ace-rlm-q08",
+      "topic_slug": "logica-associacao",
+      "fonte_imagem": "quest8Raciocinio.jpg",
+      "difficulty": 4,
+      "tags": [
+        "associacao",
+        "correlacao"
+      ],
+      "statement": "Alberto, Carlos, Douglas e Edgar têm 35, 38, 40 e 41 anos, não necessariamente nessa ordem. Cada um trabalha com um tipo de veículo (caminhão, carro, motocicleta e ônibus), em municípios distintos (Campinas, Limeira, Marília e Santos). Sabe-se que o de maior idade trabalha com carro e seu local não é Limeira nem Marília; Alberto tem menos idade que Douglas, trabalha em Campinas, não com ônibus; o mais novo trabalha em Limeira, com motocicleta; Edgar não trabalha com ônibus e é mais velho que Alberto e que Douglas. A alternativa que apresenta uma associação correta é:",
+      "options": [
+        "Alberto trabalha com caminhão.",
+        "Douglas tem 38 anos.",
+        "Edgar trabalha em Marília.",
+        "Douglas trabalha em Campinas.",
+        "Alberto tem 40 anos."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A.\n\nMICRO-AULA — montar a grade. Edgar > Alberto e Edgar > Douglas, e Alberto < Douglas: o mais novo (35) não é Alberto (está em Campinas, e o mais novo está em Limeira) nem Douglas nem Edgar -> Carlos = 35, Limeira, moto. Sobram 38/40/41 com Alberto < Douglas < Edgar -> Alberto 38, Douglas 40, Edgar 41. O de maior idade (Edgar, 41) trabalha com carro e não é Limeira/Marília nem Campinas (de Alberto) -> Santos. Douglas fica em Marília. Veículos restantes (caminhão/ônibus) para Alberto/Douglas; Alberto não é ônibus -> Alberto CAMINHÃO, Douglas ônibus. Logo A é correta.\n\n⚠️ PEGADINHA: usar cada pista como filtro e cruzar idade x local x veículo; as demais alternativas trocam um atributo (Douglas 40 não 38; Edgar Santos não Marília)."
+    },
+    {
+      "external_key": "vunesp-2023-tcmsp-ace-rlm-q09",
+      "topic_slug": "logica-associacao",
+      "fonte_imagem": "quest9Raciocinio.jpg",
+      "difficulty": 3,
+      "tags": [
+        "sequencia-figural",
+        "periodo",
+        "resto"
+      ],
+      "statement": "Observe a sequência de figuras (3x3, com quadradinhos cinza e brancos). Nessa sequência, a figura 10 é igual à figura 1, a figura 11 é igual à figura 2, a figura 12 é igual à figura 3, e assim por diante. Dessa forma, na figura 325, o número de quadradinhos com o interior na cor branca será igual a",
+      "options": [
+        "8.",
+        "6.",
+        "4.",
+        "2.",
+        "0."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A (8).\n\nMICRO-AULA — a sequência é PERIÓDICA de período 9 (a figura 10 repete a 1). Para achar a que corresponde à 325, calcula-se 325 mod 9 = 1 (pois 324 = 36x9). Logo a figura 325 é IGUAL à figura 1. A figura 1 é um quadrado 3x3 (9 quadradinhos) com apenas 1 cinza -> 8 BRANCOS.\n\n⚠️ PEGADINHA: período é 9 (não 10) — 'figura 10 = figura 1' significa ciclo de 9. Cuidado ao converter posição em resto (325 mod 9 = 1)."
+    }
+  ]
+}

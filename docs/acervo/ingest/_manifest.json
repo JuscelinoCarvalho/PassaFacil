@@ -1,0 +1,521 @@
+{
+  "_meta": {
+    "descricao": "Checkpoint de ingestao das 64 imagens de novas/. status: pending|done|skipped. categoria_guess vem do nome (confirmar ao ler).",
+    "batch_size": 6,
+    "criado_em": "2026-08-17"
+  },
+  "arquivos": {
+    "7pontos.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "meta",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/7pontos.json",
+      "notas": "7 pontos de atencao (checklist de pegadinhas) -> observacoes/padroes.md"
+    },
+    "CAPA_CODIGO_ETICA.jpg": {
+      "categoria_guess": "capa",
+      "categoria": "capa",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/CAPA_CODIGO_ETICA.json",
+      "notas": "Legislacao TCE-SP - Etica Publica e Integridade"
+    },
+    "PilarCPrincipio5.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/PilarCPrincipio5.json",
+      "notas": "etica/ocde-principio-5"
+    },
+    "Principio9.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/Principio9.json",
+      "notas": "etica/ocde-principio-9"
+    },
+    "Texto1.jpg": {
+      "categoria_guess": "estudo_caso",
+      "categoria": "apoio",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/Texto1.json",
+      "notas": "apoio: texto-base de Português (guerra comercial)"
+    },
+    "art71.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/art71.json",
+      "notas": "leis/cf88-art71-apreciar-julgar"
+    },
+    "art73_75.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/art73_75.json",
+      "notas": "leis/cf88-arts73-75"
+    },
+    "camaras.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/camaras.json",
+      "notas": "leis/regimento-pleno-camaras"
+    },
+    "capa_Legislacao.jpg": {
+      "categoria_guess": "capa",
+      "categoria": "capa",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/capa_Legislacao.json",
+      "notas": "TCE SP 2026 - Legislacao (Conhecimentos Gerais)"
+    },
+    "capa_raciocinio_logico_analitico.jpg": {
+      "categoria_guess": "capa",
+      "categoria": "capa",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/capa_raciocinio_logico_analitico.json",
+      "notas": "Raciocinio Logico e Analitico (escopo do edital)"
+    },
+    "conexao_lei.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/conexao_lei.json",
+      "notas": "leis/regimento-mandato-ferias"
+    },
+    "contas_sem_limites.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/contas_sem_limites.json",
+      "notas": "leis/lrf-exclusoes-pessoal"
+    },
+    "disposicoes_preliminares.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/disposicoes_preliminares.json",
+      "notas": "etica/codetica-sp-art1"
+    },
+    "dna_art70.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/dna_art70.json",
+      "notas": "leis/cf88-art70"
+    },
+    "estudo_cado1.jpg": {
+      "categoria_guess": "estudo_caso",
+      "categoria": "estudo_caso",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/estudo_cado1.json",
+      "notas": "estudo_caso/dea-decimo-terceiro"
+    },
+    "estudo_cado3.jpg": {
+      "categoria_guess": "estudo_caso",
+      "categoria": "estudo_caso",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/estudo_cado3.json",
+      "notas": "estudo_caso/posturas-principios-art37"
+    },
+    "estudo_caso2.jpg": {
+      "categoria_guess": "estudo_caso",
+      "categoria": "estudo_caso",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/estudo_caso2.json",
+      "notas": "estudo_caso/empolamento-terraplenagem"
+    },
+    "instrucoes.jpg": {
+      "categoria_guess": "estudo_caso",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/instrucoes.json",
+      "notas": "leis/instrucoes-1-2024"
+    },
+    "julgamento_contas.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/julgamento_contas.json",
+      "notas": "leis/lc709-julgamento-contas"
+    },
+    "limites_gastos.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/limites_gastos.json",
+      "notas": "leis/lrf-limite-pessoal"
+    },
+    "mapa_recursal.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/mapa_recursal.json",
+      "notas": "leis/lc709-mapa-recursal"
+    },
+    "mapa_recursal_completo.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/mapa_recursal_completo.json",
+      "notas": "leis/lc709-mapa-recursal (tabela completa — enriqueceu o dispositivo)"
+    },
+    "parecer_previo.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/parecer_previo.json",
+      "notas": "leis/lc709-pareceres-previos"
+    },
+    "pegadinha2_art71.jpg": {
+      "categoria_guess": "pegadinha",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/pegadinha2_art71.json",
+      "notas": "leis/cf88-art71-registro"
+    },
+    "pegadinha_art71.jpg": {
+      "categoria_guess": "pegadinha",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/pegadinha_art71.json",
+      "notas": "Versao anotada do APRECIA×JULGA (art71.jpg) — pegadinha juntada no dispositivo, nao e lei separada."
+    },
+    "pilarA.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/pilarA.json",
+      "notas": "etica/ocde-principio-1"
+    },
+    "pilarBprincipio3.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/pilarBprincipio3.json",
+      "notas": "etica/ocde-principio-3"
+    },
+    "pilarDPrincipio8.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/pilarDPrincipio8.json",
+      "notas": "etica/ocde-principio-8"
+    },
+    "pricipiosEOCD.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/pricipiosEOCD.json",
+      "notas": "etica/ocde-estrutura"
+    },
+    "principio10.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/principio10.json",
+      "notas": "etica/ocde-principio-10"
+    },
+    "principio4.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/principio4.json",
+      "notas": "etica/ocde-principio-4"
+    },
+    "principio6.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/principio6.json",
+      "notas": "etica/ocde-principio-6"
+    },
+    "principio7.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/principio7.json",
+      "notas": "etica/ocde-principio-7"
+    },
+    "prncipio2EOCD.jpg": {
+      "categoria_guess": "etica_conteudo",
+      "categoria": "etica",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/prncipio2EOCD.json",
+      "notas": "etica/ocde-principio-2"
+    },
+    "prohibicao.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/prohibicao.json",
+      "notas": "leis/lei10261-proibicoes"
+    },
+    "q2Etica.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/q2Etica.json",
+      "notas": "etica/gran-2026-tcesp-etica-codigo-q02"
+    },
+    "q3Etica.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/q3Etica.json",
+      "notas": "etica/gran-2026-tcesp-etica-codigo-q03"
+    },
+    "qUEST1b.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "blocked",
+      "content_hash": null,
+      "raw_json": null,
+      "notas": "Q01 interpretacao (base=Texto1.jpg). Slide mostra so alternativas A,B,C — faltam D/E. Aguardando insumo."
+    },
+    "quest1EOCD.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest1EOCD.json",
+      "notas": "etica/gran-2026-tcesp-ocde-integridade-q01"
+    },
+    "quest1Etica.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest1Etica.json",
+      "notas": "etica/gran-2026-tcesp-etica-codigo-q01"
+    },
+    "quest1Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest1Raciocinio.json",
+      "notas": "logica/vunesp-2025-tcesp-ace-rlm-q01"
+    },
+    "quest2.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest2.json",
+      "notas": "portugues/vunesp-2025-tcesp-ace-port-q02"
+    },
+    "quest2Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest2Raciocinio.json",
+      "notas": "logica/vunesp-2025-tcesp-ace-rlm-q02"
+    },
+    "quest2bRaciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "duplicata",
+      "status": "skipped",
+      "content_hash": null,
+      "raw_json": null,
+      "notas": "Idêntica a quest2Raciocinio.jpg (mesma questão 02) — descartada por dedup."
+    },
+    "quest3.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest3.json",
+      "notas": "portugues/vunesp-2025-tcesp-ace-port-q03"
+    },
+    "quest3Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest3Raciocinio.json",
+      "notas": "logica/vunesp-2025-tcesp-ace-rlm-q03"
+    },
+    "quest4.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest4.json",
+      "notas": "portugues/vunesp-2026-tcesp-ace-port-q04"
+    },
+    "quest4Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest4Raciocinio.json",
+      "notas": "logica/vunesp-2025-tcesp-ace-rlm-q04"
+    },
+    "quest5.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest5.json",
+      "notas": "portugues/vunesp-2026-tcesp-ace-port-q05"
+    },
+    "quest5Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/quest5Raciocinio.json",
+      "notas": "logica/vunesp-2025-tcesp-ace-rlm-q05"
+    },
+    "quest5b.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "continuacao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": null,
+      "notas": "Passagens destacadas da questao 05 (quest5.jpg) — JUNTADA no enunciado, nao e questao separada."
+    },
+    "quest6.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest6.json",
+      "notas": "portugues/q06"
+    },
+    "quest6Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest6Raciocinio.json",
+      "notas": "logica/vunesp-2023-tcmsp-ace-rlm-q06"
+    },
+    "quest7Rciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest7Rciocinio.json",
+      "notas": "logica/vunesp-2023-tcmsp-ace-rlm-q07"
+    },
+    "quest8Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest8Raciocinio.json",
+      "notas": "logica/vunesp-2023-tcmsp-ace-rlm-q08"
+    },
+    "quest9Raciocinio.jpg": {
+      "categoria_guess": "questao",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/quest9Raciocinio.json",
+      "notas": "logica/vunesp-2023-tcmsp-ace-rlm-q09"
+    },
+    "ranking_probabilidades.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "meta",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/ranking_probabilidades.json",
+      "notas": "Ranking de probabilidade por norma -> observacoes/padroes.md"
+    },
+    "recorte_edital.jpg": {
+      "categoria_guess": "meta",
+      "categoria": "meta",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/recorte_edital.json",
+      "notas": "O Recorte do Edital e a Matemática"
+    },
+    "regimento_interno.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/regimento_interno.json",
+      "notas": "leis/regimento-orgaos-2024"
+    },
+    "regra_ouro.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "questao",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/regra_ouro.json",
+      "notas": "legislacao/regra-de-ouro (deck Maratona de Questões — verificar escopo TI)"
+    },
+    "responsabilidades.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/responsabilidades.json",
+      "notas": "leis/lei10261-responsabilidades"
+    },
+    "sancoes.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/sancoes.json",
+      "notas": "leis/lc709-sancoes"
+    },
+    "sustacao.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "docs/acervo/ingest/raw/sustacao.json",
+      "notas": "leis/cf88-art71-sustacao"
+    },
+    "tce_sp4tracos.jpg": {
+      "categoria_guess": "lei",
+      "categoria": "lei",
+      "status": "done",
+      "content_hash": null,
+      "raw_json": "/home/jussa/FileShare/development/passa_facil/docs/acervo/ingest/raw/tce_sp4tracos.json",
+      "notas": "leis/lc709-tcesp-4-tracos"
+    }
+  }
+}

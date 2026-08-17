@@ -1,0 +1,110 @@
+{
+  "materia": "etica",
+  "subject_slug": "etica",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Gran Concursos - Maratona Pós-Edital (questões-modelo)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-novas-2026-08",
+  "topics": [
+    {
+      "slug": "etica-codigo-sp",
+      "name": "Código de Ética da Adm. Pública SP (Decreto 69.328/2025)",
+      "description": "Princípios/valores, agente público, conflito de interesses, informação privilegiada, mídias digitais e disposições finais."
+    },
+    {
+      "slug": "etica-integridade-ocde",
+      "name": "Princípios de Integridade em Contratações (OCDE)",
+      "description": "OECD Principles for Integrity in Public Procurement (2009): 4 pilares e princípios do ciclo da contratação."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "gran-2026-tcesp-etica-codigo-q01",
+      "topic_slug": "etica-codigo-sp",
+      "fonte_imagem": "quest1Etica.jpg",
+      "difficulty": 3,
+      "tags": [
+        "codigo-etica",
+        "principios",
+        "decreto-69328"
+      ],
+      "statement": "Sobre os princípios e valores fundamentais a serem observados pelos agentes públicos da Administração Pública direta e autárquica do Estado de São Paulo, nos termos do Código de Ética aprovado pelo Decreto nº 69.328/2025, assinale a alternativa correta.",
+      "options": [
+        "A neutralidade político-partidária, religiosa e ideológica não integra o rol de princípios do Código, cabendo essa vedação exclusivamente à Lei federal nº 8.429/1992.",
+        "Constitui princípio elencado no Código a observância da legalidade, da impessoalidade, da moralidade, da publicidade, da razoabilidade, da finalidade, da motivação e da eficiência.",
+        "O Código restringe-se aos princípios constitucionais do art. 37, caput, da Constituição Federal, sem prever a otimização de recursos disponíveis ou a proteção socioambiental.",
+        "O comprometimento com a promoção da cidadania e da inclusão figura no Código como diretriz aplicável tão somente aos ocupantes de cargo de chefia.",
+        "A probidade e a responsabilidade foram expressamente excluídas do rol de princípios do Código, por já serem tratadas em legislação federal específica."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — o Código de Ética SP (Decreto 69.328/2025) elenca expressamente os princípios da legalidade, impessoalidade, moralidade, publicidade, razoabilidade, finalidade, motivação e eficiência (alt. B), indo ALÉM do art. 37, caput (que traz LIMPE). Também prevê otimização de recursos e proteção socioambiental, neutralidade político-partidária/religiosa/ideológica, probidade, responsabilidade e promoção da cidadania — a TODOS os agentes, não só à chefia.\n\n⚠️ PEGADINHA: alternativas que EXCLUEM princípios do rol (A, E) ou RESTRINGEM o alcance (C ao art. 37; D só à chefia). O Código é ampliativo — some princípios ao núcleo constitucional."
+    },
+    {
+      "external_key": "gran-2026-tcesp-etica-codigo-q02",
+      "topic_slug": "etica-codigo-sp",
+      "fonte_imagem": "q2Etica.jpg",
+      "difficulty": 3,
+      "tags": [
+        "agente-publico",
+        "conflito-de-interesses",
+        "definicoes"
+      ],
+      "statement": "Considerando as definições de agente público e de conflito de interesses trazidas no Código de Ética da Administração Pública direta e autárquica do Estado de São Paulo, assinale a alternativa correta.",
+      "options": [
+        "Para os fins do Código, agente público é somente aquele investido em cargo efetivo mediante concurso público, excluídos os ocupantes de cargo em comissão.",
+        "Conflito de interesses é a situação gerada pelo confronto entre interesses públicos e privados, capaz de comprometer o interesse coletivo ou de influenciar, de maneira imprópria, o desempenho da função pública.",
+        "Informação privilegiada, para os fins do Código, é toda informação de amplo conhecimento público relacionada a assuntos de repercussão econômica ou financeira.",
+        "O conceito de agente público adotado pelo Código exclui quem exerce função pública de forma transitória ou sem remuneração.",
+        "O conflito de interesses somente se configura quando comprovada vantagem financeira direta e efetiva em favor do agente público."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — conflito de interesses (alt. B) é o confronto entre interesse público e privado capaz de comprometer o interesse coletivo OU influenciar impropriamente a função — independe de vantagem efetiva. 'Agente público' é conceito AMPLO: inclui comissionados e quem exerce função transitória ou SEM remuneração. 'Informação privilegiada' é a de acesso RESTRITO (não pública).\n\n⚠️ PEGADINHA: (1) exigir vantagem financeira comprovada para haver conflito (alt. E) — basta o potencial de influência. (2) restringir 'agente público' a efetivos/concursados (A) ou excluir transitórios/não remunerados (D). (3) inverter 'privilegiada' (restrita) para 'amplo conhecimento público' (C)."
+    },
+    {
+      "external_key": "gran-2026-tcesp-etica-codigo-q03",
+      "topic_slug": "etica-codigo-sp",
+      "fonte_imagem": "q3Etica.jpg",
+      "difficulty": 3,
+      "tags": [
+        "midias-digitais",
+        "disposicoes-finais",
+        "decreto-69328"
+      ],
+      "statement": "No que se refere às diretrizes relativas ao uso responsável de mídias digitais e recursos tecnológicos, bem como às disposições finais do Decreto nº 69.328/2025, assinale a alternativa correta.",
+      "options": [
+        "O agente público deve utilizar os sistemas eletrônicos a que tenha acesso em razão de suas atribuições exclusivamente para o desenvolvimento de atividades relacionadas ao cumprimento de seus deveres funcionais.",
+        "O Decreto nº 69.328/2025 revogou apenas parcialmente o Decreto nº 60.428/2014, permanecendo em vigor os dispositivos deste último relativos ao uso de redes sociais.",
+        "A edição de normas complementares necessárias à execução do Decreto é atribuição privativa do Governador do Estado, vedada a delegação à Controladoria Geral do Estado.",
+        "É facultado ao agente público utilizar os canais de comunicação institucional para fins particulares, desde que não cause prejuízo ao andamento do serviço.",
+        "Cabe exclusivamente à Secretaria de Gestão e Governo Digital dirimir dúvidas relacionadas às disposições do Código de Ética, sendo vedada a atuação da Controladoria Geral do Estado nessa matéria."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A.\n\nMICRO-AULA — o uso responsável de recursos tecnológicos (alt. A) impõe empregar os sistemas eletrônicos EXCLUSIVAMENTE para os deveres funcionais — NÃO é facultado usar canais institucionais para fins particulares (afasta a alt. D). As normas complementares e as dúvidas envolvem a Controladoria Geral do Estado (afasta as alts. C e E, que a vedam).\n\n⚠️ PEGADINHA: a alternativa 'D' é atraente (o 'desde que não cause prejuízo' soa razoável), mas o uso de recurso público para fim particular é vedado. Cuidado também com 'exclusivamente/privativa/vedada' (C e E), que costumam radicalizar competências."
+    },
+    {
+      "external_key": "gran-2026-tcesp-ocde-integridade-q01",
+      "topic_slug": "etica-integridade-ocde",
+      "fonte_imagem": "quest1EOCD.jpg",
+      "difficulty": 4,
+      "tags": [
+        "ocde",
+        "integridade",
+        "contratacoes",
+        "4-pilares"
+      ],
+      "statement": "Os OECD Principles for Integrity in Public Procurement (2009) estruturam-se em quatro pilares, cada qual desdobrado em princípios específicos aplicáveis ao ciclo da contratação pública. Sobre o conteúdo desses princípios, assinale a alternativa correta.",
+      "options": [
+        "O pilar da Transparência recomenda a maximização da divulgação de informações exclusivamente na fase de licitação competitiva, sendo as hipóteses de dispensa e inexigibilidade excluídas do âmbito de aplicação do princípio, por decorrerem de juízo discricionário da Administração.",
+        "O pilar da Boa Gestão relaciona-se apenas à qualificação técnica dos fornecedores participantes do certame, não abrangendo a capacitação e os padrões profissionais exigidos dos agentes públicos responsáveis pela condução da contratação.",
+        "O pilar de Prevenção de Condutas Irregulares, Conformidade e Monitoramento recomenda a adoção de mecanismos como a segregação de funções, a gestão de conflitos de interesse e o monitoramento contínuo apto a detectar padrões suspeitos ao longo da execução contratual.",
+        "O pilar de Responsabilização e Controle limita-se à atuação de órgãos de controle externo, não contemplando entre suas recomendações o fortalecimento do controle social exercido pela sociedade civil e pela imprensa.",
+        "Os quatro pilares aplicam-se unicamente à fase interna do processo licitatório, encerrando-se sua incidência com a assinatura do contrato administrativo."
+      ],
+      "correct_option": 2,
+      "explanation": "Gabarito: C.\n\nMICRO-AULA — os 4 pilares da OCDE (2009): (1) TRANSPARÊNCIA — em TODO o ciclo, inclusive dispensa/inexigibilidade (não só na fase competitiva); (2) BOA GESTÃO — inclui capacitação e padrões profissionais dos AGENTES, não só dos fornecedores; (3) PREVENÇÃO de condutas irregulares, conformidade e monitoramento — segregação de funções, gestão de conflitos de interesse e monitoramento contínuo (alt. C, correta); (4) RESPONSABILIZAÇÃO E CONTROLE — abrange também o CONTROLE SOCIAL (sociedade civil e imprensa). O ciclo alcança toda a execução contratual, não se encerra na assinatura.\n\n⚠️ PEGADINHA: as erradas RESTRINGEM o alcance de cada pilar ('exclusivamente', 'apenas', 'limita-se', 'unicamente'). Os princípios da OCDE são abrangentes — cobrem todo o ciclo e todos os atores."
+    }
+  ]
+}

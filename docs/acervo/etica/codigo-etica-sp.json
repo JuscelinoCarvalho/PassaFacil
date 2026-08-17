@@ -1,0 +1,28 @@
+{
+  "grupo": "Ética Pública e Integridade",
+  "edital_ref": "Decreto 69.328/2025 + Princípios OCDE",
+  "dispositivos": [
+    {
+      "slug": "codetica-sp-art1",
+      "norma": "Código de Ética da Adm. Pública SP (Decreto Estadual 69.328/2025)",
+      "dispositivo": "art. 1º",
+      "apelido": "Disposições Preliminares (abrangência)",
+      "ambito": "estadual",
+      "assunto": "Natureza, abrangência e aplicação do Código de Ética",
+      "macro_resumo": "O Código de Ética da Administração Pública direta e autárquica é INSTRUMENTO DE ORIENTAÇÃO E GOVERNANÇA PÚBLICA, referencial ético e de integridade a ser observado pelos AGENTES PÚBLICOS ESTADUAIS em suas relações internas e externas — SEM PREJUÍZO da incidência dos demais deveres e proibições legais e regulamentares.",
+      "palavras_chave": [
+        "referencial ético",
+        "governança",
+        "agentes públicos estaduais",
+        "sem prejuízo"
+      ],
+      "conexoes": [],
+      "pegadinhas": [
+        "Dizer que o Código AFASTA/substitui outros deveres legais — ele incide SEM PREJUÍZO dos demais",
+        "Restringir a abrangência (alcança adm. direta E autárquica)"
+      ],
+      "para_discursiva": "Enquadrar a conduta ética como dever adicional (não excludente) do agente público estadual.",
+      "fonte_imagem": "disposicoes_preliminares.jpg"
+    }
+  ]
+}
