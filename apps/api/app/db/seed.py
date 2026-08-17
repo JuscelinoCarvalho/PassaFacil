@@ -23,9 +23,10 @@ def seed_tce_sp(db: Session) -> None:
     exam = db.scalar(select(Exam).where(Exam.slug == "tce-sp-2026-ti"))
     # (slug, nome, categoria, peso, especialidade, [tópicos]); especialidade None = comum
     catalog = [
-        ("portugues", "Língua Portuguesa", "general", 2, None, ["Interpretação de textos", "Gramática e redação"]),
-        ("logica", "Raciocínio Lógico", "general", 2, None, ["Proposições e equivalências", "Análise combinatória"]),
-        ("legislacao", "Legislação e Ética", "general", 2, None, ["Controle externo", "Ética e administração pública"]),
+        ("portugues", "Língua Portuguesa", "general", 12, None, ["Interpretação de textos", "Gramática e redação"]),
+        ("logica", "Raciocínio Lógico", "general", 4, None, ["Proposições e equivalências", "Análise combinatória"]),
+        ("etica", "Ética Pública e Integridade", "general", 2, None, ["Ética no serviço público", "Integridade e conduta"]),
+        ("legislacao", "Legislação", "general", 2, None, ["Controle externo", "Administração pública"]),
         ("seguranca", "Segurança da Informação", "specific", 5, "ti", ["ISO 27001 e 27002", "Criptografia e controles"]),
         ("governanca", "Governança e Auditoria de TI", "specific", 5, "ti", ["COBIT", "ITIL e auditoria"]),
         ("redes", "Redes e Infraestrutura", "specific", 4, "ti", ["TCP/IP e roteamento", "Cloud e virtualização"]),

@@ -77,6 +77,31 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-17 (edital) — estrutura oficial da prova de TI documentada
+- O dono passou a **divisão de matérias × quantidade de questões** da especialidade **Tecnologia da Informação (TI)**. Registrado em `docs/FUNCIONAL.md` §4.1 (catálogo do concurso) para não se perder:
+  - **Prova Objetiva = 80 questões**: Conhecimentos Gerais **20** (Língua Portuguesa 12 · Raciocínio Lógico 4 · Ética Pública e Integridade 2 · Legislação 2) + Conhecimentos Específicos de TI **60**.
+  - **Prova Escrita = Estudo de Caso, 2 questões** (discursivas — batem com a correção por IA já no ar).
+- **Discrepância anotada:** o `seed.py` hoje agrupa "Legislação e Ética" como uma matéria só; a estrutura oficial **separa** Ética Pública e Integridade (2) de Legislação (2). Ao mexer em pesos/matérias, seguir 12/4/2/2. Nenhuma mudança de código nesta entrada — só documentação.
+
+### 2026-08-17 (seed) — Conhecimentos Gerais com pesos 12/4/2/2 + Ética separada
+- Ajustado `apps/api/app/db/seed.py` para a divisão oficial: Língua Portuguesa `weight=12`, Raciocínio Lógico `4`, **nova matéria** Ética Pública e Integridade `2` (slug `etica`) e Legislação `2` (slug `legislacao`, antes "Legislação e Ética"). Docs `FUNCIONAL.md` §4/§4.1 atualizados (discrepância resolvida).
+- **`weight` e `Topic.difficulty` não são consumidos por nenhuma lógica** (só metadados) — mudança é segura. O seed é **guardado por `if not exam`**: em produção o exame `tce-sp-2026-ti` já existe, então **isto NÃO altera o banco de produção** (só bases novas/reseed). Sem restart necessário para efeito; syntax check OK.
+
+### 2026-08-16 (preço) — valor do acesso baixado de R$100 → R$25
+- A pedido do dono, o preço do acesso caiu de **R$100 para R$25**. Alterados os 5 pontos que citam o número:
+  - **Fonte da verdade (cobrança real + valor da conversão Google Ads):** `apps/api/app/core/config.py` → `price_reais: float = 25.0`. O backend usa `settings.price_reais` no checkout Asaas, no `billing/status` e na conversão — então cobra R$25 e reporta conversão de valor 25. (`PRICE_REAIS` **não** está no `/etc`, então o default do código vale.)
+  - **Front:** `apps/web/app/page.tsx` — texto do gate (`R$ 25`), botão (`Gerar Pix de R$ 25`), e o valor-fallback de `trackPurchaseConversion` (`value = 25.0`). `apps/web/app/layout.tsx` — `price: "25.00"` no schema JSON-LD (SEO).
+- **Publicado e validado no ar:** API reiniciada (`price_reais = 25.0`, health ok); front reconstruído com `NEXT_PUBLIC_API_URL` + cópia do `.next/static` + restart. HTML servido tem `"price":"25.00"`, bundle tem "R$ 25" e **sem** `localhost:9000`.
+- Textos que não citam número ("pagamento único", "acesso por 2 anos/vitalício") ficaram inalterados.
+
+### 2026-08-16 (google-ads) — diagnóstico da recomendação "finalize o acompanhamento de conversões"
+- O Google Ads recomendou "finalizar o acompanhamento de conversões" ("uma ação de conversão foi criada, mas a tag ainda não foi verificada para: Compra"). **Investigado: a configuração já está completa e no ar** — nenhum código faltando.
+  - Tag base (gtag.js `AW-975500543`) servida no HTML público (`apps/web/app/layout.tsx`) — confirmado no ar.
+  - Snippet de evento de conversão da **Compra** (`gtag('event','conversion', send_to:'AW-975500543/YEiMCLvJ5t4cEP_pk9ED')`) implementado em `apps/web/app/page.tsx` (`trackPurchaseConversion`/`reportConversion`), disparo **one-shot por transaction_id**, com **fallback durável** via backend (`me.conversion` → dispara mesmo se a aba fechou no Pix → `POST /billing/conversion/reported`). Rótulo presente no bundle de produção (build 10:57 de 16/08).
+- **Por que o Google diz "não verificada":** a conversão "Compra" só dispara num **pagamento Pix real concluído**; o robô de verificação do Google não consegue comprar (login + pagamento), e provavelmente ninguém comprou desde o deploy → zero hits recebidos. **Estado normal/esperado**; a recomendação some sozinha na 1ª venda real.
+- **Único ponto a validar (fora do meu alcance — precisa do painel):** que o rótulo `YEiMCLvJ5t4cEP_pk9ED` bate com o event snippet da ação "Compra" no Google Ads. Teste sem pagar de verdade: Google Tag Assistant + disparo manual no console (`gtag('event','conversion',{send_to:'AW-975500543/YEiMCLvJ5t4cEP_pk9ED',value:100,currency:'BRL',transaction_id:'teste-manual'})`).
+- **Server-side (`google_ads.py`, `GOOGLE_ADS_ENABLED=false`) continua desligado** — exige developer token aprovado + gclid; não é o que a recomendação pede. Sem mudança de código nesta sessão (só esta entrada de diário).
+
 ### 2026-08-16 (docs) — documentação completa do sistema (arquitetura, funcional, swagger)
 - Criada a documentação técnica de todo o sistema, a pedido do dono:
   - `docs/ARQUITETURA.md` — stack, camadas do backend, ciclo de vida (create_all +

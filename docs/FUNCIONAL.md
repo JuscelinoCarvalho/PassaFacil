@@ -136,13 +136,38 @@ Semeado em `apps/api/app/db/seed.py`. Concurso **Auditor de Controle Externo —
 TI** (TCE‑SP, VUNESP). Matérias:
 
 **Conhecimentos Gerais** (comuns): Língua Portuguesa · Raciocínio Lógico ·
-Legislação e Ética.
+Ética Pública e Integridade · Legislação.
 
 **Específicas (TI):** Segurança da Informação · Governança e Auditoria de TI ·
 Redes e Infraestrutura · Banco de Dados · Engenharia de Software ·
 Desenvolvimento de Sistemas · LGPD.
 
 Cada matéria tem tópicos e um peso; as questões pertencem a tópicos.
+
+### 4.1. Estrutura oficial da prova — Especialidade **Tecnologia da Informação (TI)**
+
+Divisão de matérias e quantidade de questões, conforme o edital (usar como
+referência para pesos, cobertura e montagem de simulados):
+
+**Prova Objetiva — 80 questões**
+
+- **Conhecimentos Gerais — 20 questões**
+  - Língua Portuguesa — **12**
+  - Raciocínio Lógico — **4**
+  - Ética Pública e Integridade — **2**
+  - Legislação — **2**
+- **Conhecimentos Específicos (TI) — 60 questões**
+
+**Prova Escrita**
+
+- **Estudo de Caso — 2 questões** (discursivas; correção por IA — ver seção de
+  discursivas)
+
+> ✅ O seed (`apps/api/app/db/seed.py`) reflete essa divisão: as matérias de
+> Conhecimentos Gerais têm `weight` **12/4/2/2** (Língua Portuguesa · Raciocínio
+> Lógico · Ética Pública e Integridade · Legislação), com Ética e Legislação
+> como matérias **separadas**. `weight` é metadado de priorização (não é
+> consumido por lógica de seleção ainda); usar como referência para simulados.
 
 ---
 
