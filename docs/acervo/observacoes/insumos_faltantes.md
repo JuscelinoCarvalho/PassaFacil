@@ -14,3 +14,4 @@ depois. Cada item = uma pendência acionável.
 | (norma) LC 1.419/2024 | citada como "aposta da aula" ligada à Lei 10.261/68 — sem conteúdo nas imagens | buscar e registrar no acervo |
 | estudos_caso/casos.json (3 casos) | os **espelhos (model_answer) e as grades (criteria) são rascunhos** meus, não gabaritos oficiais | revisar/ajustar pontuação antes de publicar como DiscursiveCase |
 | estudo_caso2 (empolamento) | é de **Engenharia Civil** — fora do escopo de TI | dono decide se entra |
+| questoes/informatica.json (13 questões, de `novas/aula_ti.txt`) | é **Noções de Informática BÁSICA** (IA, intranet, FTP, Word, software livre) — abaixo do nível de Conhecimentos Específicos de TI-auditor; matéria nova `informatica` | **dono decide o escopo** e se publica; algumas alternativas de MC foram reconstruídas (autorais) |

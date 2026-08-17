@@ -58,8 +58,22 @@ def run(dry_run: bool) -> None:
                 )
             )
             if not subject:
-                print(f"[ERRO] matéria '{payload['subject_slug']}' não existe — pulei {path.name}")
-                continue
+                # cria a matéria se o payload declarar subject_name (senão, pula)
+                if payload.get("subject_name"):
+                    subject = Subject(
+                        exam_id=exam.id,
+                        slug=payload["subject_slug"],
+                        name=payload["subject_name"],
+                        category=payload.get("subject_category", "general"),
+                        specialty=payload.get("subject_specialty"),
+                    )
+                    db.add(subject)
+                    if not dry_run:
+                        db.flush()
+                    print(f"[+subject] {payload['subject_slug']} ({payload['subject_name']})")
+                else:
+                    print(f"[ERRO] matéria '{payload['subject_slug']}' não existe — pulei {path.name}")
+                    continue
 
             # garante tópicos
             for topic_def in payload.get("topics", []):

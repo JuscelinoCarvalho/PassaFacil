@@ -1,0 +1,281 @@
+{
+  "materia": "informatica",
+  "subject_slug": "informatica",
+  "subject_name": "Noções de Informática",
+  "subject_category": "general",
+  "subject_specialty": null,
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Aula de Noções de Informática (Prof. Marcelo Narciso) - questões-modelo",
+  "organization": "TCE-SP",
+  "board": "VUNESP/CESPE (estilo)",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-txt-ti-2026-08",
+  "escopo_nota": "NOÇÕES DE INFORMÁTICA (básico) — abaixo do nível de Conhecimentos Específicos de TI-auditor. Dono decide se entra na prova.",
+  "topics": [
+    {
+      "slug": "info-ia",
+      "name": "Inteligência Artificial (noções)",
+      "description": "Assistentes de IA, prompt, alucinação, deepfake, IAs generativas."
+    },
+    {
+      "slug": "info-redes",
+      "name": "Internet, intranet e protocolos",
+      "description": "Internet x intranet, provedores, FTP/HTML, IP, IPv4/IPv6."
+    },
+    {
+      "slug": "info-software",
+      "name": "Software e utilitários",
+      "description": "Compactação, software livre, aplicativos."
+    },
+    {
+      "slug": "info-editores",
+      "name": "Editores de texto",
+      "description": "Microsoft Word: edição, revisão ortográfica x gramatical."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "info-ti-ia-copilot",
+      "topic_slug": "info-ia",
+      "difficulty": 2,
+      "tags": [
+        "ia",
+        "assistente",
+        "windows-11"
+      ],
+      "statement": "Qual é o nome do assistente virtual que usa inteligência artificial disponível, de forma integrada, no Windows 11?",
+      "options": [
+        "Cortana",
+        "Copilot",
+        "Siri",
+        "Alexa"
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B (Copilot).\n\nMICRO-AULA — o Copilot é a IA da Microsoft integrada ao Windows 11 (concorre com o ChatGPT). Executa tarefas de IA generativa dentro do próprio sistema operacional.\n\n⚠️ PEGADINHA: a Cortana era a assistente ANTIGA da Microsoft (descontinuada) — a banca troca Copilot por Cortana. Siri (Apple) e Alexa (Amazon) são de outras empresas."
+    },
+    {
+      "external_key": "info-ti-ia-prompt",
+      "topic_slug": "info-ia",
+      "difficulty": 2,
+      "tags": [
+        "ia",
+        "prompt"
+      ],
+      "statement": "Como é chamado o comando de texto ou instrução que o usuário envia para uma ferramenta de inteligência artificial gerar uma resposta?",
+      "options": [
+        "Prompt",
+        "Token",
+        "Query",
+        "Script"
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A (Prompt).\n\nMICRO-AULA — o prompt é o comando/instrução em linguagem natural dado à IA. Quanto MAIS CONTEXTO o prompt trouxer, melhor a resposta gerada.\n\n⚠️ PEGADINHA: não confundir com 'query' (consulta a banco de dados), 'token' (unidade de texto que a IA processa) ou 'script' (código). O prompt é o texto que descreve o que se quer da IA."
+    },
+    {
+      "external_key": "info-ti-ia-alucinacao",
+      "topic_slug": "info-ia",
+      "difficulty": 3,
+      "tags": [
+        "ia",
+        "alucinacao"
+      ],
+      "statement": "Quando uma IA gera uma resposta convincente e gramaticalmente correta, mas que apresenta informações falsas ou inventadas, qual é o termo usado para esse fenômeno?",
+      "options": [
+        "Viés (bias)",
+        "Alucinação",
+        "Overfitting",
+        "Spam"
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B (Alucinação).\n\nMICRO-AULA — 'alucinação' é quando o modelo produz conteúdo plausível na forma, mas FALSO/INVENTADO no conteúdo (fatos, citações ou dados que não existem).\n\n⚠️ PEGADINHA: não confundir com VIÉS (bias) — que é a tendência herdada dos dados de treino — nem com overfitting (sobreajuste do modelo). Alucinação = informação inventada apresentada com confiança."
+    },
+    {
+      "external_key": "info-ti-ia-gemini",
+      "topic_slug": "info-ia",
+      "difficulty": 2,
+      "tags": [
+        "ia",
+        "google",
+        "gemini",
+        "bard"
+      ],
+      "statement": "Qual o nome da inteligência artificial do Google que compete diretamente com o ChatGPT e que foi anteriormente chamada de Bard?",
+      "options": [
+        "Copilot",
+        "Gemini",
+        "Grok",
+        "Perplexity"
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B (Gemini).\n\nMICRO-AULA — o Gemini é a IA generativa do Google; 'Bard' era o NOME ANTIGO do produto, que passou a se chamar Gemini.\n\n⚠️ PEGADINHA: marcar 'Bard' (quando oferecido) erra por estar DESATUALIZADO. Copilot é da Microsoft, Grok é da xAI (Elon Musk), Perplexity é outra empresa."
+    },
+    {
+      "external_key": "info-ti-ia-deepfake",
+      "topic_slug": "info-ia",
+      "difficulty": 3,
+      "tags": [
+        "deepfake",
+        "ia",
+        "seguranca"
+      ],
+      "statement": "Qual termo descreve a técnica que usa inteligência artificial para criar vídeos falsos extremamente realistas, trocando rostos ou vozes de pessoas em gravações?",
+      "options": [
+        "Phishing",
+        "Deepfake",
+        "Chatbot",
+        "Streaming"
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B (Deepfake).\n\nMICRO-AULA — deepfake é uma TÉCNICA (que se apoia em IA) para forjar vídeos/áudios realistas trocando rostos e vozes. É muito usada em golpes e desinformação.\n\n⚠️ PEGADINHA: (1) o deepfake NÃO é 'uma inteligência artificial' em si — é uma técnica que USA IA. (2) Não confundir com phishing (golpe por engano/mensagens fraudulentas), que não gera vídeo falso."
+    },
+    {
+      "external_key": "info-ti-sw-compactador",
+      "topic_slug": "info-software",
+      "difficulty": 2,
+      "tags": [
+        "compactacao",
+        "zip",
+        "rar",
+        "utilitario"
+      ],
+      "statement": "João precisa salvar alguns dados em um pen drive, mas os arquivos possuem tamanho maior do que o suportado pelo dispositivo. Qual dos softwares abaixo João pode utilizar para criar um único arquivo de tamanho menor, de modo que seus dados caibam no pen drive?",
+      "options": [
+        "Software desfragmentador",
+        "Software de restauração do sistema",
+        "Software de criptografia",
+        "Software antivírus",
+        "Software compactador (ex.: WinZip/WinRAR/7-Zip)"
+      ],
+      "correct_option": 4,
+      "explanation": "Gabarito: E (compactador).\n\nMICRO-AULA — compactar reduz o tamanho do arquivo (elimina redundâncias) e pode reunir vários arquivos em um só. Programas clássicos: WinZip, WinRAR e 7-Zip (o .zip já é nativo do Windows).\n\n⚠️ PEGADINHA: DESFRAGMENTADOR organiza os arquivos no disco (não reduz tamanho); CRIPTOGRAFIA embaralha/protege (não reduz); RESTAURAÇÃO/backup recupera dados. Só o COMPACTADOR diminui o tamanho."
+    },
+    {
+      "external_key": "info-ti-redes-ftp",
+      "topic_slug": "info-redes",
+      "difficulty": 2,
+      "tags": [
+        "ftp",
+        "protocolo",
+        "html"
+      ],
+      "statement": "Julgue o item: A sigla FTP diz respeito a uma linguagem de programação utilizada para desenvolver páginas da internet.",
+      "options": [
+        "Certo",
+        "Errado"
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: ERRADO.\n\nMICRO-AULA — FTP = File Transfer Protocol (Protocolo de Transferência de Arquivos): serve para transferir arquivos entre computadores na rede. Não é linguagem nem serve para criar páginas.\n\n⚠️ PEGADINHA: a banca troca FTP por HTML — quem CRIA páginas web é o HTML (linguagem de marcação). FTP transfere arquivos; HTML monta páginas."
+    },
+    {
+      "external_key": "info-ti-redes-intranet-independe",
+      "topic_slug": "info-redes",
+      "difficulty": 3,
+      "tags": [
+        "intranet",
+        "internet",
+        "rede-privada"
+      ],
+      "statement": "Julgue o item: A intranet é uma rede privada utilizada por empresas ou instituições e não depende de conexão com a internet para funcionar.",
+      "options": [
+        "Certo",
+        "Errado"
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: CERTO.\n\nMICRO-AULA — a intranet é uma rede PRIVADA (interna), que usa as mesmas tecnologias da internet, mas funciona de forma INDEPENDENTE: não precisa estar conectada à internet para operar.\n\n⚠️ PEGADINHA (clássica): a banca afirma que a intranet 'depende' da internet — ERRADO. Ela funciona plenamente isolada. Aqui a afirmação está correta justamente por dizer que NÃO depende."
+    },
+    {
+      "external_key": "info-ti-redes-provedor",
+      "topic_slug": "info-redes",
+      "difficulty": 2,
+      "tags": [
+        "internet",
+        "provedor",
+        "acesso"
+      ],
+      "statement": "Julgue o item: Apesar de a internet ser uma rede mundial de acesso amplo e gratuito, os usuários domésticos a utilizam por meio de algum provedor de acesso à internet, isto é, uma empresa privada que cobra pelo acesso ao serviço.",
+      "options": [
+        "Certo",
+        "Errado"
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: CERTO.\n\nMICRO-AULA — a internet como rede é pública/aberta, mas o ACESSO a ela exige um provedor (ISP), empresa que cobra pela conexão. 'Conteúdo público' não significa 'conexão gratuita'.\n\n⚠️ PEGADINHA: separar 'a internet é gratuita' (a rede) de 'o acesso é pago' (o provedor). Ambas as ideias convivem — a questão está correta."
+    },
+    {
+      "external_key": "info-ti-redes-intranet-web",
+      "topic_slug": "info-redes",
+      "difficulty": 3,
+      "tags": [
+        "intranet",
+        "internet",
+        "web",
+        "compatibilidade"
+      ],
+      "statement": "Julgue o item: Ao se substituir o acesso por intranet pelo acesso por internet a um sistema de consulta, não haverá similaridade entre os sistemas, porque sistemas voltados para intranet, diferentemente dos voltados para internet, não são compatíveis com o ambiente web.",
+      "options": [
+        "Certo",
+        "Errado"
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: ERRADO.\n\nMICRO-AULA — intranet e internet usam as MESMAS tecnologias (protocolos TCP/IP, navegador, páginas web). A intranet é praticamente idêntica à internet, mudando apenas o alcance (privado x público). Logo, os sistemas SÃO compatíveis com o ambiente web e há similaridade.\n\n⚠️ PEGADINHA: afirmar que a intranet 'não é compatível com a web' ou que é 'muito diferente' da internet — falso. Elas são ~99% iguais em tecnologia."
+    },
+    {
+      "external_key": "info-ti-redes-ipv6",
+      "topic_slug": "info-redes",
+      "difficulty": 2,
+      "tags": [
+        "ip",
+        "ipv4",
+        "ipv6",
+        "enderecamento"
+      ],
+      "statement": "Julgue o item: O IPv6 é a versão mais atual do protocolo de internet (IP), adotada devido ao esgotamento do endereçamento do IPv4.",
+      "options": [
+        "Certo",
+        "Errado"
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: CERTO.\n\nMICRO-AULA — o IP identifica cada dispositivo na rede (é único). O IPv4 oferece ~4,3 bilhões de endereços, que se esgotaram com a explosão de dispositivos (smartphones etc.). O IPv6 tem capacidade de endereçamento imensamente maior, permitindo a internet continuar crescendo.\n\n⚠️ PEGADINHA: trocar as versões (dizer que o IPv4 é o mais atual) ou negar o esgotamento do IPv4."
+    },
+    {
+      "external_key": "info-ti-word-delete",
+      "topic_slug": "info-editores",
+      "difficulty": 4,
+      "tags": [
+        "word",
+        "delete",
+        "revisao",
+        "gramatical-x-ortografico"
+      ],
+      "statement": "No Microsoft Word 365, foi digitada a frase \"As folhas estão caindo da árvore\". Se o ponto de inserção for posicionado entre as letras A e S da palavra \"folhas\" e for pressionada uma vez a tecla Delete, o que ocorrerá?",
+      "options": [
+        "Erro ortográfico, e a palavra será sublinhada em vermelho para sinalizar o erro.",
+        "Erro gramatical, e a palavra será sublinhada em azul para sinalizar o erro.",
+        "Erro de digitação não sinalizado, com sugestão de sinônimo.",
+        "Nenhuma alteração, pois Delete não apaga caracteres."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — dois conceitos: (1) a tecla DELETE apaga o caractere à DIREITA do cursor (o Backspace apaga à esquerda). Cursor entre 'A' e 'S' de 'folhas' + Delete → remove o 's' → 'As folha'. (2) 'As folha' é ERRO de CONCORDÂNCIA = erro GRAMATICAL, que o Word sublinha em AZUL.\n\n⚠️ PEGADINHA (interdisciplinar informática + português): erro ORTOGRÁFICO (palavra escrita errada) = sublinhado VERMELHO; erro GRAMATICAL (concordância/regência) = sublinhado AZUL. E cuidado: Delete apaga à direita, não à esquerda."
+    },
+    {
+      "external_key": "info-ti-sw-livre",
+      "topic_slug": "info-software",
+      "difficulty": 3,
+      "tags": [
+        "software-livre",
+        "linux",
+        "liberdades"
+      ],
+      "statement": "Assinale a alternativa que apresenta uma característica do software livre.",
+      "options": [
+        "A proibição de modificar o código-fonte do programa.",
+        "O uso restrito exclusivamente a finalidades não comerciais.",
+        "A impossibilidade de redistribuição a terceiros.",
+        "A liberdade de distribuir o programa, podendo fazê-lo gratuitamente ou mediante cobrança.",
+        "A gratuidade obrigatória, sendo vedada qualquer cobrança."
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D.\n\nMICRO-AULA — o software livre garante 4 liberdades: USAR (para qualquer fim), ESTUDAR (acesso ao código-fonte), MODIFICAR e DISTRIBUIR. A distribuição pode ser gratuita OU cobrada — a critério de quem distribui. Exemplos: Linux, LibreOffice, Firefox.\n\n⚠️ PEGADINHA (a mais cobrada): software livre NÃO é sinônimo de gratuito — pode-se cobrar pela distribuição (há versões pagas do Linux). E a liberdade de USO permite qualquer finalidade, inclusive comercial."
+    }
+  ]
+}
