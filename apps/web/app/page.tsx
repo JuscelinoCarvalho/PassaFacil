@@ -57,7 +57,7 @@ const GADS_PURCHASE_SEND_TO = "AW-975500543/YEiMCLvJ5t4cEP_pk9ED";
 const firedConversions = new Set<string>();
 // Retorna true se o evento foi (ou já havia sido) disparado; false se o gtag
 // ainda não carregou — nesse caso NÃO marcamos como reportado, para tentar de novo.
-function trackPurchaseConversion(transactionId: string, value = 100.0, currency = "BRL"): boolean {
+function trackPurchaseConversion(transactionId: string, value = 25.0, currency = "BRL"): boolean {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return false;
   const key = transactionId || "no-id";
   if (firedConversions.has(key)) return true;
@@ -1859,7 +1859,7 @@ function Paywall({ me, onRefresh, onLogout }: { me: Me; onRefresh: () => void; o
                 esperando material de outra área.
               </span>
             </div>
-            <div className="gate-price">R$ 100 <small>· pagamento único · acesso por 2 anos</small></div>
+            <div className="gate-price">R$ 25 <small>· pagamento único · acesso por 2 anos</small></div>
             <ul className="gate-hero-list">
               <li><Check size={18} /> Centenas de questões comentadas no estilo VUNESP</li>
               <li><Check size={18} /> Correção imediata + Micro Aula em cada questão</li>
@@ -1874,7 +1874,7 @@ function Paywall({ me, onRefresh, onLogout }: { me: Me; onRefresh: () => void; o
             </label>
             <button className="primary" style={{ width: "100%" }} disabled={busy || cpf.replace(/\D/g, "").length < 11} onClick={generate}>
               {busy ? <LoaderCircle className="spin" size={17} /> : null}
-              Gerar Pix de R$ 100
+              Gerar Pix de R$ 25
             </button>
           </>
         ) : (

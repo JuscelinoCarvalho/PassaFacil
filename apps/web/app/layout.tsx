@@ -98,7 +98,7 @@ const jsonLd = {
         "@type": "Offer",
         category: "Preparação para concurso",
         priceCurrency: "BRL",
-        price: "100.00",
+        price: "25.00",
       },
     },
     {

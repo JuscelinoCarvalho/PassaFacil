@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     asaas_api_key: str = ""
     asaas_api_key_sandbox: str = ""
     asaas_webhook_token: str = ""
-    price_reais: float = 100.0
+    price_reais: float = 25.0
 
     # Conversão server-side do Google Ads (Google Ads API — uploadClickConversions).
     # Quando ligado e com o gclid do comprador em mãos, a conversão "Compra" é
