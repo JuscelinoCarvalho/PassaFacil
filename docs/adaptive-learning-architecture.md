@@ -148,7 +148,7 @@ Regra de ouro: **UI desacoplada dos algoritmos de aprendizagem**. Nenhuma lógic
 |---|---|---|
 | **A** | **F0 auditoria + F1 modelo de dados/migrations** | **concluída + aplicada em prod** |
 | **B** | **F2 questões (confiança, feedback adaptativo, microaula em camadas)** | **concluída + no ar** (`services/feedback.py`, `micro_lesson`, pills de confiança, `QuestionTeach`; conteúdo a autorar depois) |
-| C | F3 motor + scheduler + fila / F4 sessão inteligente | pendente |
+| **C** | F3 motor + scheduler + fila / F4 sessão inteligente | **em andamento** — F3 core no ar (`scheduler.py` + `adaptive_engine.py` ligados no `answer`); falta ReviewQueue/TransferSelector + migração `/reviews` + F4 |
 | D | F5 dashboard | pendente |
 | E | F6 aulas/áudio interativo | pendente |
 | F | F7 dissertativas (evolui o MVP atual) | pendente |

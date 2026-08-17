@@ -16,6 +16,7 @@ from app.models import (
     Attempt, LearningEvent, Question, QuestionProvenance, ReviewItem, StudyTask, Subject, Topic, TrialEvent
 )
 from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
+from app.services.adaptive_engine import default_engine
 from app.services.feedback import build_answer_feedback, normalize_confidence
 
 router = APIRouter(prefix="/study", tags=["study"])
@@ -583,7 +584,13 @@ def answer(question_id: UUID, payload: AnswerRequest, user: PaidUser, db: DbSess
         skill_id=question.primary_skill_id,  # denormalizado (F1); NULL enquanto não classificada
     )
     db.add(attempt)
-    # Evento bruto append-only (spec §34/§35) — base p/ o motor adaptativo (F3) recalibrar.
+    # Motor adaptativo (F3): atualiza o estado da habilidade (domínio + memória) e
+    # agenda a próxima revisão. No-op se a questão ainda não tem primary_skill.
+    evaluation = default_engine.evaluate_attempt(
+        db, user.id, question, correct=is_correct, confidence=confidence,
+        hints_used=payload.hints_used, response_time_s=payload.response_time_seconds,
+    )
+    # Evento bruto append-only (spec §34/§35) — base p/ recalibrar o algoritmo depois.
     db.add(LearningEvent(
         user_id=user.id,
         question_id=question.id,
@@ -595,6 +602,9 @@ def answer(question_id: UUID, payload: AnswerRequest, user: PaidUser, db: DbSess
         response_time=payload.response_time_seconds,
         hints=payload.hints_used,
         session_id=payload.session_id,
+        review_interval=round(evaluation.interval_days) if evaluation.interval_days else None,
+        scheduler_state_before=evaluation.scheduler_state_before,
+        scheduler_state_after=evaluation.scheduler_state_after,
     ))
     review = db.scalar(
         select(ReviewItem).where(
