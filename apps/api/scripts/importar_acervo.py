@@ -68,8 +68,7 @@ def run(dry_run: bool) -> None:
                         specialty=payload.get("subject_specialty"),
                     )
                     db.add(subject)
-                    if not dry_run:
-                        db.flush()
+                    db.flush()  # atribui subject.id (necessário para os tópicos); rollback no fim se dry-run
                     print(f"[+subject] {payload['subject_slug']} ({payload['subject_name']})")
                 else:
                     print(f"[ERRO] matéria '{payload['subject_slug']}' não existe — pulei {path.name}")
@@ -93,8 +92,9 @@ def run(dry_run: bool) -> None:
                     )
                     totals["topics_created"] += 1
                     print(f"[+topic] {payload['subject_slug']}/{topic_def['slug']}")
-            if not dry_run:
-                db.flush()
+            # flush sempre (mesmo no dry-run, que faz rollback no fim) para que os
+            # tópicos recém-criados já apareçam na consulta abaixo e o preview seja fiel.
+            db.flush()
 
             topics = {
                 t.slug: t
