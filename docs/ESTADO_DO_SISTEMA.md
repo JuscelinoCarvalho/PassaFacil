@@ -88,6 +88,12 @@
 - **Como aplicar no banco:** `apps/api/scripts/importar_acervo.py` (versionado, idempotente, dedup). `--dry-run` para simular. Questões entram **owner_only / não publicadas** (revisão do dono antes de publicar). **AINDA NÃO EXECUTADO** — aguarda o dono revisar os artefatos.
 - Nenhuma alteração em produção nesta fase (só arquivos no repo).
 
+### 2026-08-17 (acervo-txt) — transcrições de TI e das aulas processadas
+- **`novas/aula_ti.txt`** (Noções de Informática básica) → **13 questões** novas em `docs/acervo/questoes/informatica.json` (IA, redes, software, Word), matéria nova `informatica`. Escopo básico — abaixo do TI-auditor; dono decide se publica.
+- **`novas/transcricao_aulas.txt`** (transcrição das 64 aulas já importadas) → passo de **refino**: cruzei com o acervo e enriqueci micro-aulas/pegadinhas (particípio rejeita pronome átono; mnemônico MANÉ; título executivo extrajudicial; notórios conhecimentos = basta um; denúncia não anônima; jurisdição imprópria; sanção do Código = só censura ética + 4 processos autônomos; OCDE soft law). Registro do garimpo em `docs/acervo/observacoes/pegadinhas_transcricao.md`. **Validação:** as respostas das questões do acervo batem com o gabarito dos professores.
+- `importar_acervo.py` agora cria matéria nova se o payload trouxer `subject_name`. Total no acervo: **32 questões** prontas para import (owner_only, não publicadas).
+- **PENDENTE (outra sessão):** ler `novas/aulao_10h.txt` (~664 KB, aula de 10h) para extrair mais questões/pegadinhas.
+
 ### 2026-08-17 (edital) — estrutura oficial da prova de TI documentada
 - O dono passou a **divisão de matérias × quantidade de questões** da especialidade **Tecnologia da Informação (TI)**. Registrado em `docs/FUNCIONAL.md` §4.1 (catálogo do concurso) para não se perder:
   - **Prova Objetiva = 80 questões**: Conhecimentos Gerais **20** (Língua Portuguesa 12 · Raciocínio Lógico 4 · Ética Pública e Integridade 2 · Legislação 2) + Conhecimentos Específicos de TI **60**.
