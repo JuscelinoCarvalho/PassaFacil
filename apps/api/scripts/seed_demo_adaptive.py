@@ -68,7 +68,8 @@ MICRO_LESSON = {
                       "admiração)' → alternativa D."),
         "pegadinha": ("Não vire P → Q na inversa ¬P → ¬Q (alt. B) nem na recíproca Q → P (alt. E). "
                       "A negação de um condicional NUNCA é outro condicional."),
-        "macete": "MANÉ — Mantém o Antecedente, Nega o consequente, E (conjunção). Q negado por De Morgan: E vira OU.",
+        "macete": ("MANÉ (\"Mané\") = MAntém o antecedente e NEga o consequente: P ∧ ¬Q. "
+                   "Depois, como Q é uma conjunção, De Morgan nega Q trocando o E por OU."),
     },
     "deep": ("Por que ¬(P → Q) = P ∧ ¬Q? Um condicional só é falso num único caso: P verdadeiro e Q falso. "
              "Negar a afirmação é justamente afirmar esse caso — P ocorre E Q não ocorre. Como Q aqui é uma "
