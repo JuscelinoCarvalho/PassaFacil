@@ -535,6 +535,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
     return () => document.removeEventListener("mousedown", onDown);
   }, [profileMenuOpen]);
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+  const [memoryToday, setMemoryToday] = useState<{ due_skills: number; estimated_minutes: number } | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -555,6 +556,11 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
       if (!response.ok) throw new Error("Não foi possível carregar seu plano.");
       setDashboard(await response.json());
       setError("");
+      // Memória de hoje (F4) — best-effort; não bloqueia o dashboard se falhar.
+      try {
+        const mt = await authFetch(`${API_URL}/study/memory-today`, { cache: "no-store" });
+        if (mt.ok) setMemoryToday(await mt.json());
+      } catch { /* silencioso */ }
     } catch {
       setError("A API não respondeu. Confirme se o serviço da porta 9000 está aberto.");
     } finally {
@@ -785,6 +791,33 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
     setView(destination);
   };
 
+  // Sessão inteligente (F4): monta a fila adaptativa (revisão vencida + frágeis +
+  // transferência + conteúdo novo) e a apresenta no mesmo fluxo de questões (modo
+  // aprendizagem). Não mexe em scope/specialty, então o efeito de loadQuestions não
+  // sobrescreve estas questões.
+  const startSmartSession = async () => {
+    setMenuOpen(false);
+    setError("");
+    try {
+      const res = await authFetch(`${API_URL}/study/session?limit=12`, { cache: "no-store" });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!data.questions?.length) {
+        setError("Nada para estudar agora — tente o simulado.");
+        return;
+      }
+      setQuestions(data.questions as Question[]);
+      setAnswersMap({});
+      setQuestionIndex(0);
+      setSelectedOption(null);
+      setAnswer(null);
+      try { localStorage.removeItem(RESUME_KEY); } catch { /* ignora */ }
+      setView("questions");
+    } catch {
+      setError("Não foi possível montar sua sessão inteligente.");
+    }
+  };
+
   // Inicia o simulado em modo geral ou focado nos pontos fracos (P3 → P2/gaps).
   // A mudança de practiceFocus dispara o efeito que recarrega as questões.
   const startPractice = (focus: "all" | "gaps") => {
@@ -940,6 +973,22 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
                   <div className="score-ring" style={{ "--progress": `${progress}%` } as React.CSSProperties}><span>{completed}/{totalTasks}</span></div>
                   <div><b>Meta diária</b><span>{completed === totalTasks ? "Fechou o dia!" : `${totalTasks - completed} atividades restantes`}</span></div>
                 </div>
+              </section>
+
+              {/* Sessão inteligente + Memória de hoje (F4) */}
+              <section className="card smart-session-card">
+                <div className="smart-session-copy">
+                  <span className="section-kicker"><Sparkles size={13} /> SESSÃO INTELIGENTE</span>
+                  <h2>{memoryToday?.due_skills ? "🧠 Memória de hoje" : "Estudar agora"}</h2>
+                  <p>
+                    {memoryToday?.due_skills
+                      ? `${memoryToday.due_skills} conhecimento${memoryToday.due_skills > 1 ? "s" : ""} para recuperar · ~${memoryToday.estimated_minutes} min. O sistema escolhe o que mais te faz ganhar pontos.`
+                      : "Uma sessão sob medida: revisão do que está em risco, transferência e um pouco de conteúdo novo — sem você ter que escolher."}
+                  </p>
+                </div>
+                <button className="primary" onClick={startSmartSession}>
+                  <Play size={17} fill="currentColor" />{memoryToday?.due_skills ? "Fortalecer memória" : "Começar sessão"}
+                </button>
               </section>
 
               <div className="grid">

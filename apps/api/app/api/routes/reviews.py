@@ -2,15 +2,19 @@ import json
 from datetime import UTC, date, datetime, timedelta
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import DbSession, get_admin_user, get_owner_user
-from app.models import Attempt, Question, ReviewItem, Topic
+from app.api.deps import DbSession, PaidUser
+from app.models import Attempt, LearningEvent, Question, ReviewItem, Topic
 from app.schemas.study import AnswerRequest
+from app.services.adaptive_engine import default_engine
+from app.services.feedback import normalize_confidence
 
-router = APIRouter(prefix="/reviews", tags=["reviews"], dependencies=[Depends(get_admin_user)])
+# Revisões: fluxo de aluno (assinante logado), por-usuário. NÃO é mais owner-only
+# (ver docs/adaptive-learning-architecture.md §2.1). Usuário gratuito usa o test-drive.
+router = APIRouter(prefix="/reviews", tags=["reviews"])
 
 
 def serialize_question(question: Question) -> dict:
@@ -26,8 +30,7 @@ def serialize_question(question: Question) -> dict:
 
 
 @router.get("/due")
-def due_reviews(db: DbSession):
-    user = get_owner_user(db)
+def due_reviews(user: PaidUser, db: DbSession):
     rows = db.scalars(
         select(ReviewItem)
         .where(ReviewItem.user_id == user.id, ReviewItem.due_date <= date.today())
@@ -51,16 +54,16 @@ def due_reviews(db: DbSession):
 
 
 @router.post("/{review_id}/answer")
-def answer_review(review_id: UUID, payload: AnswerRequest, db: DbSession):
-    user = get_owner_user(db)
+def answer_review(review_id: UUID, payload: AnswerRequest, user: PaidUser, db: DbSession):
     review = db.scalar(
         select(ReviewItem)
         .where(ReviewItem.id == review_id, ReviewItem.user_id == user.id)
-        .options(selectinload(ReviewItem.question))
+        .options(selectinload(ReviewItem.question).selectinload(Question.topic))
     )
     if not review:
         raise HTTPException(status_code=404, detail="Revisão não encontrada")
-    correct = payload.selected_option == review.question.correct_option
+    question = review.question
+    correct = payload.selected_option == question.correct_option
     review.last_result = correct
     review.last_reviewed_at = datetime.now(UTC)
     if correct:
@@ -70,6 +73,23 @@ def answer_review(review_id: UUID, payload: AnswerRequest, db: DbSession):
         review.repetitions = 0
         review.interval_days = 1
     review.due_date = date.today() + timedelta(days=review.interval_days)
+
+    # Motor adaptativo também na revisão (recuperação após intervalo — sinal forte de
+    # memória). No-op se a questão ainda não tem primary_skill.
+    confidence = normalize_confidence(payload.confidence)
+    evaluation = default_engine.evaluate_attempt(
+        db, user.id, question, correct=correct, confidence=confidence,
+        hints_used=payload.hints_used, response_time_s=payload.response_time_seconds,
+    )
+    db.add(LearningEvent(
+        user_id=user.id, question_id=question.id, skill_id=question.primary_skill_id,
+        event_type="REVIEW_COMPLETED", selected_option=payload.selected_option,
+        correct=correct, confidence=confidence, response_time=payload.response_time_seconds,
+        hints=payload.hints_used, session_id=payload.session_id,
+        review_interval=round(evaluation.interval_days) if evaluation.interval_days else None,
+        scheduler_state_before=evaluation.scheduler_state_before,
+        scheduler_state_after=evaluation.scheduler_state_after,
+    ))
     db.commit()
     return {
         "is_correct": correct,
@@ -80,8 +100,7 @@ def answer_review(review_id: UUID, payload: AnswerRequest, db: DbSession):
 
 
 @router.get("/errors")
-def error_notebook(db: DbSession):
-    user = get_owner_user(db)
+def error_notebook(user: PaidUser, db: DbSession):
     wrong_attempts = db.scalars(
         select(Attempt)
         .where(Attempt.user_id == user.id, Attempt.is_correct.is_(False))

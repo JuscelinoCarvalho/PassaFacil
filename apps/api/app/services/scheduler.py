@@ -28,6 +28,11 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
 
+def _as_utc(dt: datetime) -> datetime:
+    """Trata datetime naive como UTC (SQLite não guarda tz; Postgres guarda)."""
+    return dt if dt.tzinfo is not None else dt.replace(tzinfo=timezone.utc)
+
+
 class Rating(enum.IntEnum):
     """Qualidade da recuperação (spec §13). Ordem crescente importa nos cálculos."""
     AGAIN = 1   # errou
@@ -127,8 +132,8 @@ class SimpleFsrsScheduler(MemoryScheduler):
     def retrievability(self, state: MemoryState, now: datetime | None = None) -> float | None:
         if state.stability is None or state.last_review is None:
             return None
-        now = now or datetime.now(timezone.utc)
-        elapsed = max(0.0, (now - state.last_review).total_seconds() / 86400.0)
+        now = _as_utc(now or datetime.now(timezone.utc))
+        elapsed = max(0.0, (now - _as_utc(state.last_review)).total_seconds() / 86400.0)
         S = max(self.cfg.min_stability, state.stability)
         r = (1.0 + self.cfg.factor * elapsed / S) ** self.cfg.decay
         return min(1.0, max(0.0, r))

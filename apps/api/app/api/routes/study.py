@@ -18,6 +18,7 @@ from app.models import (
 from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
 from app.services.adaptive_engine import default_engine
 from app.services.feedback import build_answer_feedback, normalize_confidence
+from app.services.review_queue import default_review_queue
 
 router = APIRouter(prefix="/study", tags=["study"])
 
@@ -205,6 +206,31 @@ def questions(
         }
         for item in rows
     ]
+
+
+@router.get("/memory-today")
+def memory_today(user: PaidUser, db: DbSession):
+    """'Memória de hoje' (spec §41): quantas habilidades precisam ser recuperadas hoje
+    e uma estimativa de minutos. Base para o card da home e o botão 'Fortalecer memória'."""
+    due = default_review_queue.due_skill_count(db, user.id)
+    return {
+        "due_skills": due,
+        "estimated_minutes": max(1, round(due * 1.5)) if due else 0,
+    }
+
+
+@router.get("/session")
+def smart_session(user: PaidUser, db: DbSession, limit: int = 12):
+    """'Estudar agora' / sessão inteligente (spec §15): mistura revisão vencida +
+    habilidades frágeis + transferência + um pouco de conteúdo novo, já ordenada pela
+    ReviewQueue. Cada item traz `reason` (review/fragile/new) e a habilidade. Nunca vem
+    vazia (completa com conteúdo novo)."""
+    limit = max(1, min(limit, 40))
+    questions = default_review_queue.build(db, user.id, limit=limit)
+    counts = {"review": 0, "fragile": 0, "new": 0}
+    for q in questions:
+        counts[q.get("reason", "new")] = counts.get(q.get("reason", "new"), 0) + 1
+    return {"total": len(questions), "counts": counts, "questions": questions}
 
 
 def _interleave_by_subject(rows: list[Question]) -> list[Question]:

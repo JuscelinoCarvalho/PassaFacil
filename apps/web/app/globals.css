@@ -154,6 +154,15 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 :root[data-theme="dark"] .micro-aula { background: #23203099; border-color: #3a3357; border-left-color: var(--purple); }
 :root[data-theme="dark"] .micro-aula-label { color: #c3b6f7; }
 .teach-label { display: block; font-size: 9px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--purple); margin-bottom: 4px; }
+/* Fase 4 — card da sessão inteligente / memória de hoje */
+.smart-session-card { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-left: 3px solid var(--purple); }
+.smart-session-copy { flex: 1 1 260px; }
+.smart-session-copy .section-kicker { display: inline-flex; align-items: center; gap: 5px; }
+.smart-session-copy h2 { margin: 6px 0 4px; }
+.smart-session-copy p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.smart-session-card > .primary { margin-top: 0; width: auto; flex: 0 0 auto; }
+:root[data-theme="dark"] .smart-session-card { border-left-color: #8f79ef; }
+
 /* Fase 2 — confiança (modo aprendizagem) + feedback adaptativo + microaula em camadas */
 .confidence-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .confidence-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }

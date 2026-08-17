@@ -61,7 +61,9 @@
 
 - [x] **Full remake — F1 aplicada em produção** (2026-08-17, commit `079275e`; 8 tabelas + colunas criadas, 1074 questões preservadas). Branch `feat/full-remake-adaptativo` **não mesclada na `main` ainda**.
 - [x] **Full remake — Sessão B = F2 NO AR** (confiança + feedback adaptativo + microaula em camadas; backend `services/feedback.py` + `page.tsx`). Falta **autorar conteúdo** (misconceptions por alternativa + microaula estruturada `essential`/`deep`) — vem na F8/autoria; hoje degrada gracioso.
-- [ ] **Full remake — Sessão C = F3+F4**: `AdaptiveLearningEngine` + `MemoryScheduler` (FSRS via adapter ou camada própria) + `ReviewQueue` + sessão inteligente / "Memória de hoje". Migrar `/reviews/*` de owner-only → `PaidUser`+gratuito.
+- [x] **Full remake — Sessão C = F3+F4 NO AR**: `MemoryScheduler` (estilo-FSRS próprio) + `AdaptiveLearningEngine` + `ReviewQueue`/`TransferQuestionSelector` + sessão inteligente / "Memória de hoje"; `/reviews/*` migrado para `PaidUser`.
+- [ ] **Full remake — Sessão D = F5 (dashboard)**: mapa de conhecimento por disciplina/habilidade, painel "o que está me fazendo perder pontos" (riscos), erros conceituais recorrentes, evolução. Consome `UserSkillState`/`LearningEvent`.
+- [ ] **Autorar conteúdo adaptativo** (skills + misconceptions + microaula em camadas) além da questão-demo — para o motor/fila/dashboard terem massa. Vem com a F8 / painel de autoria (§50).
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
 - [ ] **Escalar a cascata quando crescer a base de assinantes:** Cerebras (chave `csk-…` já no `/etc`, modelo `gpt-oss-120b`) e/ou OpenRouter — ambos exigem crédito/cartão. Retomar é só incluir o nome no `GRADING_ORDER` + garantir crédito na conta.
@@ -79,6 +81,14 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-17 (full-remake · Sessão C, F3+F4 completas) — ReviewQueue + sessão inteligente no ar
+- Fechada a **Sessão C**: ReviewQueue/TransferSelector, migração das revisões e a **sessão inteligente / "Memória de hoje"** (F4). Backend + frontend no ar.
+- **C4 — `app/services/review_queue.py`:** `ReviewQueue.build()` monta a fila priorizando (spec §14) vencido/em risco → frágil → erro conceitual de alta confiança → consolidação → relevância no edital → retrievabilidade baixa, e **completa com conteúdo novo** (nunca vem vazia). `TransferQuestionSelector` (spec §9) escolhe uma questão **diferente da mesma habilidade** (prefere nunca respondida) para testar transferência. `due_skill_count()` alimenta a "Memória de hoje". Scheduler/fila tornados **robustos a datetime naive** (SQLite) via `_as_utc` (Postgres já é tz-aware).
+- **C4 — migração de acesso:** rotas **`/reviews/*` deixaram de ser owner-only** (`get_admin_user`+`get_owner_user`) e agora são **`PaidUser` por-usuário** (§2.1 do doc de arquitetura). A revisão também passa pelo motor adaptativo (evento `REVIEW_COMPLETED`, §34) — recuperação após intervalo atualiza memória/domínio. Usuário gratuito continua no test-drive (revisão exige conta).
+- **C5 (F4):** endpoints **`GET /study/memory-today`** (nº de habilidades a recuperar + minutos) e **`GET /study/session`** (fila adaptativa: revisão + frágeis + transferência + novo, com `reason`/`skill` por item). Front (`page.tsx`): card **"Sessão inteligente / 🧠 Memória de hoje"** na home + botão **"Começar sessão"/"Fortalecer memória"** que carrega `/study/session` no fluxo de questões (modo aprendizagem). `loadDashboard` também busca a memória de hoje. CSS `.smart-session-card` (tema claro/escuro).
+- **Validado:** scheduler + engine + reviewqueue e2e (SQLite, determinístico); `build()` conferido **read-only contra o prod** (dono: 0 revisões vencidas → 6 itens novos, fallback gracioso OK); `tsc` limpo; endpoints 401 sem token (vivos); front build sem `localhost`, web 200. Sem regressão.
+- **Efeito prático:** ao responder a questão-demo (única com skill hoje), o `UserSkillState` evolui e, quando vencer, aparece em "Memória de hoje"/sessão inteligente. O resto do acervo ganha skill na **F8**. **Próximo: Sessão D = F5 (dashboard: mapa de conhecimento, riscos, erros conceituais, evolução).**
 
 ### 2026-08-17 (full-remake · Sessão C, F3 core) — MemoryScheduler + AdaptiveLearningEngine no ar
 - Início da **Fase 3 (motor adaptativo)**. Entregue o núcleo: **scheduler de memória** + **motor** que atualiza o estado do conhecimento a cada resposta. Backend puro, no ar (só `restart passafacil-api` — sem colunas novas; as tabelas `user_skill_states`/`learning_events` já vieram na F1).
