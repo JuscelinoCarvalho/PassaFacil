@@ -265,6 +265,7 @@ type AnswerResult = {
   // Fase 2 — feedback adaptativo + microaula em camadas (todos opcionais/retrocompatíveis)
   why_wrong?: string | null;
   misconception?: { code: string; name: string } | null;
+  wrong_options?: { index: number; letter: string; reason: string }[];
   micro_lesson?: MicroLesson | null;
 };
 
@@ -1164,6 +1165,18 @@ function QuestionTeach({ result }: { result: AnswerResult }) {
           <span className="teach-label">Por que sua resposta pode estar errada</span>
           {result.misconception && <b className="mis-tag">{result.misconception.name}</b>}
           <span>{result.why_wrong}</span>
+        </div>
+      )}
+
+      {/* Por que as DEMAIS estão erradas — resumo, uma por linha */}
+      {result.wrong_options && result.wrong_options.length > 0 && (
+        <div className="teach wrong-list">
+          <span className="teach-label">Por que as demais estão erradas</span>
+          <ul>
+            {result.wrong_options.map((w) => (
+              <li key={w.index}><b>{w.letter}</b><span>{w.reason}</span></li>
+            ))}
+          </ul>
         </div>
       )}
 

@@ -82,6 +82,12 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-17 (full-remake · melhoria F2) — quadro "por que as demais estão erradas"
+- A pedido do dono, o feedback ganhou um **quadro resumido** logo depois de "Por que a correta está certa": **"Por que as demais estão erradas"**, listando **uma alternativa incorreta por linha** com um rótulo curto do erro. Compacto (não quebra a tela do celular/PC).
+- **Backend (`services/feedback.py`):** `build_answer_feedback` agora devolve `wrong_options` = lista `{index, letter, reason}` das alternativas incorretas **exceto a correta e a que o aluno marcou** (essa já vai no `why_wrong`). `reason` = **nome do misconception** (rótulo curto/impessoal) ou, na falta, a explicação da alternativa. Só aparece o que estiver autorado (degrada gracioso). Query única (dict por índice) — sem N+1.
+- **Frontend (`page.tsx` + `globals.css`):** no `QuestionTeach`, após o bloco "sua resposta", um `.wrong-list` (lista `letra — motivo`, borda fina entre linhas, tema claro/escuro). Verificado na questão-demo: escolhendo D (correta) lista A/B/E; escolhendo B lista A/E (B vai em "sua resposta", C sem misconception fica de fora).
+- Deployado (API restart + front rebuild) e **branch pushada** p/ `origin/feat/full-remake-adaptativo` (ainda não mesclada na `main`).
+
 ### 2026-08-17 (full-remake · Sessão C, F3+F4 completas) — ReviewQueue + sessão inteligente no ar
 - Fechada a **Sessão C**: ReviewQueue/TransferSelector, migração das revisões e a **sessão inteligente / "Memória de hoje"** (F4). Backend + frontend no ar.
 - **C4 — `app/services/review_queue.py`:** `ReviewQueue.build()` monta a fila priorizando (spec §14) vencido/em risco → frágil → erro conceitual de alta confiança → consolidação → relevância no edital → retrievabilidade baixa, e **completa com conteúdo novo** (nunca vem vazia). `TransferQuestionSelector` (spec §9) escolhe uma questão **diferente da mesma habilidade** (prefere nunca respondida) para testar transferência. `due_skill_count()` alimenta a "Memória de hoje". Scheduler/fila tornados **robustos a datetime naive** (SQLite) via `_as_utc` (Postgres já é tz-aware).

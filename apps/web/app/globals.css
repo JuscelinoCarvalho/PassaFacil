@@ -173,6 +173,14 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .teach.diag { background: rgba(180,85,96,0.10); }
 .teach.diag .teach-label { color: #b45560; }
 .mis-tag { display: inline-block; font-size: 11px; font-weight: 800; color: #b45560; margin-bottom: 4px; }
+/* Quadro resumido "por que as demais estão erradas" — uma por linha, compacto */
+.wrong-list ul { list-style: none; margin: 6px 0 0; padding: 0; }
+.wrong-list li { display: flex; gap: 8px; align-items: baseline; padding: 3px 0; font-size: 12.5px; line-height: 1.45; }
+.wrong-list li + li { border-top: 1px solid rgba(0,0,0,0.06); }
+.wrong-list li b { flex: 0 0 auto; min-width: 15px; color: #b45560; font-weight: 800; }
+.wrong-list li span { flex: 1 1 auto; min-width: 0; }
+:root[data-theme="dark"] .wrong-list li + li { border-top-color: rgba(255,255,255,0.08); }
+:root[data-theme="dark"] .wrong-list li b { color: #e08b8b; }
 .micro-aula.layer1 p { margin: 4px 0 0; }
 .layer-more { margin-top: 8px; }
 .layer-toggle { font-size: 11.5px; }
