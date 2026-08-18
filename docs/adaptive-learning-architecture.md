@@ -150,7 +150,7 @@ Regra de ouro: **UI desacoplada dos algoritmos de aprendizagem**. Nenhuma lógic
 | **B** | **F2 questões (confiança, feedback adaptativo, microaula em camadas)** | **concluída + no ar** (`services/feedback.py`, `micro_lesson`, pills de confiança, `QuestionTeach`; conteúdo a autorar depois) |
 | **C** | **F3 motor + scheduler + fila / F4 sessão inteligente** | **concluída + no ar** — `scheduler.py`, `adaptive_engine.py`, `review_queue.py`; `/reviews` migrado p/ `PaidUser`; endpoints `memory-today`/`session` + card na home |
 | **D** | **F5 dashboard** | **concluída + no ar** — `knowledge_map.py` + `GET /study/knowledge-map` + aba "Meu conhecimento" (indicadores, mapa, riscos, erros conceituais) |
-| E | F6 aulas/áudio interativo | pendente |
+| **E** | **F6 aulas/áudio interativo** | **concluída + no ar** — `models/lessons.py` (Lesson/LessonSection/RetrievalCheckpoint/LessonSkill), endpoints `/study/lessons*`, aula-demo dos pilotos, `LessonsView` (modos interativo/contínuo) |
 | F | F7 dissertativas (evolui o MVP atual) | pendente |
 | G | F8 migração de conteúdo + F9 QA | pendente |
 

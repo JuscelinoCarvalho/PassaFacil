@@ -63,7 +63,8 @@
 - [x] **Full remake — Sessão B = F2 NO AR** (confiança + feedback adaptativo + microaula em camadas; backend `services/feedback.py` + `page.tsx`). Falta **autorar conteúdo** (misconceptions por alternativa + microaula estruturada `essential`/`deep`) — vem na F8/autoria; hoje degrada gracioso.
 - [x] **Full remake — Sessão C = F3+F4 NO AR**: `MemoryScheduler` (estilo-FSRS próprio) + `AdaptiveLearningEngine` + `ReviewQueue`/`TransferQuestionSelector` + sessão inteligente / "Memória de hoje"; `/reviews/*` migrado para `PaidUser`.
 - [x] **Full remake — Sessão D = F5 (dashboard) NO AR**: aba "Meu conhecimento" (`services/knowledge_map.py` + `GET /study/knowledge-map` + `KnowledgeView`): indicadores, mapa por disciplina/habilidade, riscos, erros conceituais recorrentes.
-- [ ] **Full remake — Sessão E = F6 (aulas e áudio interativo)**: `LessonSection`/`AudioSegment`/`RetrievalCheckpoint` + modo interativo. Reaproveitar o áudio-piloto existente.
+- [x] **Full remake — Sessão E = F6 (aulas e áudio interativo) NO AR**: `models/lessons.py` + endpoints `/study/lessons*` + `LessonsView` (modos interativo/contínuo + transcrição); aula-demo a partir dos 8 pilotos.
+- [ ] **Full remake — Sessão F = F7 (dissertativas)**: evoluir o MVP atual (`DiscursiveCase`/`DiscursiveCriterion`/`DiscursiveSubmission` + correção por IA) para OfficialRubric/RubricItem + correção semântica + "Nota estimada" + **reescrita ativa** (§24-§32).
 - [ ] **Autorar conteúdo adaptativo** (skills + misconceptions + microaula em camadas) além da questão-demo — para o motor/fila/dashboard terem massa. Vem com a F8 / painel de autoria (§50).
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
@@ -82,6 +83,17 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-18 (full-remake · Sessão E, F6) — aulas e áudio interativo no ar
+- **Fase 6 (aulas/áudio interativo)** completa e no ar. O menu **"Áudios (em breve)" virou "Aulas em áudio"** — a feature saiu do "em breve".
+- **Backend — `app/models/lessons.py` (4 tabelas novas via create_all):** `Lesson`, `LessonSection` (unidade semântica com texto/transcrição + `audio_url`, §20/§22), `RetrievalCheckpoint` (checkpoint que reaproveita uma `Question`, §21) e `LessonSkill` (aula↔habilidade, §23). Endpoints em `study.py`: `GET /study/lessons` (lista), `GET /study/lessons/{slug}` (seções + checkpoint sem gabarito), `POST /study/lessons/checkpoint/{question_id}/answer` (feedback adaptativo + evento `AUDIO_CHECKPOINT_ANSWERED` §34 + atualiza `UserSkillState`; **não cria Attempt** — checkpoint é apoio, não conta no placar).
+- **Aula-demo** (`scripts/seed_demo_lesson.py`, idempotente): "Revisão em áudio — Conhecimentos Gerais + TI", **8 seções** a partir dos 8 MP3-piloto (`media/audio_pilot/`), cada trecho com áudio + transcrição (o enunciado) + checkpoint = a questão do trial correspondente. Semeada em produção.
+- **Frontend (`page.tsx` + `globals.css`) — `LessonsView`:** lista de aulas → player com **dois modos** (spec §21): **"🧠 Aula interativa"** (ouve o trecho → checkpoint → responde → feedback via `QuestionTeach` → próximo) e **"▶ Ouvir continuamente"** (todos os trechos com player + transcrição colapsável). Áudio servido pelo endpoint público `/study/audio-pilot/*`. Tema claro/escuro. (Removida a tag morta "EM BREVE" da nav.)
+- **Validado:** tabelas criadas (SQLite + prod), seed 8/8 seções com áudio+checkpoint, endpoints 401 sem token (vivos), áudio público 200, `tsc` limpo, front build sem `localhost`, web 200. Sem regressão.
+- **Progresso: A✓ B✓ C✓ D✓ E✓ de 7 blocos. Próximo: Sessão F = F7 (dissertativas — evolui o MVP: OfficialRubric/RubricItem, correção semântica, "Nota estimada", reescrita ativa).**
+
+### 2026-08-17 (conteúdo) — TODAS as questões publicadas (sem etapa de validação)
+- A pedido do dono: **todas as questões publicadas, sem exceção**. `UPDATE questions SET is_published=true` em produção → **1074/1074 publicadas** (antes 1026; +48, das quais 29 nem apareciam por não serem owner_only). Os 3 estudos de caso já estavam publicados. Sem restart (a API lê `is_published` ao vivo). Preferência permanente registrada na memória — **publicar logo após qualquer import novo** (o `importar_acervo.py` ainda importa como `owner_only`/não publicado).
 
 ### 2026-08-17 (full-remake · Sessão D, F5) — dashboard "Meu conhecimento" no ar
 - **Fase 5 (dashboard adaptativo)** completa e no ar (backend + frontend). Nova aba **"Meu conhecimento"** com mapa de habilidades, riscos e erros conceituais — consome `UserSkillState` + `LearningEvent`.

@@ -368,7 +368,7 @@ const nav = [
   ["Caderno de erros", CircleAlert, "errors", false],
   ["Banco de questões", Database, "bank", true],
   ["Teste grátis", BarChart3, "trial", true],
-  ["Áudios", Headphones, "soon", false],
+  ["Aulas em áudio", Headphones, "lessons", false],
 ] as const;
 
 const EXAM_DATE = new Date(2026, 9, 11, 12, 0, 0); // 11/10/2026 — prova TCE-SP 2026
@@ -499,7 +499,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "reviews" | "errors" | "bank" | "trial" | "soon">("today");
+  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "lessons" | "reviews" | "errors" | "bank" | "trial" | "soon">("today");
   const [practiceFocus, setPracticeFocus] = useState<"all" | "gaps">("all");
   const [subjectsList, setSubjectsList] = useState<SubjectScope[]>([]);
   const [specialty, setSpecialty] = useState<string>("ti"); // especialidade escolhida
@@ -848,7 +848,6 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
               onClick={() => navigate(destination)}
             >
               <Icon size={19} /><span>{label}</span>
-              {destination === "soon" && <small className="soon-tag">EM BREVE</small>}
             </button>
           ))}
         </nav>
@@ -953,6 +952,8 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
             <KnowledgeView onCorrigir={startSmartSession} />
           ) : view === "reviews" ? (
             <ReviewView />
+          ) : view === "lessons" ? (
+            <LessonsView />
           ) : view === "errors" ? (
             <ErrorNotebook onPractice={() => navigate("questions")} />
           ) : view === "bank" && me.is_admin ? (
@@ -1428,6 +1429,166 @@ function KnowledgeView({ onCorrigir }: { onCorrigir: () => void }) {
             ))}
           </ul>
         </section>
+      )}
+    </section>
+  );
+}
+
+// ============================ AULAS EM ÁUDIO (F6) ============================
+
+type LessonListItem = {
+  id: string; slug: string; title: string; description: string | null;
+  kind: string; sections: number; checkpoints: number; has_audio: boolean;
+};
+type LessonCheckpointQ = { id: string; statement: string; options: string[]; topic: string | null };
+type LessonSectionT = {
+  order: number; title: string; content: string | null; audio_url: string | null;
+  duration_seconds: number | null;
+  checkpoint: { prompt: string | null; question: LessonCheckpointQ | null } | null;
+};
+type LessonDetail = {
+  id: string; slug: string; title: string; description: string | null; kind: string;
+  sections: LessonSectionT[];
+};
+
+function LessonsView() {
+  const [list, setList] = useState<LessonListItem[] | null>(null);
+  const [lesson, setLesson] = useState<LessonDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [mode, setMode] = useState<"interactive" | "continuous">("interactive");
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [result, setResult] = useState<AnswerResult | null>(null);
+
+  useEffect(() => {
+    authFetch(`${API_URL}/study/lessons`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setList)
+      .catch(() => setList([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const openLesson = async (slug: string) => {
+    setLoading(true);
+    try {
+      const r = await authFetch(`${API_URL}/study/lessons/${slug}`, { cache: "no-store" });
+      if (r.ok) {
+        setLesson(await r.json());
+        setIdx(0); setSelected(null); setResult(null); setMode("interactive");
+      }
+    } finally { setLoading(false); }
+  };
+
+  const answerCheckpoint = async (qid: string) => {
+    if (selected === null) return;
+    const r = await authFetch(`${API_URL}/study/lessons/checkpoint/${qid}/answer`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ selected_option: selected }),
+    });
+    if (r.ok) setResult(await r.json());
+  };
+
+  const nextSection = () => { setIdx((i) => i + 1); setSelected(null); setResult(null); };
+
+  if (loading && !lesson && !list) return <section className="card empty-state"><LoaderCircle className="spin" /><h2>Carregando aulas...</h2></section>;
+
+  // ----- lista de aulas -----
+  if (!lesson) {
+    if (!list || list.length === 0) return (
+      <section className="card empty-state"><Headphones size={34} /><h1>Aulas em breve</h1><p>Ainda não há aulas publicadas.</p></section>
+    );
+    return (
+      <section className="lessons-list">
+        <div className="question-top"><div><span className="eyebrow">AULAS EM ÁUDIO</span><h1>Estude ouvindo</h1><p>Trechos curtos com checkpoints: você ouve e recupera o conteúdo na hora.</p></div></div>
+        {list.map((l) => (
+          <button key={l.id} className="card lesson-card" onClick={() => openLesson(l.slug)}>
+            <span className="lesson-icon"><Headphones size={22} /></span>
+            <span className="lesson-copy">
+              <b>{l.title}</b>
+              {l.description && <small>{l.description}</small>}
+              <span className="lesson-meta">{l.sections} trechos{l.checkpoints ? ` · ${l.checkpoints} checkpoints` : ""}</span>
+            </span>
+            <ArrowRight size={18} />
+          </button>
+        ))}
+      </section>
+    );
+  }
+
+  // ----- player de uma aula -----
+  const section = lesson.sections[idx];
+  const cpQ = section?.checkpoint?.question ?? null;
+  const isLast = idx + 1 >= lesson.sections.length;
+  return (
+    <section className="lesson-layout">
+      <div className="question-top">
+        <div><span className="eyebrow">AULA</span><h1>{lesson.title}</h1></div>
+        <button className="ghost compact" onClick={() => setLesson(null)}><ArrowLeft size={16} /> Voltar</button>
+      </div>
+      <div className="lesson-mode">
+        <button className={mode === "interactive" ? "on" : ""} onClick={() => setMode("interactive")}>🧠 Aula interativa</button>
+        <button className={mode === "continuous" ? "on" : ""} onClick={() => setMode("continuous")}>▶ Ouvir continuamente</button>
+      </div>
+
+      {mode === "continuous" ? (
+        <div className="lesson-continuous">
+          {lesson.sections.map((s) => (
+            <article className="card lesson-section" key={s.order}>
+              <h2>{s.order}. {s.title}</h2>
+              {s.audio_url && <audio className="lesson-audio" controls preload="none" src={s.audio_url} />}
+              {s.content && <details className="transcript"><summary>Ver transcrição</summary><p>{s.content}</p></details>}
+            </article>
+          ))}
+        </div>
+      ) : (
+        <article className="card lesson-section">
+          <div className="lesson-progress">Trecho {idx + 1} de {lesson.sections.length}</div>
+          <h2>{section.title}</h2>
+          {section.audio_url && <audio className="lesson-audio" controls preload="none" src={section.audio_url} />}
+          {section.content && <details className="transcript"><summary>Ver transcrição</summary><p>{section.content}</p></details>}
+
+          {cpQ ? (
+            <div className="checkpoint">
+              <span className="checkpoint-label"><Sparkles size={14} /> Checkpoint — responda para fixar</span>
+              <p className="checkpoint-statement">{cpQ.statement}</p>
+              <div className="options">
+                {cpQ.options.map((opt, i) => {
+                  const isCorrect = result && i === result.correct_option;
+                  const isWrong = result && i === selected && !result.is_correct;
+                  return (
+                    <button key={i} disabled={Boolean(result)} onClick={() => setSelected(i)}
+                      className={`option ${selected === i ? "selected" : ""} ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`}>
+                      <span>{String.fromCharCode(65 + i)}</span>{opt}
+                    </button>
+                  );
+                })}
+              </div>
+              {result && (
+                <div className={result.is_correct ? "feedback correct-feedback" : "feedback wrong-feedback"}>
+                  <b>{result.is_correct ? "✓ Você acertou!" : "✗ Ainda não — reveja o trecho"}</b>
+                  <QuestionTeach result={result} />
+                </div>
+              )}
+              <div className="question-actions">
+                {!result ? (
+                  <button className="primary compact" disabled={selected === null} onClick={() => answerCheckpoint(cpQ.id)}>Confirmar</button>
+                ) : isLast ? (
+                  <button className="primary compact" onClick={() => setLesson(null)}>Concluir aula</button>
+                ) : (
+                  <button className="primary compact" onClick={nextSection}>Próximo trecho <ArrowRight size={16} /></button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="question-actions">
+              {isLast ? (
+                <button className="primary compact" onClick={() => setLesson(null)}>Concluir aula</button>
+              ) : (
+                <button className="primary compact" onClick={nextSection}>Próximo trecho <ArrowRight size={16} /></button>
+              )}
+            </div>
+          )}
+        </article>
       )}
     </section>
   );

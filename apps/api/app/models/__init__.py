@@ -36,6 +36,12 @@ from app.models.adaptive import (
     SkillStatus,
     UserSkillState,
 )
+from app.models.lessons import (
+    Lesson,
+    LessonSection,
+    LessonSkill,
+    RetrievalCheckpoint,
+)
 
 __all__ = [
     "Attempt", "DiscursiveCase", "DiscursiveCriterion", "DiscursiveSubmission", "Exam", "Feedback", "Question", "QuestionDraft", "QuestionImportJob", "QuestionProvenance", "ReviewItem", "Simulation", "SimulationAnswer",
@@ -44,4 +50,6 @@ __all__ = [
     "Skill", "SkillRelation", "QuestionSkill", "Misconception", "OptionMisconception",
     "UserSkillState", "LearningEvent", "QuestionFamily",
     "SkillRelationType", "SkillStatus", "QuestionSkillRole", "SkillState", "Confidence",
+    # Aulas e áudio (Fase 6)
+    "Lesson", "LessonSection", "RetrievalCheckpoint", "LessonSkill",
 ]

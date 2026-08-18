@@ -13,7 +13,8 @@ from sqlalchemy.orm import selectinload
 
 from app.api.deps import AdminUser, CurrentUser, DbSession, PaidUser
 from app.models import (
-    Attempt, LearningEvent, Question, QuestionProvenance, ReviewItem, StudyTask, Subject, Topic, TrialEvent
+    Attempt, LearningEvent, Lesson, LessonSection, Question, QuestionProvenance,
+    ReviewItem, StudyTask, Subject, Topic, TrialEvent
 )
 from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
 from app.services.adaptive_engine import default_engine
@@ -218,6 +219,108 @@ def memory_today(user: PaidUser, db: DbSession):
         "due_skills": due,
         "estimated_minutes": max(1, round(due * 1.5)) if due else 0,
     }
+
+
+# ===================== AULAS E ÁUDIO INTERATIVO (F6) =====================
+
+@router.get("/lessons")
+def list_lessons(user: PaidUser, db: DbSession):
+    """Lista as aulas publicadas (§20). Cada aula traz nº de seções e quantas têm
+    checkpoint (para o modo interativo)."""
+    lessons = db.scalars(
+        select(Lesson).where(Lesson.is_published.is_(True))
+        .options(selectinload(Lesson.sections).selectinload(LessonSection.checkpoint))
+        .order_by(Lesson.display_order, Lesson.title)
+    ).all()
+    return [
+        {
+            "id": l.id, "slug": l.slug, "title": l.title, "description": l.description,
+            "kind": l.kind, "sections": len(l.sections),
+            "checkpoints": sum(1 for s in l.sections if s.checkpoint),
+            "has_audio": any(s.audio_url for s in l.sections),
+        }
+        for l in lessons
+    ]
+
+
+def _serialize_checkpoint_question(q: Question | None) -> dict | None:
+    """Questão do checkpoint SEM revelar o gabarito (só após responder)."""
+    if not q:
+        return None
+    return {
+        "id": q.id, "statement": q.statement, "options": json.loads(q.options),
+        "topic": q.topic.name if q.topic else None,
+    }
+
+
+@router.get("/lessons/{slug}")
+def get_lesson(slug: str, user: PaidUser, db: DbSession):
+    """Aula completa: seções ordenadas com áudio + transcrição (§22) e o checkpoint
+    (§21) sem gabarito. Modo 'ouvir contínuo' usa os audio_url; 'interativo' pausa nos
+    checkpoints."""
+    lesson = db.scalar(
+        select(Lesson).where(Lesson.slug == slug, Lesson.is_published.is_(True))
+        .options(
+            selectinload(Lesson.sections)
+            .selectinload(LessonSection.checkpoint)
+        )
+    )
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Aula não encontrada")
+    # carrega as questões dos checkpoints
+    q_ids = [s.checkpoint.question_id for s in lesson.sections if s.checkpoint and s.checkpoint.question_id]
+    q_map = {
+        q.id: q for q in db.scalars(
+            select(Question).where(Question.id.in_(q_ids))
+            .options(selectinload(Question.topic))
+        ).all()
+    } if q_ids else {}
+    return {
+        "id": lesson.id, "slug": lesson.slug, "title": lesson.title,
+        "description": lesson.description, "kind": lesson.kind,
+        "sections": [
+            {
+                "order": s.order, "title": s.title, "content": s.content,
+                "audio_url": s.audio_url, "duration_seconds": s.duration_seconds,
+                "checkpoint": (
+                    {"prompt": s.checkpoint.prompt,
+                     "question": _serialize_checkpoint_question(q_map.get(s.checkpoint.question_id))}
+                    if s.checkpoint else None
+                ),
+            }
+            for s in lesson.sections
+        ],
+    }
+
+
+@router.post("/lessons/checkpoint/{question_id}/answer")
+def answer_checkpoint(question_id: UUID, payload: AnswerRequest, user: PaidUser, db: DbSession):
+    """Responde um checkpoint de aula: devolve o feedback adaptativo e registra o
+    evento AUDIO_CHECKPOINT_ANSWERED (spec §34). Atualiza o estado da habilidade pelo
+    motor, mas NÃO cria Attempt (checkpoint é apoio de aula, não conta no placar)."""
+    question = db.get(Question, question_id)
+    if not question:
+        raise HTTPException(status_code=404, detail="Questão não encontrada")
+    if payload.selected_option >= len(json.loads(question.options)):
+        raise HTTPException(status_code=422, detail="Alternativa inválida")
+    feedback = build_answer_feedback(db, question, payload.selected_option)
+    confidence = normalize_confidence(payload.confidence)
+    evaluation = default_engine.evaluate_attempt(
+        db, user.id, question, correct=feedback["is_correct"], confidence=confidence,
+        hints_used=payload.hints_used, response_time_s=payload.response_time_seconds,
+    )
+    db.add(LearningEvent(
+        user_id=user.id, question_id=question.id, skill_id=question.primary_skill_id,
+        event_type="AUDIO_CHECKPOINT_ANSWERED", selected_option=payload.selected_option,
+        correct=feedback["is_correct"], confidence=confidence,
+        response_time=payload.response_time_seconds, hints=payload.hints_used,
+        session_id=payload.session_id,
+        review_interval=round(evaluation.interval_days) if evaluation.interval_days else None,
+        scheduler_state_before=evaluation.scheduler_state_before,
+        scheduler_state_after=evaluation.scheduler_state_after,
+    ))
+    db.commit()
+    return feedback
 
 
 @router.get("/knowledge-map")
