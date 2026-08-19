@@ -3,6 +3,7 @@ from app.models.entities import (
     DiscursiveCase,
     DiscursiveCriterion,
     DiscursiveSubmission,
+    EssayRewrite,
     Exam,
     Feedback,
     Question,
@@ -44,7 +45,7 @@ from app.models.lessons import (
 )
 
 __all__ = [
-    "Attempt", "DiscursiveCase", "DiscursiveCriterion", "DiscursiveSubmission", "Exam", "Feedback", "Question", "QuestionDraft", "QuestionImportJob", "QuestionProvenance", "ReviewItem", "Simulation", "SimulationAnswer",
+    "Attempt", "DiscursiveCase", "DiscursiveCriterion", "DiscursiveSubmission", "EssayRewrite", "Exam", "Feedback", "Question", "QuestionDraft", "QuestionImportJob", "QuestionProvenance", "ReviewItem", "Simulation", "SimulationAnswer",
     "StudyTask", "Subject", "Subscription", "SubscriptionPlan", "SubscriptionStatus", "Topic", "TrialEvent", "User",
     # Plataforma adaptativa (Fase 1)
     "Skill", "SkillRelation", "QuestionSkill", "Misconception", "OptionMisconception",

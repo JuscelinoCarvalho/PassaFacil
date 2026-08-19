@@ -17,11 +17,22 @@ import json
 import logging
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from app.core.config import settings
 
 logger = logging.getLogger("passafacil.grading")
+
+STATUS_VALUES = {"atendido", "parcial", "ausente"}
+
+
+def _derive_status(nota: float, teto: float) -> str:
+    """Status do critério (spec §27) a partir da nota, quando a IA não o informa."""
+    if nota <= 0:
+        return "ausente"
+    if nota >= teto:
+        return "atendido"
+    return "parcial"
 
 
 @dataclass
@@ -31,6 +42,8 @@ class GradingResult:
     comentario: str               # comentário geral sobre a resposta
     total: float                  # soma das notas (já clampada aos tetos)
     provider: str                 # provedor que efetivamente corrigiu
+    # Fase 7 — correção item-a-item (spec §27): {codigo: {nota, status, evidencia, justificativa}}
+    items: dict[str, dict] = field(default_factory=dict)
 
 
 # base_url / model / api_key de cada provedor, resolvidos a partir das settings.
@@ -66,9 +79,13 @@ SYSTEM_PROMPT = (
     "- Reconheça sinônimos e paráfrases: o candidato não precisa usar as mesmas "
     "palavras do espelho, desde que demonstre o conhecimento exigido.\n"
     "- Na justificativa, seja objetivo e didático: diga o que o candidato cobriu e "
-    "exatamente o que faltou para a nota cheia.\n\n"
+    "exatamente o que faltou para a nota cheia.\n"
+    "- Para cada critério informe também o STATUS: 'atendido' (nota cheia), 'parcial' "
+    "(crédito parcial) ou 'ausente' (nota 0); e a EVIDENCIA: um TRECHO LITERAL, copiado "
+    "da resposta do candidato, que sustenta a nota (string vazia se ausente).\n\n"
     "Responda ESTRITAMENTE em JSON válido, sem texto fora do JSON, no formato:\n"
-    '{"criterios": [{"codigo": "N1", "nota": 2.5, "justificativa": "..."}], '
+    '{"criterios": [{"codigo": "N1", "nota": 2.5, "status": "parcial", '
+    '"evidencia": "trecho literal do candidato", "justificativa": "..."}], '
     '"comentario_geral": "..."}'
 )
 
@@ -143,6 +160,7 @@ def _result_from_payload(payload: dict, case, provider: str) -> GradingResult | 
     max_by_code = {c.codigo: float(c.pontuacao_maxima) for c in case.criteria}
     scores: dict[str, float] = {}
     feedback: dict[str, str] = {}
+    items: dict[str, dict] = {}
     for item in payload.get("criterios", []):
         codigo = str(item.get("codigo", "")).strip()
         if codigo not in max_by_code:
@@ -151,17 +169,30 @@ def _result_from_payload(payload: dict, case, provider: str) -> GradingResult | 
             nota = float(item.get("nota"))
         except (TypeError, ValueError):
             continue
-        scores[codigo] = round(max(0.0, min(nota, max_by_code[codigo])), 2)
-        just = item.get("justificativa")
+        nota = round(max(0.0, min(nota, max_by_code[codigo])), 2)
+        scores[codigo] = nota
+        just = str(item.get("justificativa") or "").strip()
         if just:
-            feedback[codigo] = str(just).strip()
+            feedback[codigo] = just
+        status = str(item.get("status", "")).strip().lower()
+        if status not in STATUS_VALUES:
+            status = _derive_status(nota, max_by_code[codigo])
+        items[codigo] = {
+            "nota": nota,
+            "status": status,
+            "evidencia": str(item.get("evidencia") or "").strip(),
+            "justificativa": just,
+        }
     # Só aceita a correção se cobriu TODOS os critérios da grade — caso contrário,
     # a nota total seria injustamente baixa; cai para o próximo provedor.
     if set(scores) != set(max_by_code):
         return None
     total = round(sum(scores.values()), 2)
     comentario = str(payload.get("comentario_geral", "") or "").strip()
-    return GradingResult(scores=scores, feedback=feedback, comentario=comentario, total=total, provider=provider)
+    return GradingResult(
+        scores=scores, feedback=feedback, comentario=comentario, total=total,
+        provider=provider, items=items,
+    )
 
 
 def grade(case, texto_resposta: str) -> GradingResult | None:
@@ -190,4 +221,62 @@ def grade(case, texto_resposta: str) -> GradingResult | None:
             logger.warning("Provedor de correção %s devolveu resposta inválida: %s", name, exc)
         except Exception as exc:  # noqa: BLE001 — correção nunca pode derrubar o envio
             logger.warning("Erro inesperado na correção via %s: %s", name, exc)
+    return None
+
+
+# ----- Reescrita ativa (Fase 7, spec §29): recorreção de UM critério -----
+CRITERION_SYSTEM = (
+    "Você é um examinador de provas discursivas de concurso (padrão VUNESP). Avalie "
+    "SOMENTE o critério indicado, comparando o trecho reescrito pelo candidato com o "
+    "conteúdo esperado. Dê crédito parcial e ignore erros de forma; avalie o conteúdo. "
+    "Responda ESTRITAMENTE em JSON, sem texto ao redor: "
+    '{"nota": 0.0, "status": "atendido|parcial|ausente", "evidencia": "trecho literal", '
+    '"justificativa": "..."}'
+)
+
+
+def _criterion_prompt(case, criterion, texto: str) -> str:
+    return (
+        f"ENUNCIADO:\n{case.enunciado}\n\n"
+        f"CRITÉRIO {criterion.codigo} (até {float(criterion.pontuacao_maxima):g} pts): "
+        f"{criterion.descricao}\n"
+        f"CONTEÚDO ESPERADO: {criterion.conteudo_esperado}\n\n"
+        f"TRECHO REESCRITO PELO CANDIDATO:\n{texto}\n\n"
+        "Avalie APENAS este critério."
+    )
+
+
+def grade_criterion(case, criterion, texto: str) -> dict | None:
+    """Recorrige um único critério sobre o trecho reescrito. Devolve
+    {nota, status, evidencia, justificativa, provider} ou None se a IA falhar."""
+    if not settings.grading_enabled:
+        return None
+    teto = float(criterion.pontuacao_maxima)
+    messages = [
+        {"role": "system", "content": CRITERION_SYSTEM},
+        {"role": "user", "content": _criterion_prompt(case, criterion, texto)},
+    ]
+    for name in settings.grading_provider_order:
+        conf = _provider_conf(name)
+        if not conf:
+            continue
+        base_url, model, api_key = conf
+        try:
+            data = _call_provider(base_url, model, api_key, messages)
+            nota = round(max(0.0, min(float(data.get("nota")), teto)), 2)
+            status = str(data.get("status", "")).strip().lower()
+            if status not in STATUS_VALUES:
+                status = _derive_status(nota, teto)
+            return {
+                "nota": nota, "status": status,
+                "evidencia": str(data.get("evidencia") or "").strip(),
+                "justificativa": str(data.get("justificativa") or "").strip(),
+                "provider": name,
+            }
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as exc:
+            logger.warning("Recorreção via %s falhou (rede/limite): %s", name, exc)
+        except (KeyError, ValueError, TypeError, json.JSONDecodeError) as exc:
+            logger.warning("Recorreção via %s devolveu resposta inválida: %s", name, exc)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Erro inesperado na recorreção via %s: %s", name, exc)
     return None

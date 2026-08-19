@@ -350,8 +350,34 @@ class DiscursiveSubmission(UUIDMixin, TimestampMixin, Base):
     ai_feedback: Mapped[dict | None] = mapped_column(JSON)   # {codigo: justificativa da nota}
     ai_comentario: Mapped[str | None] = mapped_column(Text)  # comentário geral da correção
     ai_provider: Mapped[str | None] = mapped_column(String(40))  # provedor que corrigiu
+    # Fase 7 — correção item-a-item (spec §27): {codigo: {nota, status
+    # (atendido/parcial/ausente), evidencia (trecho do candidato), justificativa}}.
+    ai_items: Mapped[dict | None] = mapped_column(JSON)
 
     case: Mapped[DiscursiveCase] = relationship()
+    rewrites: Mapped[list["EssayRewrite"]] = relationship(
+        back_populates="submission", cascade="all, delete-orphan", order_by="EssayRewrite.created_at"
+    )
+
+
+class EssayRewrite(UUIDMixin, TimestampMixin, Base):
+    """Reescrita ativa (spec §29): o aluno reescreve o trecho referente a um critério
+    insuficiente e a IA recorrige AQUELE critério, permitindo comparar a evolução (§30).
+    Transforma feedback em nova produção do aluno — não substitui o aluno pela IA (§32)."""
+    __tablename__ = "essay_rewrites"
+
+    submission_id: Mapped[UUID] = mapped_column(
+        ForeignKey("discursive_submissions.id", ondelete="CASCADE"), index=True
+    )
+    codigo: Mapped[str] = mapped_column(String(10))          # critério reescrito (N1, N2...)
+    texto: Mapped[str] = mapped_column(Text)                 # trecho reescrito pelo aluno
+    ai_nota: Mapped[float | None] = mapped_column(Numeric(5, 2))
+    ai_status: Mapped[str | None] = mapped_column(String(20))   # atendido/parcial/ausente
+    ai_evidencia: Mapped[str | None] = mapped_column(Text)
+    ai_justificativa: Mapped[str | None] = mapped_column(Text)
+    ai_provider: Mapped[str | None] = mapped_column(String(40))
+
+    submission: Mapped[DiscursiveSubmission] = relationship(back_populates="rewrites")
 
 
 class Feedback(UUIDMixin, TimestampMixin, Base):

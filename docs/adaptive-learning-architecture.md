@@ -151,7 +151,7 @@ Regra de ouro: **UI desacoplada dos algoritmos de aprendizagem**. Nenhuma lógic
 | **C** | **F3 motor + scheduler + fila / F4 sessão inteligente** | **concluída + no ar** — `scheduler.py`, `adaptive_engine.py`, `review_queue.py`; `/reviews` migrado p/ `PaidUser`; endpoints `memory-today`/`session` + card na home |
 | **D** | **F5 dashboard** | **concluída + no ar** — `knowledge_map.py` + `GET /study/knowledge-map` + aba "Meu conhecimento" (indicadores, mapa, riscos, erros conceituais) |
 | **E** | **F6 aulas/áudio interativo** | **concluída + no ar** — `models/lessons.py` (Lesson/LessonSection/RetrievalCheckpoint/LessonSkill), endpoints `/study/lessons*`, aula-demo dos pilotos, `LessonsView` (modos interativo/contínuo) |
-| F | F7 dissertativas (evolui o MVP atual) | pendente |
+| **F** | **F7 dissertativas (evolui o MVP atual)** | **concluída + no ar** — `ai_items`/`EssayRewrite`, `grading.items`+`grade_criterion`, correção item-a-item (status/evidência) + "Nota estimada" + reescrita ativa |
 | G | F8 migração de conteúdo + F9 QA | pendente |
 
 *Aplicação em produção:* como a F1 é puramente aditiva, "publicar" = `sudo systemctl restart passafacil-api` (roda `create_all` + `_ensure_columns`). Sem rebuild de frontend (nada mudou em `apps/web`).

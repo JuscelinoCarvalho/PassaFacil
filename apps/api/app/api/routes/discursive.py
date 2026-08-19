@@ -5,8 +5,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import DbSession, PaidUser
-from app.models import DiscursiveCase, DiscursiveSubmission
-from app.schemas.discursive import DiscursiveSubmitRequest, SelfAssessRequest
+from app.models import DiscursiveCase, DiscursiveSubmission, EssayRewrite
+from app.schemas.discursive import DiscursiveSubmitRequest, RewriteRequest, SelfAssessRequest
 from app.services import grading
 
 router = APIRouter(prefix="/discursive", tags=["discursive"])
@@ -24,9 +24,11 @@ def _correcao(sub: DiscursiveSubmission) -> dict | None:
     return {
         "scores": sub.ai_scores,
         "feedback": sub.ai_feedback or {},
+        "items": sub.ai_items or {},          # Fase 7 — status/evidência por critério (§27)
         "comentario": sub.ai_comentario,
         "total": _num(sub.ai_total),
         "provider": sub.ai_provider,
+        "nota_estimada": True,                 # spec §28 — nunca "nota oficial"
     }
 
 
@@ -36,9 +38,11 @@ def _correcao_from_result(result: "grading.GradingResult | None") -> dict | None
     return {
         "scores": result.scores,
         "feedback": result.feedback,
+        "items": result.items,
         "comentario": result.comentario,
         "total": result.total,
         "provider": result.provider,
+        "nota_estimada": True,
     }
 
 
@@ -74,6 +78,15 @@ def _espelho(case: DiscursiveCase) -> dict:
             }
             for c in case.criteria
         ],
+    }
+
+
+def _rewrite_out(r: EssayRewrite) -> dict:
+    return {
+        "id": r.id, "codigo": r.codigo, "texto": r.texto,
+        "nota": _num(r.ai_nota), "status": r.ai_status,
+        "evidencia": r.ai_evidencia, "justificativa": r.ai_justificativa,
+        "created_at": r.created_at,
     }
 
 
@@ -158,6 +171,7 @@ def submit(case_id: UUID, payload: DiscursiveSubmitRequest, user: PaidUser, db: 
         submission.ai_feedback = result.feedback
         submission.ai_comentario = result.comentario
         submission.ai_provider = result.provider
+        submission.ai_items = result.items
     db.add(submission)
     db.commit()
     db.refresh(submission)
@@ -175,7 +189,8 @@ def get_submission(submission_id: UUID, user: PaidUser, db: DbSession):
         select(DiscursiveSubmission)
         .where(DiscursiveSubmission.id == submission_id, DiscursiveSubmission.user_id == user.id)
         .options(
-            selectinload(DiscursiveSubmission.case).selectinload(DiscursiveCase.criteria)
+            selectinload(DiscursiveSubmission.case).selectinload(DiscursiveCase.criteria),
+            selectinload(DiscursiveSubmission.rewrites),
         )
     )
     if not submission:
@@ -188,6 +203,7 @@ def get_submission(submission_id: UUID, user: PaidUser, db: DbSession):
         "correcao": _correcao(submission),
         "case": _case_public(submission.case),
         "espelho": _espelho(submission.case),
+        "rewrites": [_rewrite_out(r) for r in submission.rewrites],
     }
 
 
@@ -214,6 +230,44 @@ def self_assess(submission_id: UUID, payload: SelfAssessRequest, user: PaidUser,
     submission.self_total = round(total, 2)
     db.commit()
     return {"self_total": round(total, 2), "pontuacao_maxima": _num(submission.case.pontuacao_maxima)}
+
+
+@router.post("/submissions/{submission_id}/rewrite")
+def rewrite(submission_id: UUID, payload: RewriteRequest, user: PaidUser, db: DbSession):
+    """Reescrita ativa (spec §29): o aluno reescreve o trecho de um critério insuficiente
+    e a IA recorrige AQUELE critério. Devolve antes/depois para comparar a evolução (§30)."""
+    submission = db.scalar(
+        select(DiscursiveSubmission)
+        .where(DiscursiveSubmission.id == submission_id, DiscursiveSubmission.user_id == user.id)
+        .options(selectinload(DiscursiveSubmission.case).selectinload(DiscursiveCase.criteria))
+    )
+    if not submission:
+        raise HTTPException(status_code=404, detail="Envio não encontrado")
+    criterion = next((c for c in submission.case.criteria if c.codigo == payload.codigo), None)
+    if not criterion:
+        raise HTTPException(status_code=422, detail="Critério inválido")
+    graded = grading.grade_criterion(submission.case, criterion, payload.texto.strip())
+    if graded is None:
+        raise HTTPException(status_code=503, detail="Correção por IA indisponível agora. Tente novamente em instantes.")
+    rw = EssayRewrite(
+        submission_id=submission.id, codigo=payload.codigo, texto=payload.texto.strip(),
+        ai_nota=graded["nota"], ai_status=graded["status"],
+        ai_evidencia=graded["evidencia"], ai_justificativa=graded["justificativa"],
+        ai_provider=graded["provider"],
+    )
+    db.add(rw)
+    db.commit()
+    db.refresh(rw)
+    return {
+        "codigo": payload.codigo,
+        "antes": (submission.ai_items or {}).get(payload.codigo),  # item da 1ª correção (§30)
+        "depois": {
+            "nota": graded["nota"], "status": graded["status"],
+            "evidencia": graded["evidencia"], "justificativa": graded["justificativa"],
+        },
+        "pontuacao_maxima": _num(criterion.pontuacao_maxima),
+        "nota_estimada": True,
+    }
 
 
 @router.get("/me/history")

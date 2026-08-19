@@ -324,12 +324,24 @@ type DiscEspelho = {
   criteria: DiscCriterion[];
 };
 
+type DiscItem = { nota: number; status: "atendido" | "parcial" | "ausente"; evidencia: string; justificativa: string };
+
 type DiscCorrecao = {
   scores: Record<string, number>;
   feedback: Record<string, string>;
+  items?: Record<string, DiscItem>;   // Fase 7 — status/evidência por critério
   comentario: string | null;
   total: number;
   provider: string;
+  nota_estimada?: boolean;
+};
+
+type RewriteResult = {
+  codigo: string;
+  antes: DiscItem | null;
+  depois: { nota: number; status: string; evidencia: string; justificativa: string };
+  pontuacao_maxima: number;
+  nota_estimada: boolean;
 };
 
 type TestResult = {
@@ -1921,33 +1933,50 @@ function fmtNota(n: number): string {
 // Correção da IA reaproveitando a MESMA tela/ícones da autoavaliação: os três
 // botões (Não completou / Em parte / Completou) agora são marcados pela IA e ficam
 // somente-leitura; a nota apurada é realista (soma das notas por critério).
-function DiscCorrecaoPanel({ correcao, criteria, max }: { correcao: DiscCorrecao; criteria: DiscCriterion[]; max: number }) {
+const STATUS_UI: Record<string, { icon: string; label: string; cls: string }> = {
+  atendido: { icon: "✅", label: "Atendido", cls: "ok" },
+  parcial: { icon: "🟡", label: "Parcial", cls: "mid" },
+  ausente: { icon: "❌", label: "Ausente", cls: "no" },
+};
+
+function DiscCorrecaoPanel({ correcao, criteria, max, onRewrite }: {
+  correcao: DiscCorrecao; criteria: DiscCriterion[]; max: number;
+  onRewrite?: (codigo: string) => void;
+}) {
   const pct = max ? Math.round((correcao.total / max) * 100) : 0;
   return (
     <article className="card">
-      <div className="card-heading"><div><span className="section-kicker">CORREÇÃO DA IA</span><h2>Quanto você cobriu de cada critério</h2></div></div>
+      <div className="card-heading"><div><span className="section-kicker">CORREÇÃO DA IA · NOTA ESTIMADA</span><h2>Item a item do espelho</h2></div></div>
       <div className="disc-criteria">
         {criteria.map((cr) => {
-          const nota = correcao.scores[cr.codigo] ?? 0;
-          const just = correcao.feedback[cr.codigo] ?? "";
-          const level = nota >= cr.pontuacao_maxima ? "ok" : nota <= 0 ? "no" : "mid";
+          const item = correcao.items?.[cr.codigo];
+          const nota = item?.nota ?? correcao.scores[cr.codigo] ?? 0;
+          const just = item?.justificativa ?? correcao.feedback[cr.codigo] ?? "";
+          const status = item?.status ?? (nota >= cr.pontuacao_maxima ? "atendido" : nota <= 0 ? "ausente" : "parcial");
+          const ui = STATUS_UI[status] ?? STATUS_UI.parcial;
           return (
             <div className="disc-crit" key={cr.codigo}>
-              <div className="disc-crit-head"><b>{cr.codigo} · {cr.descricao}</b><span className={`disc-crit-nota ${level}`}>{fmtNota(nota)} / {fmtNota(cr.pontuacao_maxima)}</span></div>
-              <p className="disc-crit-esperado">{cr.conteudo_esperado}</p>
-              <div className="disc-crit-buttons ia">
-                <button className={level === "no" ? "on no" : ""} disabled>Não completou</button>
-                <button className={level === "mid" ? "on mid" : ""} disabled>Em parte</button>
-                <button className={level === "ok" ? "on ok" : ""} disabled>Completou</button>
+              <div className="disc-crit-head">
+                <b>{cr.codigo} · {cr.descricao}</b>
+                <span className={`disc-crit-nota ${ui.cls}`}>{ui.icon} {ui.label} · {fmtNota(nota)} / {fmtNota(cr.pontuacao_maxima)}</span>
               </div>
+              <p className="disc-crit-esperado">{cr.conteudo_esperado}</p>
+              {item?.evidencia && (
+                <p className="disc-crit-evidencia"><span className="tag">No seu texto</span>“{item.evidencia}”</p>
+              )}
               {just && <p className="disc-crit-feedback">{just}</p>}
+              {onRewrite && status !== "atendido" && (
+                <button className="ghost compact disc-rewrite-btn" onClick={() => onRewrite(cr.codigo)}>
+                  <RotateCcw size={14} /> Reescrever este ponto
+                </button>
+              )}
             </div>
           );
         })}
       </div>
       <div className="disc-total">
         <div className="score-ring big" style={{ "--progress": `${pct}%` } as React.CSSProperties}><span>{fmtNota(correcao.total)}</span></div>
-        <div><b>{fmtNota(correcao.total)} de {fmtNota(max)} pontos</b><p>Nota apurada pela IA comparando sua resposta com o espelho da banca.</p></div>
+        <div><b>{fmtNota(correcao.total)} de {fmtNota(max)} pontos</b><p><b>Nota estimada</b> pela IA (não é nota oficial) — comparação da sua resposta com o espelho da banca.</p></div>
       </div>
       {correcao.comentario && <p className="disc-comentario"><Sparkles size={13} /> {correcao.comentario}</p>}
     </article>
@@ -2742,6 +2771,26 @@ function DiscursiveView() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  // Reescrita ativa (F7)
+  const [rwCodigo, setRwCodigo] = useState<string | null>(null);
+  const [rwTexto, setRwTexto] = useState("");
+  const [rwResult, setRwResult] = useState<RewriteResult | null>(null);
+  const [rwBusy, setRwBusy] = useState(false);
+
+  const submitRewrite = async () => {
+    if (!submissionId || !rwCodigo || rwTexto.trim().length < 20) return;
+    setRwBusy(true); setError("");
+    try {
+      const r = await authFetch(`${API_URL}/discursive/submissions/${submissionId}/rewrite`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ codigo: rwCodigo, texto: rwTexto }),
+      });
+      if (r.ok) setRwResult(await r.json());
+      else setError("Não foi possível recorrigir agora. Tente novamente em instantes.");
+    } catch {
+      setError("Falha ao enviar a reescrita.");
+    } finally { setRwBusy(false); }
+  };
 
   const loadList = useCallback(async () => {
     setLoading(true);
@@ -2876,7 +2925,33 @@ function DiscursiveView() {
           <div className="disc-your-answer">{texto}</div>
         </article>
 
-        {correcao ? <DiscCorrecaoPanel correcao={correcao} criteria={espelho.criteria} max={espelho.pontuacao_maxima} /> : <DiscCorrecaoIndisponivel />}
+        {correcao ? (
+          <DiscCorrecaoPanel
+            correcao={correcao} criteria={espelho.criteria} max={espelho.pontuacao_maxima}
+            onRewrite={submissionId ? (codigo) => { setRwCodigo(codigo); setRwTexto(""); setRwResult(null); } : undefined}
+          />
+        ) : <DiscCorrecaoIndisponivel />}
+
+        {rwCodigo && (
+          <article className="card disc-rewrite">
+            <div className="card-heading"><div><span className="section-kicker">REESCRITA ATIVA · {rwCodigo}</span><h2>Reescreva só este trecho</h2></div><button className="ghost compact" onClick={() => { setRwCodigo(null); setRwResult(null); }}>Fechar</button></div>
+            <p className="disc-hint">Reescreva apenas o trecho necessário para incluir corretamente este ponto do espelho. A IA recorrige e mostra a evolução.</p>
+            <textarea className="disc-textarea" rows={6} value={rwTexto} onChange={(e) => setRwTexto(e.target.value)} placeholder="Escreva a versão melhorada deste ponto..." />
+            <button className="primary compact" disabled={rwBusy || rwTexto.trim().length < 20} onClick={submitRewrite}>
+              {rwBusy ? <LoaderCircle className="spin" size={16} /> : <Check size={16} />} Recorrigir este ponto
+            </button>
+            {rwResult && (
+              <div className="disc-rewrite-result">
+                <div className="rw-evolucao">
+                  <div className="rw-antes"><span>Antes</span><b className={STATUS_UI[rwResult.antes?.status ?? "ausente"]?.cls}>{STATUS_UI[rwResult.antes?.status ?? "ausente"]?.icon} {fmtNota(rwResult.antes?.nota ?? 0)}</b></div>
+                  <ArrowRight size={18} />
+                  <div className="rw-depois"><span>Depois</span><b className={STATUS_UI[rwResult.depois.status]?.cls}>{STATUS_UI[rwResult.depois.status]?.icon} {fmtNota(rwResult.depois.nota)} / {fmtNota(rwResult.pontuacao_maxima)}</b></div>
+                </div>
+                {rwResult.depois.justificativa && <p className="disc-crit-feedback">{rwResult.depois.justificativa}</p>}
+              </div>
+            )}
+          </article>
+        )}
 
         <article className="card">
           <div className="card-heading"><div><span className="section-kicker">ESPELHO DA BANCA</span><h2>Resposta-modelo</h2></div></div>

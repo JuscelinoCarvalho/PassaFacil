@@ -64,7 +64,9 @@
 - [x] **Full remake — Sessão C = F3+F4 NO AR**: `MemoryScheduler` (estilo-FSRS próprio) + `AdaptiveLearningEngine` + `ReviewQueue`/`TransferQuestionSelector` + sessão inteligente / "Memória de hoje"; `/reviews/*` migrado para `PaidUser`.
 - [x] **Full remake — Sessão D = F5 (dashboard) NO AR**: aba "Meu conhecimento" (`services/knowledge_map.py` + `GET /study/knowledge-map` + `KnowledgeView`): indicadores, mapa por disciplina/habilidade, riscos, erros conceituais recorrentes.
 - [x] **Full remake — Sessão E = F6 (aulas e áudio interativo) NO AR**: `models/lessons.py` + endpoints `/study/lessons*` + `LessonsView` (modos interativo/contínuo + transcrição); aula-demo a partir dos 8 pilotos.
-- [ ] **Full remake — Sessão F = F7 (dissertativas)**: evoluir o MVP atual (`DiscursiveCase`/`DiscursiveCriterion`/`DiscursiveSubmission` + correção por IA) para OfficialRubric/RubricItem + correção semântica + "Nota estimada" + **reescrita ativa** (§24-§32).
+- [x] **Full remake — Sessão F = F7 (dissertativas) NO AR**: correção item-a-item (status/evidência) + "Nota estimada" + reescrita ativa (`ai_items`, `EssayRewrite`, `grade_criterion`, `/rewrite`).
+- [ ] **Full remake — Sessão G = F8 (migração/classificação) + F9 (QA)**: classificar o acervo em skills/misconceptions (motor/fila/dashboard só ganham massa com isso) + rodar tests/lint/typecheck/build/migração.
+- [ ] **Revisar os gabaritos SINALIZADOS** pela varredura (`review_status='needs_review'`; relatório `docs/acervo/observacoes/gabaritos_check.json`) — 14 até 900/1074 processadas; terminar a varredura e corrigir os confirmados.
 - [ ] **Autorar conteúdo adaptativo** (skills + misconceptions + microaula em camadas) além da questão-demo — para o motor/fila/dashboard terem massa. Vem com a F8 / painel de autoria (§50).
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
@@ -83,6 +85,16 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-19 (full-remake · Sessão F, F7) — dissertativas: item-a-item + reescrita ativa
+- **Fase 7 (dissertativas)** completa e no ar — evolução do MVP (não reescreveu). Correção **item-a-item** com **status Atendido/Parcial/Ausente + evidência (trecho do candidato)**, rótulo **"Nota estimada"** e **reescrita ativa**.
+- **Backend:**
+  - `models/entities.py`: `DiscursiveSubmission.ai_items` (JSON: {codigo: {nota,status,evidencia,justificativa}}) + nova tabela **`EssayRewrite`** (reescrita de um critério + recorreção). Migração `ai_items` no `_ensure_columns`; `essay_rewrites` via create_all.
+  - `services/grading.py`: `GradingResult.items` + prompt pede **status/evidência** por critério (deriva status da nota se faltar); nova `grade_criterion(case, criterion, texto)` recorrige UM critério (para a reescrita). Compat mantida (ai_scores/ai_total/ai_feedback).
+  - `routes/discursive.py`: correção expõe `items` + `nota_estimada=True` (spec §28); `submit` persiste `ai_items`; **`POST /discursive/submissions/{id}/rewrite`** (recorrige o critério, grava `EssayRewrite`, devolve antes/depois §30); `get_submission` traz `rewrites`.
+  - Testado em produção (`/discursive/demo/submit`): retorna `items` com status/evidência + `nota_estimada`.
+- **Frontend (`page.tsx` + `globals.css`):** `DiscCorrecaoPanel` evoluído — ✅/🟡/❌ por critério + **evidência "No seu texto: …"** + "Nota estimada". No fluxo pago, botão **"Reescrever este ponto"** nos itens não atendidos → editor → **recorreção com antes→depois**. Demo (anônimo) mostra item-a-item, sem reescrita (não persiste).
+- **Progresso: A✓ B✓ C✓ D✓ E✓ F✓ de 7 blocos. Falta só a Sessão G = F8 (migração/classificação do acervo em skills) + F9 (QA).**
 
 ### 2026-08-19 (correções + QA de conteúdo) — formatação, setas no celular, ordem, varredura de gabaritos
 - **Bugs reportados pelo dono (testes) corrigidos e no ar:**

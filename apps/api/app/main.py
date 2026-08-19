@@ -39,6 +39,7 @@ def _ensure_columns() -> None:
         "ai_feedback": "JSON",
         "ai_comentario": "TEXT",
         "ai_provider": "VARCHAR(40)",
+        "ai_items": "JSON",  # Fase 7 — correção item-a-item (status/evidência)
     }
     # ---- Plataforma adaptativa (Fase 1 do full remake) ----
     # As TABELAS novas (skills, misconceptions, user_skill_states, learning_events…)
