@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -26,10 +27,27 @@ from sqlalchemy import select
 # Torna 'app' importável quando chamado de apps/api
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from app.core.assets import QUESTION_ASSET_DIR  # noqa: E402
 from app.db.session import SessionLocal  # noqa: E402
 from app.models import Exam, Question, QuestionProvenance, Subject, Topic  # noqa: E402
 
-ACERVO = Path(__file__).resolve().parents[3] / "docs" / "acervo" / "questoes"
+REPO = Path(__file__).resolve().parents[3]
+ACERVO = REPO / "docs" / "acervo" / "questoes"
+# Onde procurar o arquivo de `fonte_imagem` de uma questão figural (1ª ocorrência vence).
+FIGURE_SOURCES = [REPO / "novas", REPO / "docs" / "acervo" / "figuras", REPO / "docs" / "acervo"]
+
+
+def copy_figure(fonte_imagem: str) -> str | None:
+    """Copia a figura da questão para media/question_assets e devolve o nome do
+    arquivo (a ser gravado em Question.image_url). None se não encontrar a origem."""
+    name = Path(fonte_imagem).name
+    for base in FIGURE_SOURCES:
+        src = base / name
+        if src.is_file():
+            QUESTION_ASSET_DIR.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, QUESTION_ASSET_DIR / name)
+            return name
+    return None
 
 
 def content_hash(statement: str, options: list[str]) -> str:
@@ -122,8 +140,20 @@ def run(dry_run: bool) -> None:
                     totals["duplicates"] += 1
                     print(f"[dup] {q['external_key']} já existe")
                     continue
+                # Questão FIGURAL (§ enunciado depende de ver a figura): copia o arquivo
+                # de `fonte_imagem` para media/question_assets e liga em image_url. Sem a
+                # figura a questão é IMPOSSÍVEL — se a origem não for achada, rejeitamos.
+                image_name = None
+                if q.get("needs_figure"):
+                    fonte = q.get("fonte_imagem")
+                    image_name = copy_figure(fonte) if fonte else None
+                    if not image_name:
+                        totals["rejected"] += 1
+                        print(f"[reject] {q['external_key']}: figural mas fonte_imagem '{fonte}' não encontrada")
+                        continue
                 totals["imported"] += 1
-                print(f"[import] {q['external_key']} -> {payload['subject_slug']}/{q['topic_slug']}")
+                tag = " [figura]" if image_name else ""
+                print(f"[import] {q['external_key']} -> {payload['subject_slug']}/{q['topic_slug']}{tag}")
                 if dry_run:
                     continue
                 question = Question(
@@ -133,6 +163,7 @@ def run(dry_run: bool) -> None:
                     correct_option=q["correct_option"],
                     explanation=q.get("explanation") or "Comentário editorial pendente.",
                     source=payload["source_name"],
+                    image_url=image_name,
                     is_published=False,  # entra para revisão
                 )
                 db.add(question)

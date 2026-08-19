@@ -201,6 +201,7 @@
       "external_key": "vunesp-2023-tcmsp-ace-rlm-q09",
       "topic_slug": "logica-associacao",
       "fonte_imagem": "quest9Raciocinio.jpg",
+      "needs_figure": true,
       "difficulty": 3,
       "tags": [
         "sequencia-figural",

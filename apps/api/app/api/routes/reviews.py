@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import DbSession, PaidUser
+from app.core.assets import question_asset_url
 from app.models import Attempt, LearningEvent, Question, ReviewItem, Topic
 from app.schemas.study import AnswerRequest
 from app.services.adaptive_engine import default_engine
@@ -21,6 +22,7 @@ def serialize_question(question: Question) -> dict:
     return {
         "id": question.id,
         "statement": question.statement,
+        "image_url": question_asset_url(question.image_url),
         "options": json.loads(question.options),
         "correct_option": question.correct_option,
         "explanation": question.explanation,

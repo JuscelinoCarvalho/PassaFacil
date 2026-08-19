@@ -12,6 +12,7 @@ from sqlalchemy import case, func, or_, select, true
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import AdminUser, CurrentUser, DbSession, PaidUser
+from app.core.assets import question_asset_url, resolve_asset
 from app.models import (
     Attempt, LearningEvent, Lesson, LessonSection, Question, QuestionProvenance,
     ReviewItem, StudyTask, Subject, Topic, TrialEvent
@@ -202,6 +203,7 @@ def questions(
         {
             "id": item.id,
             "statement": item.statement,
+            "image_url": question_asset_url(item.image_url),
             "options": json.loads(item.options),
             "topic": item.topic.name,
             "subject": item.topic.subject.name,
@@ -248,7 +250,8 @@ def _serialize_checkpoint_question(q: Question | None) -> dict | None:
     if not q:
         return None
     return {
-        "id": q.id, "statement": q.statement, "options": json.loads(q.options),
+        "id": q.id, "statement": q.statement, "image_url": question_asset_url(q.image_url),
+        "options": json.loads(q.options),
         "topic": q.topic.name if q.topic else None,
     }
 
@@ -441,6 +444,7 @@ def practice(
         {
             "id": item.id,
             "statement": item.statement,
+            "image_url": question_asset_url(item.image_url),
             "options": json.loads(item.options),
             "topic": item.topic.name,
             "subject": item.topic.subject.name,
@@ -615,6 +619,7 @@ def test_mode(
             {
                 "id": item.id,
                 "statement": item.statement,
+                "image_url": question_asset_url(item.image_url),
                 "options": json.loads(item.options),
                 "topic": item.topic.name,
                 "subject": item.topic.subject.name,
@@ -803,6 +808,7 @@ def trial(db: DbSession):
         {
             "id": item.id,
             "statement": item.statement,
+            "image_url": question_asset_url(item.image_url),
             "options": json.loads(item.options),
             "topic": item.topic.name,
             "subject": item.topic.subject.name,
@@ -834,6 +840,7 @@ def trial_full(db: DbSession):
         {
             "id": item.id,
             "statement": item.statement,
+            "image_url": question_asset_url(item.image_url),
             "options": json.loads(item.options),
             "correct_option": item.correct_option,
             "explanation": item.explanation,
@@ -945,6 +952,17 @@ def audio_pilot_file(name: str):
     if not fp.is_file():
         raise HTTPException(status_code=404, detail="Áudio não encontrado")
     return FileResponse(fp, media_type="audio/mpeg")
+
+
+@router.get("/question-asset/{name}")
+def question_asset_file(name: str):
+    """Serve a figura embutida de uma questão (sequência figural, gráfico, print).
+    Público — a figura faz parte do enunciado. Resolução segura em app.core.assets."""
+    resolved = resolve_asset(name)
+    if not resolved:
+        raise HTTPException(status_code=404, detail="Figura não encontrada")
+    path, ctype = resolved
+    return FileResponse(path, media_type=ctype)
 
 
 # Títulos amigáveis das 8 questões do teste (ordem fixa q1..q8), pt-BR.

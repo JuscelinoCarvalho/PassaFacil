@@ -53,6 +53,7 @@ def _ensure_columns() -> None:
         "question_family_id": uuid_ddl,       # transferência (spec §5)
         "difficulty": "INTEGER",              # 1–5
         "question_type": "VARCHAR(40) DEFAULT 'multiple_choice'",
+        "image_url": "VARCHAR(255)",         # figura embutida no enunciado (nome do arquivo em media/question_assets)
         "review_status": "VARCHAR(30) DEFAULT 'legacy'",   # AI_GENERATED→DRAFT→…→PUBLISHED (spec §10)
         "content_version": "INTEGER DEFAULT 1",
         "ai_generated": f"BOOLEAN DEFAULT {false_default}",

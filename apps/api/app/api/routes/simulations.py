@@ -8,6 +8,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import DbSession, get_admin_user, get_owner_user
+from app.core.assets import question_asset_url
 from app.models import Question, QuestionProvenance, Simulation, SimulationAnswer, Topic
 from app.schemas.simulation import SimulationAnswerRequest
 
@@ -41,6 +42,7 @@ def simulation_payload(simulation: Simulation) -> dict:
                 "display_order": item.display_order,
                 "selected_option": item.selected_option,
                 "statement": item.question.statement,
+                "image_url": question_asset_url(item.question.image_url),
                 "options": json.loads(item.question.options),
                 "subject": item.question.topic.subject.name,
                 "topic": item.question.topic.name,

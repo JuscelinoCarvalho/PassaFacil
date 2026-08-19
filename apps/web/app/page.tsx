@@ -220,10 +220,24 @@ type DashboardData = {
 type Question = {
   id: string;
   statement: string;
+  image_url?: string | null;
   options: string[];
   topic: string;
   subject: string;
 };
+
+// Figura embutida no enunciado (sequência figural, gráfico, print). A URL vem
+// pronta do backend (/api/v1/study/question-asset/...). Sem figura → não renderiza nada.
+function QuestionFigure({ url }: { url?: string | null }) {
+  if (!url) return null;
+  const src = url.startsWith("http") ? url : `${API_ORIGIN}${url}`;
+  return (
+    <figure className="question-figure">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="Figura da questão" loading="lazy" />
+    </figure>
+  );
+}
 
 type SubjectScope = {
   slug: string;
@@ -1276,6 +1290,7 @@ function QuestionsView({
       <article className="card question-card">
         <div className="question-meta"><span>{question.subject}</span><i>{question.topic}</i></div>
         <h2>{question.statement}</h2>
+        <QuestionFigure url={question.image_url} />
         <div className="options">
           {question.options.map((option, optionIndex) => {
             const isCorrect = result && optionIndex === result.correct_option;
@@ -1452,7 +1467,7 @@ type LessonListItem = {
   id: string; slug: string; title: string; description: string | null;
   kind: string; sections: number; checkpoints: number; has_audio: boolean;
 };
-type LessonCheckpointQ = { id: string; statement: string; options: string[]; topic: string | null };
+type LessonCheckpointQ = { id: string; statement: string; image_url?: string | null; options: string[]; topic: string | null };
 type LessonSectionT = {
   order: number; title: string; content: string | null; audio_url: string | null;
   duration_seconds: number | null;
@@ -1563,6 +1578,7 @@ function LessonsView() {
             <div className="checkpoint">
               <span className="checkpoint-label"><Sparkles size={14} /> Checkpoint — responda para fixar</span>
               <p className="checkpoint-statement">{cpQ.statement}</p>
+              <QuestionFigure url={cpQ.image_url} />
               <div className="options">
                 {cpQ.options.map((opt, i) => {
                   const isCorrect = result && i === result.correct_option;
@@ -2663,6 +2679,7 @@ function TestView({ specialty, subjects }: { specialty: string; subjects: string
         <article className="card question-card">
           <div className="question-meta"><span>{q.subject}</span><i>{q.topic}</i></div>
           <h2>{q.statement}</h2>
+          <QuestionFigure url={q.image_url} />
           <div className="options">
             {q.options.map((option, optionIndex) => (
               <button
@@ -2736,6 +2753,7 @@ function TestView({ specialty, subjects }: { specialty: string; subjects: string
                   <span className={`review-badge ${d.is_correct ? "ok" : "no"}`}>{d.is_correct ? "Acertou" : "Errou"}</span>
                 </div>
                 {q && <p className="review-statement">{q.statement}</p>}
+                {q && <QuestionFigure url={q.image_url} />}
                 {q && (
                   <p className="answer-line">
                     <span className="tag">Correta</span>
@@ -3137,6 +3155,7 @@ function ReviewView() {
       <article className="card question-card">
         <div className="question-meta"><span>{item.subject}</span><i>Intervalo atual: {item.interval_days} dia(s)</i></div>
         <h2>{item.statement}</h2>
+        <QuestionFigure url={item.image_url} />
         <div className="options">
           {item.options.map((option, index) => (
             <button
@@ -3185,6 +3204,7 @@ function ErrorNotebook({ onPractice }: { onPractice: () => void }) {
             <article className="card error-card" key={item.attempt_id}>
               <div className="question-meta"><span>{item.subject}</span><i>{item.topic}</i></div>
               <h2>{item.statement}</h2>
+              <QuestionFigure url={item.image_url} />
               <p className="your-answer"><b>Sua resposta:</b> {item.options[item.selected_option]}</p>
               <p className="right-answer"><b>Resposta correta:</b> {item.options[item.correct_option]}</p>
               <div className="explanation">{item.explanation}</div>

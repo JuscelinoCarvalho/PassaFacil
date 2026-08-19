@@ -132,6 +132,9 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .scope-chip.on i { background: var(--purple); color: #fff; }
 .scope-chip:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
 .question-card h2 { font-size: 19px; line-height: 1.5; margin-bottom: 24px; }
+/* Figura embutida no enunciado (sequência figural, gráfico, print). Nunca estoura a tela. */
+.question-figure { margin: 0 0 20px; text-align: center; }
+.question-figure img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border, #2c2e39); background: #fff; padding: 8px; }
 .options { display: grid; gap: 9px; }
 .option { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 13px 15px; display: flex; align-items: center; gap: 12px; text-align: left; color: var(--ink); cursor: pointer; font-size: 12px; }
 .option:hover:not(:disabled), .option.selected { border-color: #9685e9; background: #faf9ff; }

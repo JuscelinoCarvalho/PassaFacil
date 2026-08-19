@@ -130,6 +130,10 @@ class Question(UUIDMixin, TimestampMixin, Base):
     )
     difficulty: Mapped[int | None] = mapped_column(Integer)  # 1–5
     question_type: Mapped[str] = mapped_column(String(40), default="multiple_choice")
+    # Figura embutida no enunciado (sequência figural, gráfico, print). Guarda só o
+    # NOME do arquivo em apps/api/media/question_assets/; a URL servível é montada por
+    # app.core.assets.question_asset_url. NULL = questão puramente textual (a maioria).
+    image_url: Mapped[str | None] = mapped_column(String(255))
     review_status: Mapped[str] = mapped_column(String(30), default="legacy")  # spec §10
     content_version: Mapped[int] = mapped_column(Integer, default=1)
     ai_generated: Mapped[bool] = mapped_column(Boolean, default=False)
