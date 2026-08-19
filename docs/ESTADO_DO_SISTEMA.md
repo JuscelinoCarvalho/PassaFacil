@@ -86,6 +86,10 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-19 (conteúdo) — varredura de gabaritos concluída + aulão pausado
+- **Varredura de gabaritos por IA CONCLUÍDA:** 1074/1074 processadas, **15 questões sinalizadas** `review_status='needs_review'` (relatório `docs/acervo/observacoes/gabaritos_check.json`). Predominam legislação/controle (LRF, Lei 13.303, LAI, quarentena, TCE). **PENDENTE:** o dono revisa quais estão de fato erradas e a gente corrige os `correct_option`. São *sinais* da IA — não alterei nenhuma questão.
+- **Aulão 10h (`novas/aulao_10h.txt`) — importação PAUSADA a pedido do dono** ("vou gerar um acervo melhor"). Construí o pipeline `apps/api/scripts/extrair_aulao.py` (limpa timestamps → blocos → IA extrai questões/pegadinhas/leis, resumível). Prova (5/93 blocos): **pegadinhas e leis vêm ótimas e confiáveis; as questões vêm fracas** (transcrição falada raramente lê as 5 alternativas → alternativas/gabarito incompletos). Decisão: NÃO importar questões cruas. Blocos extraídos ficam em `docs/acervo/aulao/chunks/` (untracked, exploratório). O dono começou a subir fontes melhores (PDFs em `docs/acervo/`: Competências/Organização do TCE-SP).
+
 ### 2026-08-19 (full-remake · Sessão F, F7) — dissertativas: item-a-item + reescrita ativa
 - **Fase 7 (dissertativas)** completa e no ar — evolução do MVP (não reescreveu). Correção **item-a-item** com **status Atendido/Parcial/Ausente + evidência (trecho do candidato)**, rótulo **"Nota estimada"** e **reescrita ativa**.
 - **Backend:**
