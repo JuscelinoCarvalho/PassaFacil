@@ -65,7 +65,7 @@ class Settings(BaseSettings):
 
     # Groq — camada grátis generosa e muito rápida (https://console.groq.com)
     groq_api_key: str = ""
-    groq_model: str = "llama-3.3-70b-versatile"
+    groq_model: str = "openai/gpt-oss-120b"  # llama-3.3-70b-versatile foi descontinuado (404) — 2026-08
     groq_base_url: str = "https://api.groq.com/openai/v1"
 
     # Google Gemini — endpoint compatível com OpenAI (https://aistudio.google.com)
