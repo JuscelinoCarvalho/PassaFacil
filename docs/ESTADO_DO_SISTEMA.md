@@ -84,6 +84,14 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-19 (correções + QA de conteúdo) — formatação, setas no celular, ordem, varredura de gabaritos
+- **Bugs reportados pelo dono (testes) corrigidos e no ar:**
+  - **Micro-aulas "mal formatadas":** a explicação tem estrutura em parágrafos (`Gabarito:`/`MICRO-AULA`/`⚠️ PEGADINHA` separados por `\n\n`), mas `.teach`/`.explanation` não preservavam quebras → viravam um blocão. Adicionado `white-space: pre-line`. (O banco NÃO tem markdown cru.)
+  - **Setas estourando no celular:** `.question-top` sem `flex-wrap`. Na media `max-width:620px`: `flex-wrap`, título ocupa 100%, `.question-nav` alinhado à direita e `.question-count` menor.
+- **Ordem das questões (decisão do dono):** `study.practice` agora é **aleatória e NÃO repete a mesma questão** enquanto houver inéditas (reforça o ASSUNTO com questões diferentes). Só quando TUDO foi visto o reforço repete questões (erradas → já acertadas). Antes concatenava as já-acertadas ao lote, gerando a repetição que ele notou.
+- **QA de gabaritos por IA (varredura que SINALIZA):** `app/services/answer_check.py::verify_answer` (reaproveita a cascata de `grading.py`) + `scripts/verificar_gabaritos.py` (resumível; relatório em `docs/acervo/observacoes/gabaritos_check.json`). Para cada questão a IA diz a alternativa correta; onde discorda com confiança alta/media, marca `review_status='needs_review'` — **não altera** enunciado/alternativas/`correct_option` (correção é humana, §10/§52). **Estruturalmente o banco está íntegro** (0 questões com resposta fora da faixa/sem alternativa/sem explicação); o problema é gabarito semântico em parte das extraídas de imagem. Varredura rodando em lotes.
+  - ⚠️ **Achado colateral:** o **Groq está retornando HTTP 404** (modelo/endpoint desatualizado); a cascata cai no **Gemini**. Afeta também a correção das discursivas (hoje via Gemini como fallback silencioso) — conferir `settings.groq_model`/`groq_base_url`.
+
 ### 2026-08-18 (full-remake · Sessão E, F6) — aulas e áudio interativo no ar
 - **Fase 6 (aulas/áudio interativo)** completa e no ar. O menu **"Áudios (em breve)" virou "Aulas em áudio"** — a feature saiu do "em breve".
 - **Backend — `app/models/lessons.py` (4 tabelas novas via create_all):** `Lesson`, `LessonSection` (unidade semântica com texto/transcrição + `audio_url`, §20/§22), `RetrievalCheckpoint` (checkpoint que reaproveita uma `Question`, §21) e `LessonSkill` (aula↔habilidade, §23). Endpoints em `study.py`: `GET /study/lessons` (lista), `GET /study/lessons/{slug}` (seções + checkpoint sem gabarito), `POST /study/lessons/checkpoint/{question_id}/answer` (feedback adaptativo + evento `AUDIO_CHECKPOINT_ANSWERED` §34 + atualiza `UserSkillState`; **não cria Attempt** — checkpoint é apoio, não conta no placar).

@@ -426,13 +426,15 @@ def practice(
     if focus == "gaps":
         # Só lacunas: nunca respondidas + as que errou (sem repetir os acertos).
         ordered = _interleave_by_subject(unanswered) + _interleave_by_subject(wrong_only)
+    elif unanswered:
+        # Decisão do dono (2026-08-19): aleatória e SEM repetir a mesma questão enquanto
+        # houver inéditas. Como _interleave_by_subject embaralha por matéria, o reforço do
+        # ASSUNTO acontece com questões DIFERENTES (nunca a mesma questão de novo).
+        ordered = _interleave_by_subject(unanswered)
     else:
-        # P2: novas primeiro; depois erradas; por último as já acertadas (reforço).
-        ordered = (
-            _interleave_by_subject(unanswered)
-            + _interleave_by_subject(wrong_only)
-            + _interleave_by_subject(already_ok)
-        )
+        # Só quando TUDO já foi visto o reforço precisa repetir questões: erradas primeiro
+        # (mais valiosas), depois as já acertadas — ambas embaralhadas.
+        ordered = _interleave_by_subject(wrong_only) + _interleave_by_subject(already_ok)
 
     ordered = _avoid_heavy_first(ordered)
     return [
