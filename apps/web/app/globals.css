@@ -319,36 +319,36 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .draft-list button.active { background: #f4f1ff; box-shadow: inset 3px 0 var(--purple); }.draft-list b, .draft-list span, .draft-list i { display: block; }
 .draft-list b { font-size: 11px; }.draft-list span { color: var(--muted); font-size: 8px; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .draft-list i { color: #4b8c6c; font-size: 7px; margin-top: 5px; text-transform: uppercase; font-style: normal; font-weight: 800; }
-.draft-editor { min-width: 0; }.draft-source { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }.draft-source b { font-size: 13px; }.draft-source span { color: var(--muted); font-size: 9px; }
-.draft-editor > label, .draft-editor .form-row label { display: grid; gap: 6px; color: var(--muted); font-size: 9px; font-weight: 800; text-transform: uppercase; }
-.draft-editor textarea, .draft-editor input, .draft-editor select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: #fff; color: var(--ink); font: 11px/1.45 inherit; resize: vertical; }
-.draft-editor > label > textarea { min-height: 92px; }.draft-options { display: grid; gap: 8px; margin: 13px 0; }
-.draft-options label { display: grid; grid-template-columns: auto 28px 1fr; gap: 8px; align-items: center; }.draft-options input { width: auto; }.draft-options span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 7px; background: #f1effa; color: var(--purple); font-size: 10px; font-weight: 800; }
+.draft-editor { min-width: 0; }.draft-source { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }.draft-source b { font-size: 15px; }.draft-source span { color: var(--muted); font-size: 12px; }
+.draft-editor > label, .draft-editor .form-row label { display: grid; gap: 6px; color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.draft-editor textarea, .draft-editor input, .draft-editor select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; background: #fff; color: var(--ink); font: 14px/1.5 inherit; resize: vertical; }
+.draft-editor > label > textarea { min-height: 96px; }.draft-options { display: grid; gap: 8px; margin: 13px 0; }
+.draft-options label { display: grid; grid-template-columns: auto 30px 1fr; gap: 8px; align-items: center; }.draft-options input { width: auto; }.draft-options span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 7px; background: #f1effa; color: var(--purple); font-size: 13px; font-weight: 800; }
 .draft-options textarea { min-height: 44px; }.visual-reference { border: 1px solid #dcd7f0; border-radius: 9px; background: #faf9ff; margin-bottom: 13px; overflow: hidden; }
 .visual-reference summary { padding: 10px 12px; color: var(--purple); font-size: 10px; font-weight: 800; cursor: pointer; }.visual-reference img { display: block; max-width: 100%; max-height: 520px; margin: 0 auto; object-fit: contain; border-top: 1px solid #e6e1f4; }
 .review-actions { display: flex; justify-content: flex-end; align-items: center; gap: 9px; margin-top: 15px; }.review-actions .primary { margin: 0; }.review-actions .reject { color: #a3424b; border-color: #ecc8cc; }
 
 /* Editor de questões publicadas (proprietário) */
 .editor-search { display: flex; gap: 8px; margin-bottom: 14px; }
-.editor-search input { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: #fff; color: var(--ink); font: 11px/1.4 inherit; }
+.editor-search input { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; background: #fff; color: var(--ink); font: 14px/1.4 inherit; }
 .editor-queue { display: grid; gap: 8px; max-height: 620px; overflow-y: auto; }
-.editor-card { text-align: left; border: 1px solid var(--line); border-radius: 9px; padding: 11px; background: #fff; cursor: pointer; display: grid; gap: 6px; }
+.editor-card { text-align: left; border: 1px solid var(--line); border-radius: 9px; padding: 12px 13px; background: #fff; cursor: pointer; display: grid; gap: 7px; }
 .editor-card.active { background: #f4f1ff; box-shadow: inset 3px 0 var(--purple); }
 .editor-card-top { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.editor-card-subject { color: var(--muted); font-size: 8px; text-transform: uppercase; font-weight: 800; letter-spacing: .04em; }
-.editor-card-statement { font-size: 11px; line-height: 1.45; color: var(--ink); }
-.editor-card-ai { color: #a86a1f; font-size: 8px; font-style: normal; font-weight: 800; text-transform: uppercase; }
-.flag-badge { font-size: 7px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; padding: 2px 6px; border-radius: 20px; background: #ffe1c2; color: #a8590c; }
+.editor-card-subject { color: var(--muted); font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: .04em; }
+.editor-card-statement { font-size: 14px; line-height: 1.5; color: var(--ink); }
+.editor-card-ai { color: #a86a1f; font-size: 10px; font-style: normal; font-weight: 800; text-transform: uppercase; }
+.flag-badge { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; padding: 3px 8px; border-radius: 20px; background: #ffe1c2; color: #a8590c; }
 .flag-badge.off { background: #e9e9ef; color: #6a6a76; }
 .flag-badge.img { background: #d9eede; color: #2f7d4f; }
-.editor-ai-note { border: 1px solid #f0dcc2; background: #fdf6ec; color: #7a5a2a; font-size: 10px; line-height: 1.5; border-radius: 9px; padding: 10px 12px; margin-bottom: 12px; }
-.editor-figure { border: 1px solid var(--line); border-radius: 9px; padding: 11px; margin: 4px 0 13px; display: grid; gap: 9px; }
-.editor-figure .field-label { color: var(--muted); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.editor-ai-note { border: 1px solid #f0dcc2; background: #fdf6ec; color: #7a5a2a; font-size: 13px; line-height: 1.55; border-radius: 9px; padding: 11px 13px; margin-bottom: 12px; }
+.editor-figure { border: 1px solid var(--line); border-radius: 9px; padding: 12px; margin: 4px 0 13px; display: grid; gap: 9px; }
+.editor-figure .field-label { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
 .editor-figure-has { display: grid; gap: 8px; justify-items: start; }
 .editor-figure-has img { max-width: 100%; max-height: 320px; object-fit: contain; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 6px; }
 .file-field.small span { padding: 9px 12px; font-size: 10px; display: inline-flex; gap: 6px; align-items: center; }
 .draft-editor textarea.tall { min-height: 130px; }
-.publish-toggle { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; text-transform: none !important; font-size: 11px !important; color: var(--ink) !important; }
+.publish-toggle { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; text-transform: none !important; font-size: 13px !important; color: var(--ink) !important; }
 .publish-toggle input { width: auto !important; }
 
 /* Tema escuro — área proprietária (Banco de questões + Editor). Sem isto, os
