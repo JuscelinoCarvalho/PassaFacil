@@ -350,6 +350,8 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .draft-editor textarea.tall { min-height: 130px; font-size: 16px; line-height: 1.55; }
 /* Enunciado no Editor de questões — campo principal, tipografia maior. */
 .draft-editor textarea.field-lg { font-size: 16px; line-height: 1.55; min-height: 120px; padding: 13px 14px; }
+/* Pegadinha e macete (textareas do form-row do editor) — mesmo 16px. */
+.draft-editor .form-row textarea { font-size: 16px; line-height: 1.5; }
 .publish-toggle { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; text-transform: none !important; font-size: 13px !important; color: var(--ink) !important; }
 .publish-toggle input { width: auto !important; }
 
