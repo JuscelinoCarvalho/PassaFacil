@@ -31,6 +31,9 @@ import {
   Sun,
   Settings,
   Sparkles,
+  SquarePen,
+  ImagePlus,
+  Trash2,
   Target,
   TrendingUp,
   Trophy,
@@ -393,6 +396,7 @@ const nav = [
   ["Revisões", RotateCcw, "reviews", false],
   ["Caderno de erros", CircleAlert, "errors", false],
   ["Banco de questões", Database, "bank", true],
+  ["Editor de questões", SquarePen, "editor", true],
   ["Teste grátis", BarChart3, "trial", true],
   ["Aulas em áudio", Headphones, "lessons", false],
 ] as const;
@@ -525,7 +529,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "lessons" | "reviews" | "errors" | "bank" | "trial" | "soon">("today");
+  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "lessons" | "reviews" | "errors" | "bank" | "editor" | "trial" | "soon">("today");
   const [practiceFocus, setPracticeFocus] = useState<"all" | "gaps">("all");
   const [subjectsList, setSubjectsList] = useState<SubjectScope[]>([]);
   const [specialty, setSpecialty] = useState<string>("ti"); // especialidade escolhida
@@ -984,6 +988,8 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
             <ErrorNotebook onPractice={() => navigate("questions")} />
           ) : view === "bank" && me.is_admin ? (
             <QuestionBankView />
+          ) : view === "editor" && me.is_admin ? (
+            <QuestionEditorView />
           ) : view === "trial" && me.is_admin ? (
             <TrialAnalyticsView />
           ) : view === "soon" ? (
@@ -3226,6 +3232,252 @@ type ImportJob = {
   page_count: number | null;
   candidate_count: number;
 };
+
+// ---- Oficina de questões PUBLICADAS (proprietário): editar enunciado, alternativas+gabarito,
+// explicação, pegadinha/macete e figura. Sinalizadas para revisão vêm em destaque no topo. ----
+type ManageCard = {
+  id: string;
+  statement: string;
+  subject: string | null;
+  topic: string | null;
+  review_status: string;
+  is_published: boolean;
+  has_image: boolean;
+  flagged: boolean;
+  ai: { cadastrado: string | null; ia_sugere: string | null; motivo: string | null } | null;
+};
+
+type ManageDetail = {
+  id: string;
+  statement: string;
+  options: string[];
+  correct_option: number;
+  explanation: string;
+  micro_lesson: MicroLesson | null;
+  topic_id: string | null;
+  subject: string | null;
+  topic: string | null;
+  review_status: string;
+  is_published: boolean;
+  source: string;
+  image_url: string | null;
+  image_asset_url: string | null;
+  ai: { cadastrado?: string; ia_sugere?: string; motivo?: string; confianca?: string } | null;
+};
+
+const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+function QuestionEditorView() {
+  const [queue, setQueue] = useState<ManageCard[]>([]);
+  const [term, setTerm] = useState("");
+  const [results, setResults] = useState<ManageCard[]>([]);
+  const [searched, setSearched] = useState(false);
+  const [topics, setTopics] = useState<{ id: string; name: string }[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<ManageDetail | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const loadQueue = useCallback(() => {
+    authFetch(`${API_URL}/question-bank/manage/queue`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setQueue);
+  }, []);
+
+  useEffect(() => {
+    loadQueue();
+    authFetch(`${API_URL}/question-bank/topics`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setTopics);
+  }, [loadQueue]);
+
+  const openQuestion = async (id: string) => {
+    setSelectedId(id);
+    setDetail(null);
+    setMessage("");
+    const r = await authFetch(`${API_URL}/question-bank/manage/${id}`, { cache: "no-store" });
+    if (r.ok) setDetail(await r.json());
+  };
+
+  const runSearch = async () => {
+    if (term.trim().length < 2) return;
+    setSearched(true);
+    const r = await authFetch(`${API_URL}/question-bank/manage/search?q=${encodeURIComponent(term.trim())}`, { cache: "no-store" });
+    setResults(r.ok ? await r.json() : []);
+  };
+
+  const patch = (body: Record<string, unknown>) =>
+    authFetch(`${API_URL}/question-bank/manage/${detail!.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+  const change = (patchObj: Partial<ManageDetail>) => setDetail((d) => (d ? { ...d, ...patchObj } : d));
+
+  const changeMicro = (field: "pegadinha" | "macete", value: string) =>
+    setDetail((d) => {
+      if (!d) return d;
+      const ml: MicroLesson = { ...(d.micro_lesson || {}) };
+      ml.essential = { ...(ml.essential || {}), [field]: value };
+      return { ...d, micro_lesson: ml };
+    });
+
+  const save = async () => {
+    if (!detail) return;
+    setSaving(true);
+    const r = await patch({
+      statement: detail.statement,
+      options: detail.options,
+      correct_option: detail.correct_option,
+      explanation: detail.explanation,
+      micro_lesson: detail.micro_lesson,
+      topic_id: detail.topic_id,
+      is_published: detail.is_published,
+    });
+    setMessage(r.ok ? "Alterações salvas." : "Falha ao salvar.");
+    setSaving(false);
+    loadQueue();
+  };
+
+  const approve = async () => {
+    if (!detail) return;
+    setSaving(true);
+    await patch({ review_status: "reviewed" });
+    change({ review_status: "reviewed" });
+    setMessage("Selo de revisão removido — questão confirmada.");
+    setSaving(false);
+    loadQueue();
+  };
+
+  const uploadImage = async (file: File) => {
+    if (!detail) return;
+    setSaving(true);
+    const form = new FormData();
+    form.append("file", file);
+    const r = await authFetch(`${API_URL}/question-bank/manage/${detail.id}/image`, { method: "POST", body: form });
+    if (r.ok) {
+      const data = await r.json();
+      change({ image_url: data.image_url, image_asset_url: data.image_asset_url });
+      setMessage("Figura anexada.");
+    } else setMessage("Falha ao enviar a figura.");
+    setSaving(false);
+    loadQueue();
+  };
+
+  const removeImage = async () => {
+    if (!detail) return;
+    await patch({ image_url: "" });
+    change({ image_url: null, image_asset_url: null });
+    setMessage("Figura removida.");
+  };
+
+  const list = searched && term.trim().length >= 2 ? results : queue;
+  const ess = detail?.micro_lesson?.essential || null;
+
+  return (
+    <section>
+      <div className="question-top">
+        <div><span className="eyebrow">ÁREA PROPRIETÁRIA</span><h1>Editor de questões</h1><p>Corrija enunciado, gabarito, explicação, pegadinha e figura. As sinalizadas para revisão aparecem em destaque.</p></div>
+        <div className="question-count">{queue.length}</div>
+      </div>
+      <div className="bank-grid">
+        <section className="card editor-list-card">
+          <div className="editor-search">
+            <input
+              value={term}
+              onChange={(e) => { setTerm(e.target.value); if (!e.target.value.trim()) setSearched(false); }}
+              onKeyDown={(e) => e.key === "Enter" && runSearch()}
+              placeholder="Buscar por texto do enunciado..."
+            />
+            <button className="secondary compact" onClick={runSearch} disabled={term.trim().length < 2}>Buscar</button>
+          </div>
+          <div className="card-heading">
+            <div><span className="section-kicker">{searched && term.trim().length >= 2 ? "RESULTADOS DA BUSCA" : "SINALIZADAS PARA REVISÃO"}</span></div>
+            <span className="review-count">{list.length}</span>
+          </div>
+          {!list.length ? (
+            <p className="no-data">{searched ? "Nenhuma questão encontrada." : "Nenhuma questão sinalizada. Use a busca acima para editar qualquer questão."}</p>
+          ) : (
+            <div className="editor-queue">
+              {list.map((card) => (
+                <button key={card.id} className={`editor-card ${card.id === selectedId ? "active" : ""}`} onClick={() => openQuestion(card.id)}>
+                  <div className="editor-card-top">
+                    {card.flagged && <span className="flag-badge">REVISAR</span>}
+                    {!card.is_published && <span className="flag-badge off">off</span>}
+                    {card.has_image && <span className="flag-badge img">figura</span>}
+                    <span className="editor-card-subject">{card.subject}</span>
+                  </div>
+                  <span className="editor-card-statement">{card.statement.slice(0, 120)}</span>
+                  {card.ai && <i className="editor-card-ai">IA: cadastrado {card.ai.cadastrado} → sugere {card.ai.ia_sugere}</i>}
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="card draft-editor-card">
+          {!detail ? (
+            <p className="no-data">{selectedId ? "Carregando..." : "Selecione uma questão para editar."}</p>
+          ) : (
+            <div className="draft-editor">
+              <div className="draft-source">
+                <b>{detail.subject} · {detail.topic}</b>
+                <span>{detail.source}{detail.review_status === "needs_review" ? " · SINALIZADA" : ""}</span>
+              </div>
+              {detail.ai && (
+                <div className="editor-ai-note">
+                  <b>Varredura de IA:</b> cadastrado <b>{detail.ai.cadastrado}</b>, sugere <b>{detail.ai.ia_sugere}</b> ({detail.ai.confianca}). {detail.ai.motivo}
+                </div>
+              )}
+              <label>Enunciado<textarea value={detail.statement} onChange={(e) => change({ statement: e.target.value })} /></label>
+
+              <div className="editor-figure">
+                <span className="field-label">Figura</span>
+                {detail.image_asset_url ? (
+                  <div className="editor-figure-has">
+                    <img src={`${API_ORIGIN}${detail.image_asset_url}`} alt="Figura da questão" />
+                    <button className="secondary reject compact" onClick={removeImage}><Trash2 size={14} /> Remover figura</button>
+                  </div>
+                ) : <p className="no-data">Sem figura.</p>}
+                <label className="file-field small">
+                  <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f); }} />
+                  <span><ImagePlus size={15} /> {detail.image_url ? "Trocar figura" : "Anexar figura"}</span>
+                </label>
+              </div>
+
+              <div className="draft-options">
+                {detail.options.map((option, index) => (
+                  <label key={index}>
+                    <input type="radio" name="edit-correct" checked={detail.correct_option === index} onChange={() => change({ correct_option: index })} />
+                    <span>{LETTERS[index]}</span>
+                    <textarea value={option} onChange={(e) => change({ options: detail.options.map((it, i) => (i === index ? e.target.value : it)) })} />
+                  </label>
+                ))}
+              </div>
+
+              <label>Explicação (comentário)<textarea className="tall" value={detail.explanation} onChange={(e) => change({ explanation: e.target.value })} /></label>
+              <div className="form-row">
+                <label>Pegadinha<textarea value={ess?.pegadinha ?? ""} onChange={(e) => changeMicro("pegadinha", e.target.value)} placeholder="O erro clássico que a banca explora" /></label>
+                <label>Macete<textarea value={ess?.macete ?? ""} onChange={(e) => changeMicro("macete", e.target.value)} placeholder="Mnemônico / atalho de memória" /></label>
+              </div>
+              <div className="form-row">
+                <label>Tópico<select value={detail.topic_id ?? ""} onChange={(e) => change({ topic_id: e.target.value || null })}><option value="">Classificar...</option>{topics.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}</select></label>
+                <label className="publish-toggle"><input type="checkbox" checked={detail.is_published} onChange={(e) => change({ is_published: e.target.checked })} /> Publicada</label>
+              </div>
+
+              {message && <div className="import-message">{message}</div>}
+              <div className="review-actions">
+                {detail.review_status === "needs_review" && <button className="secondary" disabled={saving} onClick={approve}>Confirmar gabarito (baixar selo)</button>}
+                <button className="primary compact" disabled={saving} onClick={save}>{saving ? "Salvando..." : "Salvar alterações"}</button>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
+    </section>
+  );
+}
 
 type DraftQuestion = {
   id: string;

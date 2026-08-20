@@ -6,13 +6,15 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
+from sqlalchemy.orm import selectinload
 
 from app.api.deps import DbSession, get_admin_user, get_owner_user
+from app.core.assets import ALLOWED_ASSET_TYPES, QUESTION_ASSET_DIR, question_asset_url
 from app.core.config import settings
-from app.models import Question, QuestionDraft, QuestionImportJob, QuestionProvenance, Topic
+from app.models import Question, QuestionDraft, QuestionImportJob, QuestionProvenance, Subject, Topic
 from app.schemas.question_drafts import AssociateDocuments, DraftBulkAction, DraftUpdate
-from app.schemas.question_bank import ImportBatch
+from app.schemas.question_bank import ImportBatch, ManageQuestionUpdate
 from app.services.pdf_questions import extract_pdf_preview
 
 router = APIRouter(
@@ -486,3 +488,159 @@ def import_questions(payload: ImportBatch, db: DbSession):
         "published": imported if can_publish else 0,
         "review_required": 0 if can_publish else imported,
     }
+
+
+# ---------------------------------------------------------------------------
+# Oficina de questões PUBLICADAS (editar enunciado, alternativas+gabarito,
+# explicação, micro-aula/pegadinha e figura). Diferente da oficina de rascunhos
+# (drafts do PDF): aqui o alvo são as questões que já estão no ar.
+# ---------------------------------------------------------------------------
+_AI_REPORT = QUESTION_ASSET_DIR.parents[3] / "docs" / "acervo" / "observacoes" / "gabaritos_check.json"
+
+
+def _ai_flags() -> dict[str, dict]:
+    """Sugestões da varredura de gabaritos por IA, id -> flag (cadastrado/ia_sugere/motivo)."""
+    try:
+        data = json.loads(_AI_REPORT.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 — relatório é opcional
+        return {}
+    return {f["id"]: f for f in data.get("flags", [])}
+
+
+def _manage_card(q: Question, flag: dict | None) -> dict:
+    return {
+        "id": q.id,
+        "statement": q.statement,
+        "subject": q.topic.subject.name if q.topic and q.topic.subject else None,
+        "topic": q.topic.name if q.topic else None,
+        "review_status": q.review_status,
+        "is_published": q.is_published,
+        "has_image": bool(q.image_url),
+        "flagged": q.review_status == "needs_review",
+        "ai": {"cadastrado": flag.get("cadastrado"), "ia_sugere": flag.get("ia_sugere"),
+               "motivo": flag.get("motivo")} if flag else None,
+    }
+
+
+@router.get("/manage/queue")
+def manage_queue(db: DbSession):
+    """Fila PRIORITÁRIA: questões sinalizadas para revisão (needs_review), com a
+    sugestão da IA ao lado. É o que abre por padrão na oficina."""
+    get_owner_user(db)
+    flags = _ai_flags()
+    rows = db.scalars(
+        select(Question)
+        .where(Question.review_status == "needs_review")
+        .options(selectinload(Question.topic).selectinload(Topic.subject))
+    ).all()
+    return [_manage_card(q, flags.get(str(q.id))) for q in rows]
+
+
+@router.get("/manage/search")
+def manage_search(db: DbSession, q: str = "", limit: int = 30):
+    """Busca qualquer questão por texto do enunciado (para editar uma NÃO sinalizada)."""
+    get_owner_user(db)
+    term = q.strip()
+    if len(term) < 2:
+        return []
+    flags = _ai_flags()
+    rows = db.scalars(
+        select(Question)
+        .where(Question.statement.ilike(f"%{term}%"))
+        .options(selectinload(Question.topic).selectinload(Topic.subject))
+        .limit(min(max(limit, 1), 100))
+    ).all()
+    # sinalizadas primeiro, depois alfabético pelo enunciado
+    rows.sort(key=lambda r: (0 if r.review_status == "needs_review" else 1, (r.statement or "")[:80].lower()))
+    return [_manage_card(q, flags.get(str(q.id))) for q in rows]
+
+
+@router.get("/manage/{qid}")
+def manage_get(qid: UUID, db: DbSession):
+    get_owner_user(db)
+    q = db.get(Question, qid)
+    if not q:
+        raise HTTPException(status_code=404, detail="Questão não encontrada")
+    if q.topic:
+        _ = q.topic.subject  # carrega para o nome
+    flag = _ai_flags().get(str(qid))
+    return {
+        "id": q.id,
+        "statement": q.statement,
+        "options": json.loads(q.options),
+        "correct_option": q.correct_option,
+        "explanation": q.explanation,
+        "micro_lesson": q.micro_lesson,
+        "topic_id": q.topic_id,
+        "subject": q.topic.subject.name if q.topic and q.topic.subject else None,
+        "topic": q.topic.name if q.topic else None,
+        "review_status": q.review_status,
+        "is_published": q.is_published,
+        "source": q.source,
+        "image_url": q.image_url,
+        "image_asset_url": question_asset_url(q.image_url),
+        "ai": flag,
+    }
+
+
+@router.patch("/manage/{qid}")
+def manage_update(qid: UUID, payload: ManageQuestionUpdate, db: DbSession):
+    get_owner_user(db)
+    q = db.get(Question, qid)
+    if not q:
+        raise HTTPException(status_code=404, detail="Questão não encontrada")
+    data = payload.model_dump(exclude_unset=True)
+
+    # opções e gabarito precisam ser consistentes
+    new_options = data.get("options")
+    if new_options is not None:
+        new_options = [o.strip() for o in new_options]
+    effective_options = new_options if new_options is not None else json.loads(q.options)
+    if "correct_option" in data and data["correct_option"] is not None:
+        if data["correct_option"] >= len(effective_options):
+            raise HTTPException(status_code=422, detail="correct_option fora do intervalo das alternativas")
+
+    if new_options is not None:
+        q.options = json.dumps(new_options, ensure_ascii=False)
+    if "statement" in data:
+        q.statement = data["statement"].strip()
+    if "correct_option" in data and data["correct_option"] is not None:
+        q.correct_option = data["correct_option"]
+    if "explanation" in data:
+        q.explanation = data["explanation"]
+    if "micro_lesson" in data:
+        q.micro_lesson = data["micro_lesson"]
+    if "is_published" in data and data["is_published"] is not None:
+        q.is_published = data["is_published"]
+    if "review_status" in data and data["review_status"]:
+        q.review_status = data["review_status"]
+    if "image_url" in data:
+        q.image_url = (data["image_url"] or None)  # "" remove a figura
+    if "topic_id" in data and data["topic_id"]:
+        topic = db.get(Topic, UUID(data["topic_id"]))
+        if not topic:
+            raise HTTPException(status_code=422, detail="Tópico inexistente")
+        q.topic_id = topic.id
+
+    from datetime import datetime, timezone
+    q.reviewed_at = datetime.now(timezone.utc)
+    db.commit()
+    return {"ok": True, "id": q.id, "review_status": q.review_status, "is_published": q.is_published}
+
+
+@router.post("/manage/{qid}/image")
+async def manage_upload_image(qid: UUID, db: DbSession, file: UploadFile = File(...)):
+    """Anexa/troca a figura de uma questão. Salva em media/question_assets e liga em image_url."""
+    get_owner_user(db)
+    q = db.get(Question, qid)
+    if not q:
+        raise HTTPException(status_code=404, detail="Questão não encontrada")
+    suffix = Path(file.filename or "").suffix.lower()
+    if suffix not in ALLOWED_ASSET_TYPES:
+        raise HTTPException(status_code=422, detail=f"Tipo não permitido. Use: {', '.join(ALLOWED_ASSET_TYPES)}")
+    QUESTION_ASSET_DIR.mkdir(parents=True, exist_ok=True)
+    name = f"q-{qid.hex}{suffix}"          # nome estável por questão (troca sobrescreve)
+    (QUESTION_ASSET_DIR / name).write_bytes(await file.read())
+    q.image_url = name
+    db.commit()
+    return {"ok": True, "image_url": name, "image_asset_url": question_asset_url(name)}

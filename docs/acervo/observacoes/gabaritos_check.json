@@ -1083,7 +1083,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "Art.71 da Constituição atribui ao Tribunal de Contas a avaliação da execução dos planos e programas de governo, incluindo o PPA",
-      "enunciado": "A competência para avaliar o cumprimento das metas previstas no plano plurianual (PPA) é atribuída, na Constituição, a:"
+      "enunciado": "A competência para avaliar o cumprimento das metas previstas no plano plurianual (PPA) é atribuída, na Constituição, a:",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "57c0b1b1-7272-4af8-b44e-a3ed72fa1e6a",
@@ -1092,7 +1093,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "Lei 13.303/2016 estabelece que a licitação é dispensável para outros serviços, compras e alienações até R$ 176.000,00",
-      "enunciado": "Segundo a Lei nº 13.303/2016, é dispensável a licitação para outros serviços e compras (e para alienações previstas na Lei) de valor até"
+      "enunciado": "Segundo a Lei nº 13.303/2016, é dispensável a licitação para outros serviços e compras (e para alienações previstas na Lei) de valor até",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "647d6266-096d-4c62-b17c-b495e36dee23",
@@ -1101,7 +1103,8 @@
       "confianca": "alta",
       "provider": "gemini",
       "motivo": "A internet não é uma rede de acesso gratuito; o acesso à rede mundial envolve custos de infraestrutura e provedores, tornando a premissa do item incorreta.",
-      "enunciado": "Julgue o item: Apesar de a internet ser uma rede mundial de acesso amplo e gratuito, os usuários domésticos a utilizam por meio de algum provedor de acesso à in"
+      "enunciado": "Julgue o item: Apesar de a internet ser uma rede mundial de acesso amplo e gratuito, os usuários domésticos a utilizam por meio de algum provedor de acesso à in",
+      "resolucao": "pendente_conferir_fonte"
     },
     {
       "id": "73f025b1-e913-4918-843a-17741d6803f0",
@@ -1110,7 +1113,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "A LRF proíbe explicitamente a edição de créditos suplementares nos últimos 180 dias do mandato",
-      "enunciado": "Segundo a LRF, nos últimos 180 dias do mandato do titular do Poder ou órgão, é vedado:"
+      "enunciado": "Segundo a LRF, nos últimos 180 dias do mandato do titular do Poder ou órgão, é vedado:",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "78f671c6-75ce-4a8e-be3d-3b4ae9988a6b",
@@ -1119,7 +1123,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "A Regra de Ouro impede que o endividamento supere a receita corrente líquida, vedando operações de crédito acima desse montante.",
-      "enunciado": "A chamada “regra de ouro” das finanças públicas veda a realização de operações de crédito que excedam o montante:"
+      "enunciado": "A chamada “regra de ouro” das finanças públicas veda a realização de operações de crédito que excedam o montante:",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "7f0f103b-bfa2-42da-ad1f-af50cd024cb1",
@@ -1128,7 +1133,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "O Conselho de Ética, órgão auxiliar previsto na Lei 13.303/2016, deve reunir-se no mínimo bimestralmente e dispõe de canal para receber denúncias, inclusive sigilosas.",
-      "enunciado": "O órgão estatutário auxiliar do Conselho de Administração, previsto na Lei nº 13.303/2016, que deve reunir-se no mínimo bimestralmente e possuir meios para rece"
+      "enunciado": "O órgão estatutário auxiliar do Conselho de Administração, previsto na Lei nº 13.303/2016, que deve reunir-se no mínimo bimestralmente e possuir meios para rece",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "8a1a81f4-6ff6-4b75-822a-8bc2db505170",
@@ -1137,7 +1143,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "Lei 12.813/2013 estabelece quarentena de 2 anos",
-      "enunciado": "De acordo com a Lei nº 12.813/2013, o período de impedimento (quarentena) durante o qual o ex-agente público fica, em regra, impedido de exercer atividades que "
+      "enunciado": "De acordo com a Lei nº 12.813/2013, o período de impedimento (quarentena) durante o qual o ex-agente público fica, em regra, impedido de exercer atividades que ",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "8c9bd1c4-9199-468c-a517-8cfa095ada54",
@@ -1146,7 +1153,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "A prestação de contas costuma iniciar após o encerramento do exercício financeiro, conforme normas de controle externo",
-      "enunciado": "O Tribunal de Contas prestará suas contas anualmente à Assembleia Legislativa no prazo de 60 dias, contados:"
+      "enunciado": "O Tribunal de Contas prestará suas contas anualmente à Assembleia Legislativa no prazo de 60 dias, contados:",
+      "resolucao": "pendente_conferir_fonte"
     },
     {
       "id": "91ddabdc-0cab-4a60-ad1f-43be536e8622",
@@ -1155,7 +1163,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "Os limites de dispensa nos incisos I e II são percentuais fixos da Lei 8.666 e não podem ser alterados administrativamente enquanto a lei vigora",
-      "enunciado": "Sobre os valores de dispensa de licitação previstos no art. 29, incisos I e II, da Lei nº 13.303/2016, é correto afirmar que"
+      "enunciado": "Sobre os valores de dispensa de licitação previstos no art. 29, incisos I e II, da Lei nº 13.303/2016, é correto afirmar que",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "a1bcf554-8982-43cf-ac10-db618b8b5b4e",
@@ -1164,7 +1173,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "A LAI estabelece acesso restrito a dados pessoais por até 5 anos",
-      "enunciado": "Conforme a LAI, as informações pessoais relativas à intimidade, vida privada, honra e imagem terão acesso restrito, independentemente de classificação de sigilo"
+      "enunciado": "Conforme a LAI, as informações pessoais relativas à intimidade, vida privada, honra e imagem terão acesso restrito, independentemente de classificação de sigilo",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "a362fc21-73e0-46c4-af16-885c2ba6b89b",
@@ -1173,7 +1183,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "Lei 12.527/2011, art. 8º, §1, isenta municípios com população até 20.000 habitantes",
-      "enunciado": "Segundo a Lei nº 12.527/2011, ficam dispensados da divulgação obrigatória de informações na internet os Municípios com população de até"
+      "enunciado": "Segundo a Lei nº 12.527/2011, ficam dispensados da divulgação obrigatória de informações na internet os Municípios com população de até",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "add514fb-b4cd-4791-9e5a-22c4dacb8013",
@@ -1182,7 +1193,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "Conforme a Lei 12.527/2011, os prazos máximos são 2 anos para reservada, 5 anos para secreta e 10 anos para ultrassecreta.",
-      "enunciado": "Conforme a Lei nº 12.527/2011, os prazos máximos de restrição de acesso, segundo o grau de classificação, são:"
+      "enunciado": "Conforme a Lei nº 12.527/2011, os prazos máximos de restrição de acesso, segundo o grau de classificação, são:",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "cd463efd-e03b-42e0-bb0a-355f49aea225",
@@ -1191,7 +1203,8 @@
       "confianca": "alta",
       "provider": "groq",
       "motivo": "A alternativa reflete a exigência de que a consulta ao TCE‑SP deve conter a situação fática individualizada, requisito previsto nas normas de procedimento do tribunal",
-      "enunciado": "Sobre o processo de consulta no TCE-SP, é correto afirmar que a consulta:"
+      "enunciado": "Sobre o processo de consulta no TCE-SP, é correto afirmar que a consulta:",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "d72d499c-efb3-4189-9a0f-695f0b5821e0",
@@ -1200,7 +1213,8 @@
       "confianca": "media",
       "provider": "groq",
       "motivo": "A sustação de contrato, em regra, é decidida pelo próprio Tribunal de Contas, não exigindo intervenção de outros poderes ou decisão monocrática",
-      "enunciado": "Quando o Tribunal de Contas verifica ilegalidade em ato e a autoridade não regulariza a situação, pode sustar a execução do ATO impugnado. Em se tratando de CON"
+      "enunciado": "Quando o Tribunal de Contas verifica ilegalidade em ato e a autoridade não regulariza a situação, pode sustar a execução do ATO impugnado. Em se tratando de CON",
+      "resolucao": "mantido_gabarito_ok"
     },
     {
       "id": "ed4b49cc-0a8f-4884-b78b-17aa4e47802e",
@@ -1209,8 +1223,14 @@
       "confianca": "alta",
       "provider": "gemini",
       "motivo": "Para a transferência de dados no HTTPS/TLS, utiliza-se a criptografia simétrica (chave de sessão) devido ao seu melhor desempenho computacional, caracterizada pelo uso da mesma chave para cifrar e decifrar.",
-      "enunciado": "(VUNESP/TCE-SP) No acesso a páginas Web de forma segura, com HTTPS, a criptografia utilizada para o acesso aos dados possui o esquema de chave:"
+      "enunciado": "(VUNESP/TCE-SP) No acesso a páginas Web de forma segura, com HTTPS, a criptografia utilizada para o acesso aos dados possui o esquema de chave:",
+      "resolucao": "pendente_conferir_fonte"
     }
   ],
-  "updated_at": "2026-08-19T13:21:59.486541+00:00"
+  "updated_at": "2026-08-20T11:09:55.288570+00:00",
+  "flags_pendentes": [
+    "647d6266-096d-4c62-b17c-b495e36dee23",
+    "8c9bd1c4-9199-468c-a517-8cfa095ada54",
+    "ed4b49cc-0a8f-4884-b78b-17aa4e47802e"
+  ]
 }
