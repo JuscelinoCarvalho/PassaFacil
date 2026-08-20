@@ -324,7 +324,7 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .draft-editor textarea, .draft-editor input, .draft-editor select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; background: #fff; color: var(--ink); font: 14px/1.5 inherit; resize: vertical; }
 .draft-editor > label > textarea { min-height: 96px; }.draft-options { display: grid; gap: 8px; margin: 13px 0; }
 .draft-options label { display: grid; grid-template-columns: auto 30px 1fr; gap: 8px; align-items: center; }.draft-options input { width: auto; }.draft-options span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 7px; background: #f1effa; color: var(--purple); font-size: 13px; font-weight: 800; }
-.draft-options textarea { min-height: 44px; }.visual-reference { border: 1px solid #dcd7f0; border-radius: 9px; background: #faf9ff; margin-bottom: 13px; overflow: hidden; }
+.draft-options textarea { min-height: 50px; font-size: 16px; line-height: 1.5; }.visual-reference { border: 1px solid #dcd7f0; border-radius: 9px; background: #faf9ff; margin-bottom: 13px; overflow: hidden; }
 .visual-reference summary { padding: 10px 12px; color: var(--purple); font-size: 10px; font-weight: 800; cursor: pointer; }.visual-reference img { display: block; max-width: 100%; max-height: 520px; margin: 0 auto; object-fit: contain; border-top: 1px solid #e6e1f4; }
 .review-actions { display: flex; justify-content: flex-end; align-items: center; gap: 9px; margin-top: 15px; }.review-actions .primary { margin: 0; }.review-actions .reject { color: #a3424b; border-color: #ecc8cc; }
 
@@ -347,7 +347,7 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .editor-figure-has { display: grid; gap: 8px; justify-items: start; }
 .editor-figure-has img { max-width: 100%; max-height: 320px; object-fit: contain; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 6px; }
 .file-field.small span { padding: 9px 12px; font-size: 10px; display: inline-flex; gap: 6px; align-items: center; }
-.draft-editor textarea.tall { min-height: 130px; }
+.draft-editor textarea.tall { min-height: 130px; font-size: 16px; line-height: 1.55; }
 /* Enunciado no Editor de questões — campo principal, tipografia maior. */
 .draft-editor textarea.field-lg { font-size: 16px; line-height: 1.55; min-height: 120px; padding: 13px 14px; }
 .publish-toggle { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; text-transform: none !important; font-size: 13px !important; color: var(--ink) !important; }
