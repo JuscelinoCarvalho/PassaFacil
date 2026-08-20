@@ -1,0 +1,36 @@
+{
+  "materia": "etica",
+  "subject_slug": "etica",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Gran Concursos — Revisão de Véspera TCE-SP (aula 10h)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2025,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-aula10h-2026-08",
+  "topics": [
+    {
+      "slug": "etica-codigo-tcesp",
+      "name": "Código de Ética do TCE-SP",
+      "description": "Código de Conduta Ética dos Servidores do TCE-SP (Resolução nº 20/2024): princípios, deveres, vedações, Comissão de Ética e procedimento de Consulta."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "adaptada-codigo-etica-tcesp-consulta-comissao",
+      "topic_slug": "etica-codigo-tcesp",
+      "difficulty": 3,
+      "tags": ["codigo-etica-tcesp", "comissao-de-etica", "consulta", "res-20-2024"],
+      "statement": "De acordo com o Código de Conduta Ética dos Servidores do Tribunal de Contas do Estado de São Paulo (Resolução nº 20/2024), sobre o procedimento de Consulta à Comissão de Ética, assinale a alternativa correta:",
+      "options": [
+        "Qualquer servidor ou unidade do TCE-SP pode formular consulta à Comissão de Ética sobre caso concreto ou interpretação de dispositivos do Código; em caso de discordância quanto à manifestação da Comissão, o consulente poderá submeter a matéria à apreciação da Presidência do TCE-SP.",
+        "Somente as chefias e unidades organizacionais do TCE-SP podem formular consulta, e a deliberação da Comissão tem caráter definitivo e irrecorrível no âmbito administrativo.",
+        "A consulta destina-se a dirimir dúvidas relacionadas estritamente a situações de conflito entre interesses públicos e privados, não sendo cabível para outras questões de interpretação do Código.",
+        "A consulta sobre caso concreto deve ser formulada com prazo não inferior a 60 dias da data prevista para o início da ação, no caso de possível conflito entre interesses públicos e privados.",
+        "O sumário da deliberação da Comissão sobre a consulta é sigiloso e seu inteiro teor não é disponibilizado no Portal do TCE-SP."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A.\n\nMICRO-AULA — pelo Código de Ética do TCE-SP (Resolução nº 20/2024, art. 26), QUALQUER servidor ou unidade pode formular consulta à Comissão de Ética sobre caso concreto ou interpretação do Código; havendo discordância, o consulente pode levar a matéria à Presidência. Por isso caem B (“somente chefias”/“irrecorrível”) e C (restringir só a conflito de interesses).\n\n⚠️ PEGADINHA: o prazo do §2º do art. 26 é de, no mínimo, 30 dias (e não 60 — erro da alternativa D) para consulta sobre atividade particular em possível conflito de interesses."
+    }
+  ]
+}

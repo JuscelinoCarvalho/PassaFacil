@@ -1,0 +1,99 @@
+{
+  "materia": "legislacao",
+  "subject_slug": "legislacao",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Gran Concursos — Revisão de Véspera TCE-SP (aula 10h)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2025,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-aula10h-2026-08",
+  "topics": [
+    {
+      "slug": "legislacao-efs-intosai",
+      "name": "Entidades Fiscalizadoras Superiores (INTOSAI/NBASP)",
+      "description": "Declaração de Lima, Declaração do México (INTOSAI-P 10 / NBASP 10) e Transparência e Accountability (INTOSAI-P 20 / NBASP 20): independência das EFS e diretrizes de auditoria governamental."
+    },
+    {
+      "slug": "legislacao-controle-competencias",
+      "name": "Competências do Tribunal de Contas (art. 71)",
+      "description": "Competências do controle externo (CF art. 71): parecer prévio, julgamento de contas, registro de atos de pessoal, fiscalização, sanções e sustação de atos e contratos."
+    },
+    {
+      "slug": "legislacao-lc709",
+      "name": "Lei Orgânica do TCE-SP (LC 709/93)",
+      "description": "Natureza, competências, julgamento de contas (regulares/regulares com ressalva/irregulares), sanções e eficácia de título executivo das decisões do TCE-SP."
+    },
+    {
+      "slug": "legislacao-regimento-tcesp",
+      "name": "Regimento Interno do TCE-SP",
+      "description": "Estrutura, funcionamento, recursos, uniformização de jurisprudência e o processo de Consulta no TCE-SP."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "vunesp-2023-tcmsp-cjur-lima-relatorios",
+      "topic_slug": "legislacao-efs-intosai",
+      "difficulty": 3,
+      "tags": ["declaracao-lima", "intosai", "relatorios-efs"],
+      "statement": "Conforme diretriz estabelecida na Declaração de Lima (INTOSAI), os relatórios da Entidade Fiscalizadora Superior:",
+      "options": [
+        "deverão, em regra, ter a sua publicidade restrita, dando-se conhecimento exclusivamente às organizações auditadas e aos demais órgãos de controle.",
+        "deverão ser redigidos em linguagem técnica e precisa, ainda que possa dificultar a compreensão do público em geral.",
+        "apresentarão os fatos e sua avaliação de maneira objetiva, clara e restrita aos elementos essenciais.",
+        "deverão desconsiderar os pontos de vista das organizações auditadas sobre os achados, em nome da isenção e imparcialidade do relato.",
+        "não se confundem com os relatórios de fiscalização que podem e devem regularmente ser elaborados pelos Tribunais de Contas no Brasil."
+      ],
+      "correct_option": 2,
+      "explanation": "Gabarito: C.\n\nMICRO-AULA — pela Declaração de Lima (INTOSAI), Seção 17, os relatórios das EFS apresentam os fatos e sua avaliação de maneira OBJETIVA, CLARA e restrita aos elementos essenciais, em linguagem precisa e de fácil compreensão (Seção 16 garante ampla publicidade e distribuição). Por isso caem A (publicidade restrita), B (linguagem que dificulta) e D (desconsiderar as manifestações do auditado — a Seção 17.2 manda considerá-las).\n\n⚠️ PEGADINHA: a Declaração de Lima prega TRANSPARÊNCIA — relatório claro e de ampla divulgação, não restrito."
+    },
+    {
+      "external_key": "vunesp-2016-mogi-sustacao-contrato",
+      "topic_slug": "legislacao-controle-competencias",
+      "difficulty": 4,
+      "tags": ["sustacao-contrato", "art-71", "controle-externo"],
+      "statement": "Situação hipotética: o Tribunal de Contas verifica que determinado contrato administrativo firmado por um Município possui objeto muito mais restrito que o previsto na licitação, com remuneração paga superior à contraprestação recebida, causando prejuízo ao patrimônio público. Nesse caso, o Tribunal de Contas:",
+      "options": [
+        "nada poderá fazer, já que não possui atribuições fiscalizatórias em relação ao Município.",
+        "deve informar à Câmara Municipal, sendo o ato de sustação adotado diretamente por esta, que solicitará, de imediato, ao Poder Executivo as medidas cabíveis.",
+        "deve assinar prazo para que a Municipalidade tome as providências e, se não atendido, poderá sustar diretamente a execução do contrato.",
+        "deve representar ao Ministério Público, já que somente o Poder Judiciário pode sustar o contrato.",
+        "deve deliberar a respeito e, havendo unanimidade do colegiado, sustar o contrato, com decisão de eficácia de título executivo."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — pela CF (art. 71, X e §1º), o Tribunal de Contas susta diretamente apenas o ATO ilegal. Em se tratando de CONTRATO, a sustação cabe ao Poder Legislativo (no âmbito municipal, à Câmara Municipal), que solicitará de imediato ao Executivo as medidas cabíveis. Só se o Legislativo/Executivo não agirem em 90 dias é que o próprio Tribunal decidirá (CF art. 71, §2º).\n\n⚠️ PEGADINHA: ATO o TC susta direto; CONTRATO quem susta é o Legislativo. Trocar isso é o erro clássico (alternativa C)."
+    },
+    {
+      "external_key": "inedita-lc709-contas-irregulares-debito",
+      "topic_slug": "legislacao-lc709",
+      "difficulty": 3,
+      "tags": ["lc-709", "contas-irregulares", "debito", "tce-sp"],
+      "statement": "Conforme a Lei Orgânica do Tribunal de Contas do Estado de São Paulo (LC nº 709/1993), quando o Tribunal julgar as contas irregulares e houver débito, a condenação imposta ao responsável será:",
+      "options": [
+        "aplicação de multa e determinação de medidas para correção das impropriedades.",
+        "recolhimento da dívida atualizada monetariamente, acrescida dos juros de mora devidos, podendo, ainda, aplicar-lhe multa.",
+        "recolhimento da dívida com juros simples, sem possibilidade de aplicação de multa.",
+        "determinação de imediata instauração de tomada de contas e comunicação ao Ministério Público.",
+        "aplicação de multa proporcional ao dano, sem a necessidade de recolhimento do débito."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — pela LC nº 709/1993 (Lei Orgânica do TCE-SP), julgadas irregulares as contas com débito, condena-se o responsável ao RECOLHIMENTO DA DÍVIDA atualizada monetariamente e acrescida dos juros de mora, podendo AINDA aplicar-se multa. A alternativa A descreve contas regulares com ressalva; a C omite a atualização e nega a multa; a E dispensa indevidamente o recolhimento do débito.\n\n⚠️ PEGADINHA: com débito, primeiro vem o recolhimento (corrigido + juros) e a multa é cumulativa (“podendo, ainda”), não substitutiva."
+    },
+    {
+      "external_key": "adaptada-regimento-tcesp-consulta",
+      "topic_slug": "legislacao-regimento-tcesp",
+      "difficulty": 4,
+      "tags": ["regimento-interno", "consulta", "tce-sp"],
+      "statement": "Considerando o Regimento Interno do Tribunal de Contas do Estado de São Paulo sobre o processamento e julgamento da Consulta, assinale a alternativa correta:",
+      "options": [
+        "A Consulta poderá ser formulada por qualquer cidadão que comprove interesse legítimo, respondida em tese, desde que indique com precisão seu objeto e venha acompanhada de parecer do órgão de assistência técnica ou jurídica da autoridade consulente.",
+        "O Tribunal não conhecerá de Consulta que verse sobre caso concreto, ainda que contenha relevante questão de direito e seja formulada por autoridade competente.",
+        "A Consulta somente será conhecida quando assinada por Secretário de Estado, Prefeito Municipal, Presidente de Câmara Municipal, Reitor de Universidade ou dirigente máximo de entidade da administração indireta estadual ou municipal, vedado o conhecimento quando assinada apenas por Secretário Municipal.",
+        "Cabe ao Presidente do Tribunal, ao receber a Consulta, decidir monocraticamente sobre seu conhecimento antes da submissão ao Tribunal Pleno.",
+        "O parecer em Consulta, após aprovado pelo Tribunal Pleno com quórum de dois terços, tem caráter normativo e constitui prejulgamento da tese e também do caso concreto."
+      ],
+      "correct_option": 2,
+      "explanation": "Gabarito: C.\n\nMICRO-AULA — pelo Regimento Interno do TCE-SP (art. 226, §2º), a Consulta é formulada pelos Chefes dos Poderes Públicos estaduais e municipais, Secretários de Estado e dirigentes das entidades da administração indireta — daí ser conhecida apenas quando assinada por essas autoridades (não por um Secretário Municipal isoladamente). A resposta é dada em TESE e o parecer não constitui prejulgamento do caso concreto (por isso cai E).\n\n⚠️ PEGADINHA: consulta é respondida EM TESE; legitimados são as autoridades máximas, não “qualquer cidadão” (alternativa A)."
+    }
+  ]
+}

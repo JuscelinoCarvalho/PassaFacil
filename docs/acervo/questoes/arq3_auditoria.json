@@ -1,0 +1,131 @@
+{
+  "materia": "auditoria",
+  "subject_slug": "cont-auditoria",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Gran Concursos — Revisão de Véspera TCE-SP (aula 10h)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2025,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-aula10h-2026-08",
+  "topics": [
+    {
+      "slug": "audit-issai-etica",
+      "name": "Normas INTOSAI/ISSAI e ética (ISSAI 100/130)",
+      "description": "Princípios fundamentais de auditoria do setor público (ISSAI 100/NBASP 100) e código de ética (ISSAI 130): integridade, objetividade, confidencialidade, competência e ceticismo profissional."
+    },
+    {
+      "slug": "audit-risco-materialidade",
+      "name": "Risco de auditoria (RI/RC/RD) e materialidade",
+      "description": "Modelo RA = RI x RC x RD, fatores de risco inerente, risco de controle e de detecção, e materialidade."
+    },
+    {
+      "slug": "audit-achados-relato",
+      "name": "Achados, responsabilização e tipos de opinião",
+      "description": "Matriz de achados, matriz de responsabilização e tipos de opinião (sem ressalva, com ressalva, adversa, abstenção)."
+    },
+    {
+      "slug": "audit-asseguracao",
+      "name": "Trabalhos de asseguração (razoável/limitada)",
+      "description": "Asseguração razoável (conclusão em forma positiva) x asseguração limitada (risco maior, conclusão em forma negativa)."
+    }
+  ],
+  "questions": [
+    {
+      "external_key": "vunesp-2023-tcmsp-ccont-ceticismo",
+      "topic_slug": "audit-issai-etica",
+      "difficulty": 3,
+      "tags": ["issai-100", "ceticismo-profissional", "nbasp"],
+      "statement": "Conforme estabelece a NBASP 100 (ISSAI 100) — Princípios Fundamentais de Auditoria do Setor Público, o princípio do “ceticismo profissional” significa:",
+      "options": [
+        "a aplicação coletiva de conhecimentos, habilidades e experiências dos membros da equipe ao processo de auditoria, de maneira a atingir os resultados esperados a partir do melhor julgamento profissional.",
+        "manter distanciamento profissional e uma atitude alerta e questionadora quando avalia se a evidência obtida ao longo da auditoria é suficiente e apropriada, mantendo a mente aberta e receptiva a todos os pontos de vista e argumentos.",
+        "planejar e executar auditorias de maneira diligente, evitando qualquer conduta que possa desacreditar o trabalho por imparcialidade, imperícia ou subjetividade.",
+        "que as políticas e procedimentos de controle de qualidade da entidade de fiscalização superior devem estar em conformidade com normas profissionais, para assegurar auditorias com nível de qualidade consistentemente elevado.",
+        "compreensão e experiência prática do tipo de auditoria realizada, familiaridade com as normas e a legislação aplicáveis e habilidade para exercer julgamento profissional."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — pela NBASP 100 (ISSAI 100), o CETICISMO PROFISSIONAL é a postura de distanciamento, alerta e questionamento diante das evidências (a mente aberta e questionadora do auditor). Não se confunde com julgamento profissional (E), diligência/devido zelo (C) nem com controle de qualidade (D).\n\n⚠️ PEGADINHA: a banca troca ceticismo por “julgamento profissional” ou “devido zelo” — ceticismo é DUVIDAR e checar a suficiência/adequação da evidência."
+    },
+    {
+      "external_key": "vunesp-2024-unifesp-risco-inerente-fatores",
+      "topic_slug": "audit-risco-materialidade",
+      "difficulty": 3,
+      "tags": ["risco-inerente", "distorcao", "controles"],
+      "statement": "Fatores de risco inerentes são características de eventos ou condições que afetam a suscetibilidade à distorção, independentemente de ser causada por fraude ou erro, de uma afirmação relevante sobre uma:",
+      "options": [
+        "agregação de saldo contábil e procedimentos avaliativos destes antes de auditoria.",
+        "classe de transações, saldo contábil ou divulgação, antes da consideração dos controles.",
+        "espécie de suporte às operações financeiras, antes da distorção do alcance das estratégias de negócios.",
+        "combinação de probabilidade de ocorrência da distorção administrativa potencial, antes que ocorra a distorção.",
+        "variedade de divulgação de transações e de saldos contábeis antes das informações que incluem dados geradores de relatórios."
+      ],
+      "correct_option": 1,
+      "explanation": "Gabarito: B.\n\nMICRO-AULA — o RISCO INERENTE é a suscetibilidade de uma afirmação sobre classe de transações, saldo contábil ou divulgação a uma distorção relevante, ANTES de considerar os controles internos. A palavra-chave é “antes da consideração dos controles”.\n\n⚠️ PEGADINHA: se aparecer “após considerar os controles”, já é risco de CONTROLE, não inerente."
+    },
+    {
+      "external_key": "vunesp-2024-spcine-especies-risco",
+      "topic_slug": "audit-risco-materialidade",
+      "difficulty": 3,
+      "tags": ["risco-inerente", "risco-controle", "risco-deteccao"],
+      "statement": "Sobre as espécies de risco de auditoria, é correto afirmar que:",
+      "options": [
+        "o risco inerente é a probabilidade de que existam erros ou distorções significativas em uma demonstração financeira, antes de levar em consideração os controles internos da entidade.",
+        "o risco de controle é a probabilidade de que existam erros ou distorções significativas em uma demonstração financeira, após levar em consideração os controles internos da entidade.",
+        "o risco inerente se refere à possibilidade de que os sistemas e procedimentos de controle interno da entidade não detectem ou não evitem erros ou distorções nas demonstrações financeiras.",
+        "o risco de detecção se refere à possibilidade de que os sistemas e procedimentos operacionais da entidade não evitem erros ou distorções nas demonstrações financeiras.",
+        "o risco de detecção representa a combinação dos três tipos de riscos existentes, resultando no risco total de uma auditoria programada."
+      ],
+      "correct_option": 0,
+      "explanation": "Gabarito: A.\n\nMICRO-AULA — RISCO INERENTE = suscetibilidade a distorção ANTES dos controles internos (alternativa A). RISCO DE CONTROLE = o controle interno falhar em prevenir/detectar a distorção (é o que a alternativa C descreve, mas atribui erradamente ao inerente). RISCO DE DETECÇÃO = os procedimentos do auditor não detectarem a distorção.\n\n⚠️ PEGADINHA: a banca embaralha as definições. Fixe: inerente = antes dos controles; controle = falha do controle interno; detecção = falha do próprio auditor. Modelo RA = RI × RC × RD."
+    },
+    {
+      "external_key": "vunesp-2019-campinas-matriz-responsabilizacao",
+      "topic_slug": "audit-achados-relato",
+      "difficulty": 3,
+      "tags": ["matriz-responsabilizacao", "achados", "nexo-causal"],
+      "statement": "A respeito da chamada matriz de responsabilização, é correto afirmar que:",
+      "options": [
+        "deve ser sempre preenchida e anexada ao relatório de auditoria, de maneira a gerar maior adesão da alta administração às recomendações apresentadas.",
+        "tem por principal objetivo listar os achados de auditoria de forma pormenorizada, com as eventuais recomendações de melhorias.",
+        "é também chamada de matriz de risco e visa apresentar, em gráfico cartesiano, a relação entre risco e responsável por seu monitoramento.",
+        "não objetiva avaliar a reprovabilidade da conduta e a culpabilidade do agente, mas apenas identificar os responsáveis por futuras providências apresentadas no relatório.",
+        "tem por objetivo identificar os agentes, as condutas e o nexo de causalidade com eventual ocorrência lesiva à organização, de maneira a caracterizar a eventual responsabilidade do agente."
+      ],
+      "correct_option": 4,
+      "explanation": "Gabarito: E.\n\nMICRO-AULA — a MATRIZ DE RESPONSABILIZAÇÃO liga agente + conduta + nexo de causalidade + dano, para caracterizar a responsabilidade. Não confundir com a MATRIZ DE ACHADOS (critério, condição, causa, efeito, recomendação — que é o que a alternativa B descreve) nem com matriz de risco (C).\n\n⚠️ PEGADINHA: “listar achados e recomendações” é a matriz de ACHADOS; a de responsabilização foca em quem responde e por quê."
+    },
+    {
+      "external_key": "vunesp-2025-sertaozinho-asseguracao-razoavel",
+      "topic_slug": "audit-asseguracao",
+      "difficulty": 3,
+      "tags": ["asseguracao-razoavel", "forma-positiva", "relatorio"],
+      "statement": "No trabalho de asseguração razoável, a conclusão do auditor independente é expressa de forma:",
+      "options": [
+        "racional, incluindo a capacidade de obter nível apropriado de mensuração do objeto.",
+        "conformativa e admissível para transmitir sua opinião sobre a margem recomendada da mensuração ou avaliação do objeto.",
+        "positiva para transmitir sua opinião sobre o resultado da mensuração ou avaliação do objeto.",
+        "declarativa para comunicar, exclusivamente, sua opinião sobre a gestão e o alcance da qualidade de avaliação do objeto.",
+        "propositiva e admissível, comunicando essencialmente as ressalvas para garantir a mensuração do objeto."
+      ],
+      "correct_option": 2,
+      "explanation": "Gabarito: C.\n\nMICRO-AULA — na ASSEGURAÇÃO RAZOÁVEL (risco reduzido a um nível baixo) a conclusão é expressa de forma POSITIVA (“em nossa opinião, o objeto está adequado…”). Na asseguração LIMITADA, a conclusão é de forma NEGATIVA (“nada chegou ao nosso conhecimento que nos faça crer…”).\n\n⚠️ PEGADINHA: razoável = forma positiva; limitada = forma negativa. É o par que a VUNESP mais cobra em asseguração."
+    },
+    {
+      "external_key": "vunesp-2021-coden-asseguracao-limitada",
+      "topic_slug": "audit-asseguracao",
+      "difficulty": 3,
+      "tags": ["asseguracao-limitada", "risco", "conceito"],
+      "statement": "No trabalho de ___________, o auditor independente reduz o risco do trabalho para um nível que é aceitável nas circunstâncias, mas que ainda é maior do que para um trabalho de asseguração razoável. Assinale a alternativa que completa corretamente:",
+      "options": [
+        "revisão analítica",
+        "circularização",
+        "confirmação de saldos",
+        "asseguração limitada",
+        "revisão eletrônica"
+      ],
+      "correct_option": 3,
+      "explanation": "Gabarito: D.\n\nMICRO-AULA — na ASSEGURAÇÃO LIMITADA o risco do trabalho é reduzido a um nível aceitável, porém MAIOR do que na asseguração razoável — por isso a conclusão vem em forma negativa. Revisão analítica e circularização são PROCEDIMENTOS, não tipos de trabalho de asseguração.\n\n⚠️ PEGADINHA: “risco maior que o da razoável” é a definição de asseguração LIMITADA."
+    }
+  ]
+}
