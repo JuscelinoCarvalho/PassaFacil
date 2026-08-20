@@ -351,6 +351,32 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .publish-toggle { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; text-transform: none !important; font-size: 11px !important; color: var(--ink) !important; }
 .publish-toggle input { width: auto !important; }
 
+/* Tema escuro — área proprietária (Banco de questões + Editor). Sem isto, os
+   fundos #fff fixos ficam com o texto claro (--ink) por cima = ilegível. */
+:root[data-theme="dark"] .upload-card input, :root[data-theme="dark"] .upload-card select,
+:root[data-theme="dark"] .association-box select,
+:root[data-theme="dark"] .draft-editor textarea, :root[data-theme="dark"] .draft-editor input, :root[data-theme="dark"] .draft-editor select,
+:root[data-theme="dark"] .editor-search input { background: #262834; border-color: #33353f; color: var(--ink); }
+:root[data-theme="dark"] .draft-editor input:focus, :root[data-theme="dark"] .draft-editor select:focus,
+:root[data-theme="dark"] .editor-search input:focus, :root[data-theme="dark"] .upload-card input:focus { border-color: #8f79ef; }
+:root[data-theme="dark"] .draft-list, :root[data-theme="dark"] .association-box,
+:root[data-theme="dark"] .editor-figure, :root[data-theme="dark"] .visual-reference { background: #1d1f27; border-color: #2c2e39; }
+:root[data-theme="dark"] .draft-list button { background: #21232c; border-bottom-color: #2c2e39; color: var(--ink); }
+:root[data-theme="dark"] .editor-card { background: #21232c; border-color: #2c2e39; }
+:root[data-theme="dark"] .editor-card:hover { border-color: #5a4bbf; }
+:root[data-theme="dark"] .draft-list button.active, :root[data-theme="dark"] .editor-card.active { background: #2b2545; box-shadow: inset 3px 0 var(--purple); }
+:root[data-theme="dark"] .draft-options span { background: #33353f; color: #cfd2db; }
+:root[data-theme="dark"] .file-field span { background: #262834; border-color: #4a417a; }
+:root[data-theme="dark"] .import-message { background: #17233a; color: #9db8ec; }
+:root[data-theme="dark"] .editor-ai-note { background: #2b2413; border-color: #4d4020; color: #e2c48c; }
+:root[data-theme="dark"] .editor-ai-note b { color: #e2b466; }
+:root[data-theme="dark"] .editor-card-ai { color: #e0b466; }
+:root[data-theme="dark"] .flag-badge { background: #3a2c17; color: #e0b466; }
+:root[data-theme="dark"] .flag-badge.off { background: #2c2e39; color: #aeb2be; }
+:root[data-theme="dark"] .flag-badge.img, :root[data-theme="dark"] .status { background: #17311f; color: #7fcea4; }
+:root[data-theme="dark"] .review-count, :root[data-theme="dark"] .job-icon { background: #2a2545; color: #c3b6f7; }
+:root[data-theme="dark"] .review-actions .reject { color: #e08b8b; border-color: #5a2f34; }
+
 @media (max-width: 900px) {
   .sidebar { transform: translateX(-100%); transition: .25s; }.sidebar.open { transform: translateX(0); }
   .content { margin-left: 0; width: 100%; }.menu-button { display: block; margin-right: auto; cursor: pointer; }
