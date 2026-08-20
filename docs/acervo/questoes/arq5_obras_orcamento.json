@@ -1,0 +1,18 @@
+{
+  "materia": "obras-orcamento",
+  "subject_slug": "ec-orcamento-obras",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Gran Concursos — Revisão de Véspera TCE-SP (aula 10h, Prof. Guilherme Pereira)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2024,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-aula10h-2026-08",
+  "topics": [
+    {"slug": "obras-bdi", "name": "BDI (Benefícios e Despesas Indiretas)", "description": "Conceito e cálculo do BDI: custos diretos/indiretos, preço de venda, fórmula do TCU e valores referenciais."}
+  ],
+  "questions": [
+    {"external_key": "vunesp-2022-presprudente-bdi-calculo", "topic_slug": "obras-bdi", "difficulty": 3, "tags": ["bdi", "orcamento", "custo-direto"], "statement": "Para a construção de uma edificação, foram gastos R$ 250.000,00 de custos diretos e R$ 50.000,00 de custos indiretos. Se o preço de venda da edificação é de R$ 390.000,00, então o BDI aplicado é de:", "options": ["20%", "25%", "30%", "35%", "40%"], "correct_option": 2, "explanation": "Gabarito sugerido: C — 30% (confirmar).\n\nMICRO-AULA — o BDI é a taxa que, aplicada sobre o custo, leva ao preço de venda. Considerando o custo total de R$ 300.000,00 (diretos + indiretos) e o preço de venda de R$ 390.000,00: 390.000 / 300.000 = 1,30 → BDI de 30%.\n\n⚠️ PEGADINHA: some os custos diretos e indiretos antes de comparar com o preço de venda; a diferença proporcional é o BDI."},
+    {"external_key": "vunesp-2018-ribeiraopreto-bdi-custo-direto", "topic_slug": "obras-bdi", "difficulty": 3, "tags": ["bdi", "custo-direto", "preco-de-venda"], "statement": "O preço de venda de uma obra é R$ 600.000,00, no qual está incluso o BDI da construtora de 25%. O custo direto dessa obra é R$:", "options": ["450.000,00", "480.000,00", "500.000,00", "520.000,00", "580.000,00"], "correct_option": 1, "explanation": "Gabarito sugerido: B — R$ 480.000,00 (confirmar).\n\nMICRO-AULA — como Preço de Venda = Custo × (1 + BDI): 600.000 = Custo × 1,25 → Custo = 600.000 / 1,25 = R$ 480.000,00.\n\n⚠️ PEGADINHA: o BDI incide SOBRE o custo; para voltar do preço ao custo, divide-se por (1 + BDI), não se subtrai 25% do preço."}
+  ]
+}

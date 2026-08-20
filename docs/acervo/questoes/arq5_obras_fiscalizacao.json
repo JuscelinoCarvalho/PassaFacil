@@ -1,0 +1,18 @@
+{
+  "materia": "obras-fiscalizacao",
+  "subject_slug": "ec-fiscalizacao",
+  "exam_slug": "tce-sp-2026-ti",
+  "source_name": "Gran Concursos — Revisão de Véspera TCE-SP (aula 10h, Prof. Guilherme Pereira)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2024,
+  "rights_status": "owner_only",
+  "import_batch": "acervo-aula10h-2026-08",
+  "topics": [
+    {"slug": "obras-canteiro", "name": "Canteiro de obras e fiscalização (NR-18)", "description": "Organização e sinalização do canteiro, condições de trabalho (NR-18) e instrumentos de registro/fiscalização da execução (diário de obras)."}
+  ],
+  "questions": [
+    {"external_key": "vunesp-2024-sbc-diario-de-obras", "topic_slug": "obras-canteiro", "difficulty": 2, "tags": ["diario-de-obras", "fiscalizacao", "canteiro"], "statement": "Na organização de canteiros de obras públicas e particulares, o instrumento para registro de ocorrências de execução e fiscalização durante a execução da obra, que deve ficar disponível no canteiro para uso da fiscalização do contratante, é:", "options": ["o diário de obras.", "o cabide de projetos.", "o processo administrativo de contratação da obra.", "o processo administrativo correspondente à medição de obra.", "a Anotação de Responsabilidade Técnica (ART) ou o Registro de Responsabilidade Técnica (RRT)."], "correct_option": 0, "explanation": "Gabarito sugerido: A — diário de obras (confirmar).\n\nMICRO-AULA — o DIÁRIO DE OBRAS (ou livro de ocorrências) é o instrumento em que se registram, dia a dia, as ocorrências, o andamento e a fiscalização da execução, ficando disponível no canteiro para a fiscalização do contratante. A ART/RRT é o registro de responsabilidade técnica do profissional, não o registro diário da execução.\n\n⚠️ PEGADINHA: registro diário da execução = diário de obras; responsabilidade técnica do profissional = ART/RRT."},
+    {"external_key": "vunesp-2020-morroagudo-canteiro-nr18", "topic_slug": "obras-canteiro", "difficulty": 4, "tags": ["nr-18", "canteiro", "condicoes-de-trabalho"], "statement": "Os canteiros de obras devem ser organizados de modo a garantir boas condições de trabalho. Nesse sentido, é correto afirmar que:", "options": ["nas instalações móveis (inclusive contêineres) destinadas a alojamentos com camas tipo beliche, a altura livre entre uma cama e outra é de, no mínimo, 0,70 m.", "as instalações sanitárias devem estar em locais de fácil e seguro acesso, não sendo permitido deslocamento superior a 100 metros do posto de trabalho aos gabinetes sanitários, mictórios e lavatórios.", "a área mínima necessária para utilização de cada chuveiro é de 1,0 m², com altura de 2,0 m do piso.", "o alojamento deve ter pé-direito de 2,30 m para cama simples e de 2,50 m para camas duplas.", "os lavatórios devem ficar a uma altura de 0,90 m e, quando coletivos, ter espaçamento mínimo entre as torneiras de 0,60 m."], "correct_option": 4, "explanation": "Gabarito sugerido: E (confirmar — item de NR-18, exige conferência da redação vigente).\n\nMICRO-AULA — a NR-18 fixa parâmetros dimensionais para as instalações do canteiro (sanitárias, alojamentos, lavatórios). Item típico: lavatórios a cerca de 0,90 m de altura e, quando coletivos, com espaçamento mínimo entre torneiras. Os demais trocam medidas (distância máxima às instalações sanitárias, área do chuveiro, pé-direito), que são as pegadinhas clássicas.\n\n⚠️ PEGADINHA: a banca altera 1 número (0,70/1,0/2,30/100 m); confira sempre a medida exata na NR-18 vigente."}
+  ]
+}
