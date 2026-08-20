@@ -88,6 +88,11 @@
 
 ## 7. Diário de bordo
 
+### 2026-08-20 (conteúdo) — LGPD: citar o número da lei junto do artigo
+- **O que:** o dono apontou uma questão de LGPD que citava "art. Xº" sem o número/ano da lei (regra: sempre citar a norma junto do artigo). Corrigido em lote.
+- **Como:** `apps/api/scripts/citar_lei_lgpd.py` (idempotente; `--apply` grava, sem argumento é dry-run). Ancorou a **1ª** citação de artigo à **Lei nº 13.709/2018** nas explicações das questões de LGPD, só quando o número ainda não aparecia. **49 questões** atualizadas no Postgres de produção — reflete na hora (a API lê o banco a cada request; sem restart). Re-rodar = 0 (idempotente).
+- **Pendente:** mesma varredura para as demais normas (Lei 14.133/2021, 13.303/2016, LC 709/93, CF, Lei 10.261/68…). Não automatizei porque questões que citam VÁRIAS leis exigem decidir qual artigo é de qual lei; LGPD deu certo por ser tema de lei única. O script serve de molde por lei.
+
 ### 2026-08-20 (PWA) — app instalável no celular, com auto-atualização ao abrir
 - **O que:** transformamos o front num **PWA** — dá pra "Adicionar à tela de início" no Android/iOS e ele abre em tela cheia como app nativo. Como o app **carrega o site ao vivo** (não empacota código), **toda abertura já pega a última versão publicada** — nada de reinstalar.
 - **Como a atualização é garantida:** `apps/web/public/sw.js` (service worker) é **network-first** na navegação (HTML) → com internet sempre busca o servidor; cache só como rede de segurança offline. Assets do Next (`/_next/static/*`, hash no nome) = cache-first (seguro). `/api/*` e outros domínios (gtag) **nunca** são cacheados. `apps/web/app/_components/PwaUpdater.tsx` registra o SW (`updateViaCache:"none"`), chama `registration.update()` a **cada foco/reabertura** (`visibilitychange`/`focus`), ativa o SW novo (`skipWaiting`) e dá **um** reload quando ele assume (`controllerchange`).
