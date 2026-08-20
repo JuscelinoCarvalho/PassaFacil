@@ -16,7 +16,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/?source=pwa",
     scope: "/",
     display: "standalone",
-    orientation: "portrait",
+    // "any" = deixa o app girar junto com o celular (retrato e paisagem).
+    orientation: "any",
     background_color: "#191b28",
     theme_color: "#5f40dd",
     lang: "pt-BR",
