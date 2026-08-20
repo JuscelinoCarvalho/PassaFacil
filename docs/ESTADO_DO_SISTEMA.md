@@ -44,8 +44,10 @@
   export NEXT_PUBLIC_API_URL="https://passafacil.jussa.com.br/api/v1"  # ⚠️ OBRIGATÓRIO
   cd apps/web && ./node_modules/.bin/next build            # 1) build standalone
   rm -rf .next/standalone/.next/static && cp -r .next/static .next/standalone/.next/static  # 2) copiar assets
+  rm -rf .next/standalone/public && cp -r public .next/standalone/public  # 2b) copiar public/ (PWA: sw.js + ícones)
   sudo systemctl restart passafacil-web                     # 3) reiniciar
   ```
+  ⚠️ **PASSO 2b é OBRIGATÓRIO** desde o PWA (2026-08-20): o Next standalone **não** copia `public/` sozinho. Sem esse `cp`, `/sw.js` e `/icons/*` dão 404 e o app instalável para de atualizar. `sw.js` deve chegar ao navegador com `Cache-Control: max-age=0` (já é o default do standalone) para o service worker se renovar.
   ⚠️ **NUNCA rode `next build` sem exportar `NEXT_PUBLIC_API_URL`.** O Next embute o valor no bundle em tempo de build; sem ele, o front cai no default `http://localhost:9000/api/v1` e **quebra o login/todas as chamadas** no navegador do usuário.
   Conferir no ar: `curl -s http://127.0.0.1:9001/ -o /dev/null -w "%{http_code}\n"`; garantir que o bundle tem a URL de produção e **não** `localhost`: `grep -rl localhost:9000 .next/standalone/.next/static/`.
 - Adicionar/rotacionar um segredo: editar `/etc/passafacil.env` → `sudo systemctl restart passafacil-api`.
@@ -85,6 +87,12 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-08-20 (PWA) — app instalável no celular, com auto-atualização ao abrir
+- **O que:** transformamos o front num **PWA** — dá pra "Adicionar à tela de início" no Android/iOS e ele abre em tela cheia como app nativo. Como o app **carrega o site ao vivo** (não empacota código), **toda abertura já pega a última versão publicada** — nada de reinstalar.
+- **Como a atualização é garantida:** `apps/web/public/sw.js` (service worker) é **network-first** na navegação (HTML) → com internet sempre busca o servidor; cache só como rede de segurança offline. Assets do Next (`/_next/static/*`, hash no nome) = cache-first (seguro). `/api/*` e outros domínios (gtag) **nunca** são cacheados. `apps/web/app/_components/PwaUpdater.tsx` registra o SW (`updateViaCache:"none"`), chama `registration.update()` a **cada foco/reabertura** (`visibilitychange`/`focus`), ativa o SW novo (`skipWaiting`) e dá **um** reload quando ele assume (`controllerchange`).
+- **Onde:** `app/manifest.ts` (→ `/manifest.webmanifest`, `display:standalone`, tema `#5f40dd`), `app/layout.tsx` (link do manifest + metatags Apple `appleWebApp` + `icons` + `viewport.themeColor`), ícones em `public/icons/` gerados por `scripts/gerar_icones_pwa.py` (monograma "PF" no roxo da marca; 192/512/maskable/apple-touch).
+- **Deploy (no ar):** rebuild padrão **+ novo passo `cp -r public .next/standalone/public`** (senão `sw.js`/ícones dão 404 — ver §3). Verificado em prod: `/manifest.webmanifest` `application/manifest+json`, `/sw.js` `application/javascript` `max-age=0`, ícones `image/png`, todos 200; página com link do manifest + metatags Apple + theme-color.
 
 ### 2026-08-20 (Sessão G — F8+F9) — REMAKE FECHADO: skills no acervo todo + QA
 - **Arq1 (Português) importado/publicado (needs_review):** 12 questões → `portugues` (7 tópicos: classes de palavras, tempos/modos verbais, sentido figurado, concordância, regência/crase, colocação pronominal, conjunções). **Fecha os 5 decks da aula 10h: 56 questões novas** (Arq1 12 + Arq2 19 + Arq3 11 + Arq4 10 + Arq5 4). Banco **1074→1130**, todas publicadas; needs_review = 48 (45 dos decks em imagem + 3 gabaritos antigos).

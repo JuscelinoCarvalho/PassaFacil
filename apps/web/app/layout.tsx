@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import HelpWidget from "./_components/HelpWidget";
 import OfflineBanner from "./_components/OfflineBanner";
+import PwaUpdater from "./_components/PwaUpdater";
 
 const SITE_URL = "https://passafacil.jussa.com.br";
 // Google Ads (gtag.js) — medição de conversões. ID da conta AW-975500543.
@@ -36,6 +37,19 @@ export const metadata: Metadata = {
   applicationName: "Passa Fácil",
   category: "education",
   alternates: { canonical: SITE_URL },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Passa Fácil",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
@@ -65,6 +79,12 @@ export const metadata: Metadata = {
   // Para o Google Search Console: peça ao dev para preencher o token aqui,
   // OU (mais fácil) verifique via registro DNS TXT no Cloudflare.
   // verification: { google: "SEU_TOKEN_DO_SEARCH_CONSOLE" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#5f40dd",
+  // Ocupa a tela toda quando instalado como app (atrás do "notch" no iOS).
+  viewportFit: "cover",
 };
 
 const jsonLd = {
@@ -145,6 +165,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR">
       <body>
+        <PwaUpdater />
         <OfflineBanner />
         {/* Google tag (gtag.js) — Google Ads / conversões */}
         <Script
