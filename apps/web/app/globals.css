@@ -348,6 +348,8 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .editor-figure-has img { max-width: 100%; max-height: 320px; object-fit: contain; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 6px; }
 .file-field.small span { padding: 9px 12px; font-size: 10px; display: inline-flex; gap: 6px; align-items: center; }
 .draft-editor textarea.tall { min-height: 130px; }
+/* Enunciado no Editor de questões — campo principal, tipografia maior. */
+.draft-editor textarea.field-lg { font-size: 16px; line-height: 1.55; min-height: 120px; padding: 13px 14px; }
 .publish-toggle { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; text-transform: none !important; font-size: 13px !important; color: var(--ink) !important; }
 .publish-toggle input { width: auto !important; }
 

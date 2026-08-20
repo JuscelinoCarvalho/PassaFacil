@@ -3430,7 +3430,7 @@ function QuestionEditorView() {
                   <b>Varredura de IA:</b> cadastrado <b>{detail.ai.cadastrado}</b>, sugere <b>{detail.ai.ia_sugere}</b> ({detail.ai.confianca}). {detail.ai.motivo}
                 </div>
               )}
-              <label>Enunciado<textarea value={detail.statement} onChange={(e) => change({ statement: e.target.value })} /></label>
+              <label>Enunciado<textarea className="field-lg" value={detail.statement} onChange={(e) => change({ statement: e.target.value })} /></label>
 
               <div className="editor-figure">
                 <span className="field-label">Figura</span>
