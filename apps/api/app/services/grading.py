@@ -107,14 +107,20 @@ def _build_user_prompt(case, texto_resposta: str) -> str:
     return "\n".join(linhas)
 
 
-def _call_provider(base_url: str, model: str, api_key: str, messages: list[dict]) -> dict:
-    """Faz a chamada /chat/completions e devolve o JSON já parseado do modelo."""
+def _call_provider(
+    base_url: str, model: str, api_key: str, messages: list[dict], max_tokens: int = 1600
+) -> dict:
+    """Faz a chamada /chat/completions e devolve o JSON já parseado do modelo.
+
+    `max_tokens` é ajustável: chamadas com saída curta (ex.: enriquecer explicação)
+    reservam menos tokens, o que ajuda a caber no limite de tokens-por-minuto (TPM)
+    dos provedores grátis. Default 1600 preserva o comportamento das discursivas."""
     body = json.dumps(
         {
             "model": model,
             "messages": messages,
             "temperature": 0.2,
-            "max_tokens": 1600,
+            "max_tokens": max_tokens,
             "response_format": {"type": "json_object"},
         }
     ).encode("utf-8")
