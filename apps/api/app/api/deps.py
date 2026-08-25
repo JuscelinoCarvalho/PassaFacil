@@ -55,6 +55,11 @@ PAID_PLANS = {SubscriptionPlan.plus, SubscriptionPlan.pro}
 
 
 def user_has_access(user: User) -> bool:
+    # Acesso gratuito temporário (sistema em evolução): libera todo mundo sem
+    # cobrar. Reversível — desligar FREE_ACCESS no /etc restaura o paywall. O
+    # código de pagamento (Asaas/checkout) segue intacto, só fica oculto.
+    if settings.free_access:
+        return True
     if user.is_admin:
         return True
     sub = user.subscription

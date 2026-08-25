@@ -118,7 +118,7 @@ const jsonLd = {
         "@type": "Offer",
         category: "Preparação para concurso",
         priceCurrency: "BRL",
-        price: "25.00",
+        price: "0",
       },
     },
     {
@@ -142,10 +142,10 @@ const jsonLd = {
         },
         {
           "@type": "Question",
-          name: "Posso testar antes de assinar?",
+          name: "O acesso é pago?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Sim. Há um teste grátis com questões de diferentes níveis de dificuldade para você conhecer a correção imediata e as mini-aulas antes de contratar o acesso.",
+            text: "No momento o acesso está liberado gratuitamente enquanto a plataforma evolui. Basta criar uma conta para usar tudo — simulados, questões comentadas e correção imediata.",
           },
         },
         {
@@ -203,8 +203,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             </p>
             <h3>Perguntas frequentes</h3>
             <p>
-              <strong>Posso testar antes de assinar?</strong> Sim — há um teste grátis com questões de
-              diferentes níveis para você sentir a correção imediata e as mini-aulas.{" "}
+              <strong>O acesso é pago?</strong> No momento não — o acesso está liberado gratuitamente
+              enquanto a plataforma evolui; basta criar uma conta.{" "}
               <strong>As questões são comentadas?</strong> Sim, todas trazem explicação e mini-aula.
             </p>
             <p>

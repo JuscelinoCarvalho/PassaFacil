@@ -23,6 +23,14 @@ class Settings(BaseSettings):
     support_to: str = "jussa@jussa.com.br,mitsuplick@protonmail.com"
     support_bcc: str = "juscelino.carvalho@gmail.com"
 
+    # Acesso gratuito temporário: enquanto o sistema está em evolução, liberamos
+    # o acesso completo para qualquer usuário logado SEM cobrar. Nada do fluxo de
+    # pagamento (Asaas/Paywall/checkout) é removido — só fica OCULTO/inativo. Para
+    # voltar a cobrar, basta desligar este flag (FREE_ACCESS=false no /etc) e
+    # reiniciar a API; o Paywall e o checkout Pix voltam sozinhos. Ver
+    # deps.user_has_access() e o Paywall no front (some quando has_access=true).
+    free_access: bool = False
+
     # Pagamento (Asaas)
     asaas_sandbox: bool = True
     asaas_api_base: str = "https://api.asaas.com/v3"

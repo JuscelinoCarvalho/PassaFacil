@@ -505,7 +505,6 @@ export default function App() {
     return (
       <AuthGate
         onAuthed={onAuthed}
-        onTrial={() => setShowTrial(true)}
         notice={sessionExpired ? "Sua sessão expirou por inatividade. Entre novamente para continuar." : ""}
       />
     );
@@ -2115,8 +2114,8 @@ function TrialDiscursive({ onBack, onCreate }: { onBack: () => void; onCreate: (
 
 // ============================ TELAS DE AUTENTICAÇÃO ============================
 
-function AuthGate({ onAuthed, onTrial, notice = "" }: { onAuthed: (token: string) => void; onTrial: () => void; notice?: string }) {
-  const [mode, setMode] = useState<"login" | "register" | "forgot">("login");
+function AuthGate({ onAuthed, notice = "" }: { onAuthed: (token: string) => void; notice?: string }) {
+  const [mode, setMode] = useState<"login" | "register" | "forgot">("register");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -2171,12 +2170,12 @@ function AuthGate({ onAuthed, onTrial, notice = "" }: { onAuthed: (token: string
     }
   };
 
-  const title = mode === "login" ? "Entrar na sua conta" : mode === "register" ? "Criar sua conta" : "Recuperar senha";
+  const title = mode === "login" ? "Entrar na sua conta" : mode === "register" ? "Crie seu acesso (grátis)" : "Recuperar senha";
   const sub =
     mode === "login"
       ? "Estude para o TCE-SP 2026 com simulados e questões comentadas."
       : mode === "register"
-      ? "Comece agora. Você confirmará seu e-mail para ativar a conta."
+      ? "Acesso completo liberado gratuitamente enquanto a plataforma evolui. Você confirmará seu e-mail para ativar a conta."
       : "Informe seu e-mail e enviaremos um link para você criar uma nova senha.";
 
   return (
@@ -2188,7 +2187,7 @@ function AuthGate({ onAuthed, onTrial, notice = "" }: { onAuthed: (token: string
         <div className="gate-ti-notice">
           <AlertTriangle size={18} />
           <span>
-            <strong>Atenção:</strong> o conteúdo pago é focado exclusivamente na especialidade de{" "}
+            <strong>Atenção:</strong> o conteúdo é focado exclusivamente na especialidade de{" "}
             <strong>Tecnologia da Informação (TI)</strong> do TCE-SP 2026. As demais especialidades
             ainda não têm conteúdo completo.
           </span>
@@ -2220,15 +2219,12 @@ function AuthGate({ onAuthed, onTrial, notice = "" }: { onAuthed: (token: string
           )}
           <button className="primary" type="submit" disabled={busy} style={{ width: "100%" }}>
             {busy ? <LoaderCircle className="spin" size={17} /> : null}
-            {mode === "login" ? "Entrar" : mode === "register" ? "Criar conta" : "Enviar link de recuperação"}
+            {mode === "login" ? "Entrar" : mode === "register" ? "Crie seu acesso (grátis)" : "Enviar link de recuperação"}
           </button>
         </form>
-        {mode !== "forgot" && (
-          <button className="gate-secondary" onClick={onTrial}>Experimentar grátis (sem cadastro)</button>
-        )}
         <div className="gate-switch">
           {mode === "login" ? (
-            <>Ainda não tem conta? <button onClick={() => switchMode("register")}>Criar conta</button></>
+            <>Ainda não tem conta? <button onClick={() => switchMode("register")}>Crie seu acesso (grátis)</button></>
           ) : mode === "register" ? (
             <>Já tem conta? <button onClick={() => switchMode("login")}>Entrar</button></>
           ) : (

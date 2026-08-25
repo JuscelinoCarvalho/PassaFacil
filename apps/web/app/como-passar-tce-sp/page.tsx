@@ -62,8 +62,8 @@ export default function Page() {
 
         <div className="cta-box">
           <h3>Comece agora, de graça</h3>
-          <p>Faça uma amostra de questões comentadas e sinta o método. Depois, libere o acesso completo com pagamento único.</p>
-          <Link href="/">Fazer o teste grátis</Link>
+          <p>Crie sua conta e use o acesso completo — simulados, questões comentadas e correção imediata, liberado gratuitamente por enquanto.</p>
+          <Link href="/">Crie seu acesso (grátis)</Link>
         </div>
 
         <p>
