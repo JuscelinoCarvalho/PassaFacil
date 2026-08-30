@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from sqlalchemy import inspect, text
 
-from app.api.routes import auth, billing, discursive, exams, feedback, health, question_bank, reviews, simulations, study
+from app.api.routes import auth, billing, discursive, exams, feedback, flashcards, health, question_bank, reviews, simulations, study
 from app.core.config import settings
 from app.db.base import Base
 from app.db.seed import seed_tce_sp
@@ -145,4 +145,5 @@ app.include_router(simulations.router, prefix=settings.api_v1_prefix)
 app.include_router(question_bank.router, prefix=settings.api_v1_prefix)
 app.include_router(billing.router, prefix=settings.api_v1_prefix)
 app.include_router(discursive.router, prefix=settings.api_v1_prefix)
+app.include_router(flashcards.router, prefix=settings.api_v1_prefix)
 app.include_router(feedback.router, prefix=settings.api_v1_prefix)

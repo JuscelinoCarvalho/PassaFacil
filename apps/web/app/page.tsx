@@ -390,7 +390,7 @@ const nav = [
   ["Plano de estudos", CalendarDays, "today", false],
   ["Simulado", Gauge, "questions", false],
   ["Modo teste", ListChecks, "test", false],
-  ["Estudo de caso", FileText, "discursive", false],
+  ["Discursivas", FileText, "discursive", false],
   ["Meus resultados", TrendingUp, "results", false],
   ["Meu conhecimento", Target, "knowledge", false],
   ["Revisões", RotateCcw, "reviews", false],
@@ -567,6 +567,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   }, [profileMenuOpen]);
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [memoryToday, setMemoryToday] = useState<{ due_skills: number; estimated_minutes: number } | null>(null);
+  const [cardsToday, setCardsToday] = useState<{ due: number; new: number } | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -591,6 +592,11 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
       try {
         const mt = await authFetch(`${API_URL}/study/memory-today`, { cache: "no-store" });
         if (mt.ok) setMemoryToday(await mt.json());
+      } catch { /* silencioso */ }
+      // Cartões da discursiva a revisar hoje (memorização espaçada) — best-effort.
+      try {
+        const ct = await authFetch(`${API_URL}/flashcards/today`, { cache: "no-store" });
+        if (ct.ok) setCardsToday(await ct.json());
       } catch { /* silencioso */ }
     } catch {
       setError("A API não respondeu. Confirme se o serviço da porta 9000 está aberto.");
@@ -969,7 +975,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
               subjects={scope && scope.length < allSlugs.length ? scope : null}
             />
           ) : view === "discursive" ? (
-            <DiscursiveView />
+            <DiscursivasHub />
           ) : view === "results" ? (
             <ResultsView
               specialty={specialty}
@@ -1026,6 +1032,24 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
                   <Play size={17} fill="currentColor" />{memoryToday?.due_skills ? "Fortalecer memória" : "Começar sessão"}
                 </button>
               </section>
+
+              {/* Cartões da discursiva — memorização espaçada das leis do núcleo duro */}
+              {cardsToday && (cardsToday.due > 0 || cardsToday.new > 0) && (
+                <section className="card flash-today-card">
+                  <div className="smart-session-copy">
+                    <span className="section-kicker"><RotateCcw size={13} /> DISCURSIVA · MEMORIZAÇÃO</span>
+                    <h2>{cardsToday.due > 0 ? "📇 Cartões para revisar hoje" : "📇 Comece a memorizar as leis"}</h2>
+                    <p>
+                      {cardsToday.due > 0
+                        ? `${cardsToday.due} cartão${cardsToday.due > 1 ? "es" : ""} no ponto de revisão${cardsToday.new > 0 ? ` · ${cardsToday.new} novo${cardsToday.new > 1 ? "s" : ""} para aprender` : ""}. Recordação ativa fixa lei e artigo na memória.`
+                        : `${cardsToday.new} cartões do núcleo duro (LINDB, 14.133, LGPD, controle externo…) esperando você. 5 minutos por dia bastam.`}
+                    </p>
+                  </div>
+                  <button className="primary" onClick={() => navigate("discursive")}>
+                    <RotateCcw size={16} />{cardsToday.due > 0 ? "Revisar cartões" : "Começar cartões"}
+                  </button>
+                </section>
+              )}
 
               <div className="grid">
                 <section className="card plan-card">
@@ -2986,6 +3010,295 @@ function DiscursiveView() {
   }
 
   return null;
+}
+
+// ============================ DISCURSIVAS — HUB (método + cartões + treino) ============================
+type FlashDeck = { deck: string; total: number; new: number; due: number };
+type FlashCardT = { id: string; deck: string; frente: string; verso: string; lei_ref: string | null; mnemonic: string | null; is_new: boolean };
+
+const DECK_LABELS: Record<string, string> = {
+  "nucleo-duro-leis": "Núcleo duro — Leis",
+  "governanca-ti": "Governança de TI",
+};
+const deckLabel = (d: string) => DECK_LABELS[d] ?? d;
+
+// Botões de autoavaliação → viram o Rating do scheduler no backend (errei/dificil/bom/facil).
+const FLASH_RATINGS: { key: string; label: string; hint: string; cls: string }[] = [
+  { key: "errei", label: "Errei", hint: "não lembrei", cls: "r-again" },
+  { key: "dificil", label: "Difícil", hint: "lembrei com esforço", cls: "r-hard" },
+  { key: "bom", label: "Bom", hint: "lembrei", cls: "r-good" },
+  { key: "facil", label: "Fácil", hint: "de olhos fechados", cls: "r-easy" },
+];
+
+// ---- Cartões de recordação ativa (repetição espaçada) ----
+function FlashcardsView() {
+  const [decks, setDecks] = useState<FlashDeck[]>([]);
+  const [phase, setPhase] = useState<"decks" | "study" | "done">("decks");
+  const [cards, setCards] = useState<FlashCardT[]>([]);
+  const [idx, setIdx] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(0);
+  const [again, setAgain] = useState(0);
+  const [error, setError] = useState("");
+
+  const loadDecks = useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await authFetch(`${API_URL}/flashcards/decks`, { cache: "no-store" });
+      if (r.ok) setDecks(await r.json());
+    } catch { /* silencioso */ } finally { setLoading(false); }
+  }, []);
+  useEffect(() => { loadDecks(); }, [loadDecks]);
+
+  const start = async (d: string | null) => {
+    setBusy(true); setError("");
+    try {
+      const qs = d ? `?deck=${encodeURIComponent(d)}` : "";
+      const r = await authFetch(`${API_URL}/flashcards/study${qs}`, { cache: "no-store" });
+      if (!r.ok) throw new Error();
+      const data = await r.json();
+      if (!data.cards.length) { setError("Sem cartões para estudar agora — volte mais tarde."); return; }
+      setCards(data.cards); setIdx(0); setRevealed(false); setDone(0); setAgain(0); setPhase("study");
+    } catch { setError("Não foi possível iniciar a sessão."); }
+    finally { setBusy(false); }
+  };
+
+  const rate = useCallback(async (rating: string) => {
+    const card = cards[idx];
+    if (!card || busy) return;
+    setBusy(true);
+    try {
+      await authFetch(`${API_URL}/flashcards/${card.id}/review`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating }),
+      });
+    } catch { /* best-effort: não trava o drill */ }
+    if (rating === "errei") setAgain((n) => n + 1);
+    setDone((n) => n + 1);
+    setBusy(false);
+    if (idx + 1 < cards.length) { setIdx(idx + 1); setRevealed(false); }
+    else { setPhase("done"); loadDecks(); }
+  }, [cards, idx, busy, loadDecks]);
+
+  // Atalhos de teclado (drill rápido no desktop): espaço revela; 1–4 avaliam.
+  useEffect(() => {
+    if (phase !== "study") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!revealed && (e.key === " " || e.key === "Enter")) { e.preventDefault(); setRevealed(true); return; }
+      if (revealed && ["1", "2", "3", "4"].includes(e.key)) { e.preventDefault(); rate(FLASH_RATINGS[Number(e.key) - 1].key); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [phase, revealed, rate]);
+
+  if (loading) return <section className="card empty-state"><LoaderCircle className="spin" /><h2>Carregando cartões...</h2></section>;
+
+  // ---- ESCOLHA DE DECK ----
+  if (phase === "decks") {
+    const totalDue = decks.reduce((s, d) => s + d.due, 0);
+    const totalNew = decks.reduce((s, d) => s + d.new, 0);
+    return (
+      <div className="flash-wrap">
+        <p className="flash-intro">
+          Cada cartão é uma <b>pergunta</b>: tente lembrar a resposta <b>antes</b> de virar — é a recordação ativa
+          que grava lei e artigo na memória. Depois se avalie com honestidade; o sistema agenda a próxima revisão
+          na hora certa (repetição espaçada).
+        </p>
+        {error && <p className="test-error"><CircleAlert size={16} /> {error}</p>}
+        <div className="flash-decks">
+          <button className="flash-deck all" disabled={busy} onClick={() => start(null)}>
+            <b>Estudar tudo</b>
+            <span>{totalDue > 0 ? `${totalDue} a revisar` : "nada vencido"}{totalNew > 0 ? ` · ${totalNew} novos` : ""}</span>
+          </button>
+          {decks.map((d) => (
+            <button className="flash-deck" key={d.deck} disabled={busy} onClick={() => start(d.deck)}>
+              <b>{deckLabel(d.deck)}</b>
+              <span>{d.total} cartões · {d.due > 0 ? `${d.due} a revisar` : "em dia"}{d.new > 0 ? ` · ${d.new} novos` : ""}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ---- SESSÃO CONCLUÍDA ----
+  if (phase === "done") {
+    return (
+      <div className="flash-wrap">
+        <section className="card flash-summary">
+          <Trophy size={30} />
+          <h2>Sessão concluída!</h2>
+          <p>Você revisou <b>{done}</b> cartão{done > 1 ? "es" : ""}{again > 0 ? ` — ${again} para reforçar em breve` : " — todos fixados"}. Os que você errou voltam antes.</p>
+          <div className="flash-summary-actions">
+            <button className="primary compact" onClick={() => setPhase("decks")}>Estudar mais</button>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // ---- CARTÃO ----
+  const card = cards[idx];
+  return (
+    <div className="flash-wrap">
+      <div className="flash-progress">
+        <span>{idx + 1} / {cards.length}</span>
+        <div className="flash-bar"><div style={{ width: `${(idx / cards.length) * 100}%` }} /></div>
+        <button className="ghost compact" onClick={() => { setPhase("decks"); loadDecks(); }}>Sair</button>
+      </div>
+      <div className={`flash-card ${revealed ? "revealed" : ""}`} onClick={() => !revealed && setRevealed(true)}>
+        {card.is_new && <span className="flash-new">novo</span>}
+        <div className="flash-face front">
+          <span className="flash-deck-tag">{deckLabel(card.deck)}</span>
+          <p className="flash-front-text">{card.frente}</p>
+          {!revealed && <span className="flash-hint">toque para ver a resposta · ou tecle espaço</span>}
+        </div>
+        {revealed && (
+          <div className="flash-face back">
+            <p className="flash-verso">{card.verso}</p>
+            {card.lei_ref && <span className="flash-lei">{card.lei_ref}</span>}
+            {card.mnemonic && <span className="flash-mnemonic">🧠 {card.mnemonic}</span>}
+          </div>
+        )}
+      </div>
+      {!revealed ? (
+        <button className="primary flash-show" onClick={() => setRevealed(true)}>Mostrar resposta</button>
+      ) : (
+        <div className="flash-ratings">
+          {FLASH_RATINGS.map((r, i) => (
+            <button key={r.key} className={`flash-rate ${r.cls}`} disabled={busy} onClick={() => rate(r.key)}>
+              <b>{r.label}</b><small>{r.hint}</small><kbd>{i + 1}</kbd>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---- Método CIDA: o que a banca cobra e como responder como auditor ----
+function MetodoView({ onGoCartoes, onGoTreino }: { onGoCartoes: () => void; onGoTreino: () => void }) {
+  const CIDA = [
+    ["C", "Contextualizar", "1–2 linhas. Enquadre o caso na norma: “Trata-se de contratação de solução de TIC submetida à Lei nº 14.133/2021…”."],
+    ["I", "Identificar", "Nomeie a irregularidade com precisão técnica (ex.: inexigibilidade forjada por especificação proprietária)."],
+    ["D", "Dispositivo", "Cite a base legal — lei + artigo. É aqui que mora a maior parte dos pontos do espelho."],
+    ["A", "Ação", "Proponha o encaminhamento concreto: o que o Tribunal/gestor deve fazer (sanear, sustar, anular, recomendar)."],
+  ];
+  return (
+    <div className="metodo-wrap">
+      <article className="card metodo-block">
+        <h2>A VUNESP pede estudo de caso, não redação</h2>
+        <p>
+          Um problema concreto com comandos numerados. O corretor tem um <b>espelho com critérios</b> — ele procura
+          <b> pontos</b>, não fluidez. Erro nº 1: escrever bonito e não responder o comando. <b>Regra de ouro:</b> um
+          parágrafo por comando, na mesma ordem do enunciado.
+        </p>
+      </article>
+
+      <article className="card metodo-block">
+        <span className="section-kicker">ESQUELETO CIDA · use em toda resposta</span>
+        <div className="cida-diagram">
+          {CIDA.map(([letra, nome, oque]) => (
+            <div className="cida-row" key={letra}>
+              <span className="cida-letra">{letra}</span>
+              <div><b>{nome}</b><p>{oque}</p></div>
+            </div>
+          ))}
+        </div>
+        <p className="metodo-note">Terminou os comandos? <b>Pare.</b> Texto extra não pontua e consome linhas.</p>
+      </article>
+
+      <article className="card metodo-block">
+        <h2>Como escrever como um auditor</h2>
+        <ul className="metodo-list">
+          <li><b>Comece pela conclusão</b> de cada parágrafo (“a contratação é ilegal”) e só depois fundamente — dá previsibilidade ao corretor.</li>
+          <li><b>Sempre lei + artigo.</b> Resposta sem dispositivo perde os pontos do espelho, por melhor que seja o raciocínio.</li>
+          <li><b>Coesão:</b> use conectivos (“em primeiro lugar”, “ademais”, “por conseguinte”) e sinônimos para não repetir — “Tribunal de Contas” vira “Corte de Contas”.</li>
+          <li><b>Estrangeirismo entre aspas</b> (“compliance”, “lock-in”) e nada de siglas sem sentido no contexto.</li>
+          <li><b>Voz de auditor:</b> impessoal e técnica; você fiscaliza a conformidade e propõe o saneamento — não “acha”.</li>
+        </ul>
+      </article>
+
+      <article className="card metodo-block metodo-danger">
+        <h2>O que zera a prova</h2>
+        <ul className="metodo-list">
+          <li>Fugir do caso proposto (mesmo escrevendo bem sobre outro tema).</li>
+          <li>Qualquer identificação: nome, rubrica, assinatura.</li>
+          <li>Folha em branco ou faltando comando.</li>
+          <li>Texto não articulado (desenhos, bullets soltos, tópicos sem frase). <b>Tudo em prosa.</b> Se precisar listar: “São três as linhas de defesa: a primeira…; a segunda…; a terceira…”.</li>
+        </ul>
+      </article>
+
+      <article className="card metodo-block">
+        <span className="section-kicker">DIAGRAMAS DE APOIO</span>
+        <div className="diagram-grid">
+          <div className="mini-diagram">
+            <h4>3 linhas de defesa · Lei nº 14.133/2021, art. 169</h4>
+            <div className="lines-def">
+              <div><span>1ª</span> Gestores na execução <em>(quem faz)</em></div>
+              <div><span>2ª</span> Jurídico + controle interno <em>(quem supervisiona)</em></div>
+              <div><span>3ª</span> Controle interno central + <b>Tribunal de Contas</b> <em>(quem audita)</em></div>
+            </div>
+          </div>
+          <div className="mini-diagram">
+            <h4>COBIT 2019 · governança × gestão</h4>
+            <div className="cobit-diagram">
+              <div className="cobit-gov"><b>Governança</b> EDM — avalia, dirige, monitora</div>
+              <div className="cobit-ges"><b>Gestão</b> APO · BAI · DSS · MEA — planeja, constrói, entrega, avalia</div>
+            </div>
+          </div>
+          <div className="mini-diagram">
+            <h4>Fases da licitação · Lei nº 14.133/2021, art. 17</h4>
+            <div className="fases-diagram">
+              {["Preparatória", "Divulgação", "Propostas", "Julgamento", "Habilitação", "Recursal", "Homologação"].map((f) => (
+                <span key={f}>{f}</span>
+              ))}
+            </div>
+            <small>Novidade: julgamento <b>antes</b> da habilitação.</small>
+          </div>
+          <div className="mini-diagram">
+            <h4>Sigilo · Lei nº 12.527/2011 (LAI), art. 24</h4>
+            <div className="sigilo-diagram">
+              <div><b>Ultrassecreta</b><span>25 anos</span></div>
+              <div><b>Secreta</b><span>15 anos</span></div>
+              <div><b>Reservada</b><span>5 anos</span></div>
+            </div>
+            <small>Publicidade é a regra; sigilo, a exceção.</small>
+          </div>
+        </div>
+      </article>
+
+      <div className="metodo-cta">
+        <button className="primary compact" onClick={onGoCartoes}><RotateCcw size={15} /> Memorizar as leis</button>
+        <button className="ghost compact" onClick={onGoTreino}><FileText size={15} /> Treinar um caso</button>
+      </div>
+    </div>
+  );
+}
+
+function DiscursivasHub() {
+  const [tab, setTab] = useState<"cartoes" | "metodo" | "treino">("cartoes");
+  return (
+    <section className="disc-hub">
+      <div className="question-top">
+        <div>
+          <span className="eyebrow">PROVA DISCURSIVA · TCE-SP</span>
+          <h1>Discursivas</h1>
+          <p>Memorize as leis, entenda o que a banca cobra e treine a resposta como um auditor.</p>
+        </div>
+      </div>
+      <div className="disc-tabs" role="tablist">
+        <button role="tab" className={tab === "cartoes" ? "active" : ""} onClick={() => setTab("cartoes")}><RotateCcw size={15} /> Núcleo duro</button>
+        <button role="tab" className={tab === "metodo" ? "active" : ""} onClick={() => setTab("metodo")}><BookOpen size={15} /> Método</button>
+        <button role="tab" className={tab === "treino" ? "active" : ""} onClick={() => setTab("treino")}><FileText size={15} /> Treino de caso</button>
+      </div>
+      {tab === "cartoes" ? <FlashcardsView />
+        : tab === "metodo" ? <MetodoView onGoCartoes={() => setTab("cartoes")} onGoTreino={() => setTab("treino")} />
+          : <DiscursiveView />}
+    </section>
+  );
 }
 
 // ===================== ADMIN — painel do teste grátis (telemetria anônima) =====================

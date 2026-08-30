@@ -880,3 +880,108 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 :root[data-theme="dark"] .help-select,
 :root[data-theme="dark"] .help-input,
 :root[data-theme="dark"] .help-textarea { background: #23252f; border-color: #2f313d; color: #e8e9ee; }
+
+/* ============================ DISCURSIVAS — hub (método + cartões + treino) ============================ */
+/* Card da home: cartões da discursiva a revisar hoje */
+.flash-today-card { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-left: 3px solid #d98a2b; }
+.flash-today-card > .primary { margin-top: 0; width: auto; flex: 0 0 auto; }
+:root[data-theme="dark"] .flash-today-card { border-left-color: #e0a24f; }
+
+/* Hub + abas */
+.disc-hub { display: flex; flex-direction: column; gap: 18px; }
+.disc-tabs { display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.disc-tabs button { display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border: none; background: none; color: var(--muted); font-weight: 700; font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.disc-tabs button:hover { color: var(--ink); }
+.disc-tabs button.active { color: var(--purple); border-bottom-color: var(--purple); }
+
+/* ---- Cartões de recordação ativa ---- */
+.flash-wrap { display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+.flash-intro { color: var(--muted); font-size: 13.5px; line-height: 1.6; margin: 0; }
+.flash-decks { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+.flash-deck { text-align: left; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--cream); cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: border-color .15s, transform .1s; }
+.flash-deck:hover:not(:disabled) { border-color: var(--purple); transform: translateY(-1px); }
+.flash-deck:disabled { opacity: .6; cursor: default; }
+.flash-deck b { font-size: 15px; color: var(--ink); }
+.flash-deck span { font-size: 12px; color: var(--muted); }
+.flash-deck.all { background: var(--purple); border-color: var(--purple); }
+.flash-deck.all b, .flash-deck.all span { color: #fff; }
+
+.flash-progress { display: flex; align-items: center; gap: 12px; }
+.flash-progress > span { font-size: 12px; font-weight: 800; color: var(--muted); flex: 0 0 auto; }
+.flash-bar { flex: 1 1 auto; height: 6px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.flash-bar > div { height: 100%; background: var(--purple); transition: width .2s; }
+
+.flash-card { position: relative; min-height: 200px; border-radius: 18px; border: 1px solid var(--line); background: var(--cream); padding: 26px 22px; display: flex; flex-direction: column; gap: 16px; cursor: pointer; }
+.flash-card.revealed { cursor: default; }
+.flash-new { position: absolute; top: 12px; right: 14px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #d98a2b; background: rgba(217,138,43,.12); padding: 2px 8px; border-radius: 20px; }
+.flash-face { display: flex; flex-direction: column; gap: 10px; }
+.flash-deck-tag { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--purple); }
+.flash-front-text { font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.4; margin: 0; }
+.flash-hint { font-size: 11.5px; color: var(--muted); margin-top: auto; }
+.flash-face.back { border-top: 1px dashed var(--line); padding-top: 16px; }
+.flash-verso { font-size: 15.5px; color: var(--ink); line-height: 1.6; margin: 0; white-space: pre-line; }
+.flash-lei { display: inline-block; width: fit-content; font-size: 12px; font-weight: 700; color: var(--purple-dark); background: rgba(111,84,232,.1); padding: 3px 10px; border-radius: 8px; }
+.flash-mnemonic { display: inline-block; width: fit-content; font-size: 12.5px; font-weight: 700; color: #b0731c; background: rgba(217,138,43,.12); padding: 3px 10px; border-radius: 8px; }
+
+.flash-show { width: 100%; }
+.flash-ratings { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.flash-rate { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 11px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--cream); cursor: pointer; transition: transform .1s, border-color .15s; }
+.flash-rate:hover:not(:disabled) { transform: translateY(-1px); }
+.flash-rate:disabled { opacity: .55; cursor: default; }
+.flash-rate b { font-size: 14px; color: var(--ink); }
+.flash-rate small { font-size: 10.5px; color: var(--muted); }
+.flash-rate kbd { position: absolute; top: 5px; right: 7px; font-size: 9px; color: var(--muted); opacity: .7; }
+.flash-rate.r-again { border-bottom: 2px solid #d1596a; }
+.flash-rate.r-hard { border-bottom: 2px solid #d98a2b; }
+.flash-rate.r-good { border-bottom: 2px solid #3aa676; }
+.flash-rate.r-easy { border-bottom: 2px solid var(--purple); }
+
+.flash-summary { text-align: center; align-items: center; gap: 10px; }
+.flash-summary svg { color: var(--purple); }
+.flash-summary-actions { margin-top: 8px; }
+
+/* ---- Método CIDA ---- */
+.metodo-wrap { display: flex; flex-direction: column; gap: 16px; max-width: 760px; }
+.metodo-block h2 { margin: 0 0 8px; font-size: 17px; }
+.metodo-block > p { color: var(--muted); font-size: 13.5px; line-height: 1.65; margin: 0; }
+.metodo-note { margin-top: 12px !important; font-size: 13px !important; }
+.metodo-list { margin: 4px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
+.metodo-list li { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.metodo-list li b { color: var(--ink); }
+.metodo-danger { border-left: 3px solid #d1596a; }
+.metodo-danger h2 { color: #c04a5b; }
+:root[data-theme="dark"] .metodo-danger h2 { color: #e58090; }
+
+.cida-diagram { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.cida-row { display: flex; gap: 12px; align-items: flex-start; }
+.cida-letra { flex: 0 0 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--purple); color: #fff; font-weight: 800; font-size: 16px; }
+.cida-row b { font-size: 14px; color: var(--ink); }
+.cida-row p { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+.diagram-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 12px; }
+.mini-diagram { border: 1px solid var(--line); border-radius: 14px; padding: 14px; background: var(--cream); }
+.mini-diagram h4 { margin: 0 0 10px; font-size: 12.5px; color: var(--ink); }
+.mini-diagram small { display: block; margin-top: 8px; font-size: 11.5px; color: var(--muted); }
+.lines-def { display: flex; flex-direction: column; gap: 6px; }
+.lines-def > div { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--ink); padding: 7px 10px; border-radius: 8px; background: rgba(111,84,232,.07); }
+.lines-def span { flex: 0 0 auto; font-weight: 800; color: var(--purple); }
+.lines-def em { color: var(--muted); font-style: normal; font-size: 11.5px; }
+.cobit-diagram { display: flex; flex-direction: column; gap: 8px; }
+.cobit-gov, .cobit-ges { font-size: 12px; padding: 9px 11px; border-radius: 8px; line-height: 1.45; }
+.cobit-gov { background: rgba(111,84,232,.12); color: var(--ink); }
+.cobit-ges { background: rgba(58,166,118,.12); color: var(--ink); }
+.cobit-gov b, .cobit-ges b { display: block; }
+.fases-diagram { display: flex; flex-wrap: wrap; gap: 5px; }
+.fases-diagram span { font-size: 11px; font-weight: 700; color: var(--ink); background: rgba(111,84,232,.09); padding: 4px 9px; border-radius: 20px; }
+.sigilo-diagram { display: flex; gap: 8px; }
+.sigilo-diagram > div { flex: 1; text-align: center; padding: 10px 4px; border-radius: 10px; background: rgba(111,84,232,.07); }
+.sigilo-diagram b { display: block; font-size: 11.5px; color: var(--ink); }
+.sigilo-diagram span { font-size: 12px; font-weight: 800; color: var(--purple); }
+
+.metodo-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+
+@media (max-width: 620px) {
+  .flash-front-text { font-size: 17px; }
+  .flash-rate small { display: none; }
+  .flash-ratings { gap: 6px; }
+}
