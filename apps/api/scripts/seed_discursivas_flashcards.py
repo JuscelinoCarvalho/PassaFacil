@@ -17,6 +17,7 @@ from app.models import FlashCard
 DECK_LEIS = "nucleo-duro-leis"
 DECK_GOV = "governanca-ti"
 DECK_PRAZOS = "prazos-e-procedimentos"
+DECK_JURIS = "jurisprudencia"
 
 # (deck, ordem, frente, verso, lei_ref, mnemonic)
 CARDS: list[tuple] = [
@@ -268,6 +269,47 @@ CARDS: list[tuple] = [
     (DECK_PRAZOS, 14, "Marco Civil — prazos de GUARDA de registros?",
      "Registros de CONEXÃO: 1 ano (art. 13). Registros de acesso a APLICAÇÕES: 6 meses (art. 15).",
      "Lei nº 12.965/2014, arts. 13 e 15", "Conexão 1 ano / Aplicação 6 meses"),
+
+    # =========================================================
+    # DECK JURISPRUDÊNCIA — súmulas/teses do STF e do TCU que a VUNESP cobra
+    # (paráfrase — confira o texto oficial antes de decorar)
+    # =========================================================
+    (DECK_JURIS, 1, "STF — a súmula-chave dos Tribunais de Contas (contraditório)?",
+     "SÚMULA VINCULANTE 3: assegura-se contraditório e ampla defesa nos processos do Tribunal de Contas quando a decisão puder anular/revogar ato que beneficie o interessado — EXCETO na apreciação da legalidade do ato de concessão INICIAL de aposentadoria, reforma e pensão.",
+     "STF, Súmula Vinculante 3", "SV 3"),
+    (DECK_JURIS, 2, "STF — prazo do Tribunal de Contas para julgar o registro de aposentadoria?",
+     "TEMA 445: os Tribunais de Contas têm 5 anos, a contar da chegada do processo à Corte, para julgar a legalidade da concessão inicial de aposentadoria/reforma/pensão; ultrapassado o prazo, exige-se contraditório antes da anulação.",
+     "STF, Tema 445 (RE 636.553)", "5 anos"),
+    (DECK_JURIS, 3, "STF — autotutela: a Administração pode desfazer os próprios atos?",
+     "SÚMULA 473: a Administração pode ANULAR seus atos ilegais e REVOGAR os inconvenientes/inoportunos, respeitados os direitos adquiridos e ressalvada a apreciação judicial.",
+     "STF, Súmula 473", "autotutela"),
+    (DECK_JURIS, 4, "STF — a Administração pode declarar a nulidade dos próprios atos?",
+     "SÚMULA 346: sim — a Administração Pública pode declarar a nulidade dos seus próprios atos (par com a Súmula 473).",
+     "STF, Súmula 346", None),
+    (DECK_JURIS, 5, "STF — vedação ao nepotismo?",
+     "SÚMULA VINCULANTE 13: é vedado nomear cônjuge, companheiro ou parente até o 3º grau da autoridade nomeante (ou de servidor de direção da mesma pessoa jurídica) para cargo em comissão/função de confiança, inclusive o nepotismo cruzado.",
+     "STF, Súmula Vinculante 13", "SV 13"),
+    (DECK_JURIS, 6, "STF — falta de advogado no processo administrativo disciplinar (PAD)?",
+     "SÚMULA VINCULANTE 5: a falta de defesa técnica por advogado no PAD não ofende a Constituição.",
+     "STF, Súmula Vinculante 5", "SV 5"),
+    (DECK_JURIS, 7, "STF — cláusula de reserva de plenário?",
+     "SÚMULA VINCULANTE 10: viola a reserva de plenário (art. 97 da CF) a decisão de órgão fracionário que afasta a incidência de lei, no todo ou em parte, sem declarar expressamente a inconstitucionalidade.",
+     "STF, Súmula Vinculante 10", "SV 10"),
+    (DECK_JURIS, 8, "STF — exigir depósito prévio para recorrer na via administrativa?",
+     "SÚMULA VINCULANTE 21: é inconstitucional exigir depósito ou arrolamento prévio de dinheiro/bens como condição de admissibilidade de recurso administrativo.",
+     "STF, Súmula Vinculante 21", "SV 21"),
+    (DECK_JURIS, 9, "STF — o Tribunal de Contas pode apreciar a constitucionalidade de leis/atos?",
+     "SÚMULA 347: o Tribunal de Contas pode apreciar a constitucionalidade de leis e atos do Poder Público no exercício de suas atribuições. ⚠️ O STF tem RELATIVIZADO esse entendimento em decisões recentes — cite com cautela.",
+     "STF, Súmula 347", None),
+    (DECK_JURIS, 10, "STF — proteção de dados pessoais é direito fundamental?",
+     "Sim: o STF reconheceu a proteção de dados pessoais como direito fundamental autônomo (ADI 6.387) e a EC 115/2022 a inseriu no art. 5º, LXXIX, da CF. Reforça a LGPD nos estudos de caso de TI.",
+     "STF, ADI 6.387 + EC 115/2022 (CF, art. 5º, LXXIX)", None),
+    (DECK_JURIS, 11, "STF — requisitos da contratação direta de advocacia por inexigibilidade?",
+     "TEMA 309: exige-se, CUMULATIVAMENTE, notória especialização, preço compatível com o mercado e a inadequação/impossibilidade de prestação pelos quadros efetivos do poder público.",
+     "STF, Tema 309", None),
+    (DECK_JURIS, 12, "STF — recontratação emergencial da mesma empresa além de 12 meses?",
+     "ADI 6.890 (2024): é vedada a recontratação, por dispensa emergencial/calamidade, da mesma empresa sob o mesmo fundamento que ultrapasse o limite de 12 meses.",
+     "STF, ADI 6.890/2024", None),
 ]
 
 

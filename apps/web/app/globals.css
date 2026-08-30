@@ -985,3 +985,8 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
   .flash-rate small { display: none; }
   .flash-ratings { gap: 6px; }
 }
+
+/* Memória de hoje — ações combinadas (questões + cartões) */
+.smart-session-card .memory-actions { display: flex; gap: 10px; flex-wrap: wrap; flex: 0 0 auto; }
+.smart-session-card .memory-actions .primary,
+.smart-session-card .memory-actions .ghost { margin-top: 0; width: auto; flex: 0 0 auto; }

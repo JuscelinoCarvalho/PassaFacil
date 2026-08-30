@@ -566,8 +566,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
     return () => document.removeEventListener("mousedown", onDown);
   }, [profileMenuOpen]);
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
-  const [memoryToday, setMemoryToday] = useState<{ due_skills: number; estimated_minutes: number } | null>(null);
-  const [cardsToday, setCardsToday] = useState<{ due: number; new: number } | null>(null);
+  const [memoryToday, setMemoryToday] = useState<{ due_skills: number; due_cards: number; new_cards: number; estimated_minutes: number } | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -592,11 +591,6 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
       try {
         const mt = await authFetch(`${API_URL}/study/memory-today`, { cache: "no-store" });
         if (mt.ok) setMemoryToday(await mt.json());
-      } catch { /* silencioso */ }
-      // Cartões da discursiva a revisar hoje (memorização espaçada) — best-effort.
-      try {
-        const ct = await authFetch(`${API_URL}/flashcards/today`, { cache: "no-store" });
-        if (ct.ok) setCardsToday(await ct.json());
       } catch { /* silencioso */ }
     } catch {
       setError("A API não respondeu. Confirme se o serviço da porta 9000 está aberto.");
@@ -1017,39 +1011,47 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
                 </div>
               </section>
 
-              {/* Sessão inteligente + Memória de hoje (F4) */}
+              {/* Memória de hoje (F4) — habilidades das questões + cartões da discursiva (mesmo motor FSRS) */}
               <section className="card smart-session-card">
                 <div className="smart-session-copy">
-                  <span className="section-kicker"><Sparkles size={13} /> SESSÃO INTELIGENTE</span>
-                  <h2>{memoryToday?.due_skills ? "🧠 Memória de hoje" : "Estudar agora"}</h2>
+                  <span className="section-kicker"><Sparkles size={13} /> MEMÓRIA DE HOJE</span>
+                  <h2>{(memoryToday?.due_skills || memoryToday?.due_cards) ? "🧠 O que recuperar hoje" : "Estudar agora"}</h2>
                   <p>
-                    {memoryToday?.due_skills
-                      ? `${memoryToday.due_skills} conhecimento${memoryToday.due_skills > 1 ? "s" : ""} para recuperar · ~${memoryToday.estimated_minutes} min. O sistema escolhe o que mais te faz ganhar pontos.`
-                      : "Uma sessão sob medida: revisão do que está em risco, transferência e um pouco de conteúdo novo — sem você ter que escolher."}
+                    {(() => {
+                      const s = memoryToday?.due_skills ?? 0;
+                      const dc = memoryToday?.due_cards ?? 0;
+                      const nc = memoryToday?.new_cards ?? 0;
+                      const parts: string[] = [];
+                      if (s) parts.push(`${s} conhecimento${s > 1 ? "s" : ""} das questões`);
+                      if (dc) parts.push(`${dc} cartão${dc > 1 ? "es" : ""} da discursiva`);
+                      if (!s && !dc && nc) parts.push(`${nc} cartões do núcleo duro esperando você`);
+                      if (!parts.length) return "Uma sessão sob medida: revisão do que está em risco, transferência e um pouco de conteúdo novo — sem você ter que escolher.";
+                      const tail = memoryToday?.estimated_minutes ? ` · ~${memoryToday.estimated_minutes} min` : "";
+                      return `${parts.join(" · ")}${tail} para recuperar por repetição espaçada.`;
+                    })()}
                   </p>
                 </div>
-                <button className="primary" onClick={startSmartSession}>
-                  <Play size={17} fill="currentColor" />{memoryToday?.due_skills ? "Fortalecer memória" : "Começar sessão"}
-                </button>
+                <div className="memory-actions">
+                  {memoryToday?.due_skills ? (
+                    <button className="primary" onClick={startSmartSession}>
+                      <Play size={17} fill="currentColor" />Fortalecer memória
+                    </button>
+                  ) : (memoryToday && (memoryToday.due_cards > 0 || memoryToday.new_cards > 0)) ? (
+                    <button className="primary" onClick={() => navigate("discursive")}>
+                      <RotateCcw size={16} />{memoryToday.due_cards > 0 ? `Revisar cartões (${memoryToday.due_cards})` : "Começar cartões"}
+                    </button>
+                  ) : (
+                    <button className="primary" onClick={startSmartSession}>
+                      <Play size={17} fill="currentColor" />Começar sessão
+                    </button>
+                  )}
+                  {memoryToday?.due_skills && (memoryToday.due_cards > 0 || memoryToday.new_cards > 0) ? (
+                    <button className="ghost" onClick={() => navigate("discursive")}>
+                      <RotateCcw size={16} />{memoryToday.due_cards > 0 ? `Cartões (${memoryToday.due_cards})` : "Cartões novos"}
+                    </button>
+                  ) : null}
+                </div>
               </section>
-
-              {/* Cartões da discursiva — memorização espaçada das leis do núcleo duro */}
-              {cardsToday && (cardsToday.due > 0 || cardsToday.new > 0) && (
-                <section className="card flash-today-card">
-                  <div className="smart-session-copy">
-                    <span className="section-kicker"><RotateCcw size={13} /> DISCURSIVA · MEMORIZAÇÃO</span>
-                    <h2>{cardsToday.due > 0 ? "📇 Cartões para revisar hoje" : "📇 Comece a memorizar as leis"}</h2>
-                    <p>
-                      {cardsToday.due > 0
-                        ? `${cardsToday.due} cartão${cardsToday.due > 1 ? "es" : ""} no ponto de revisão${cardsToday.new > 0 ? ` · ${cardsToday.new} novo${cardsToday.new > 1 ? "s" : ""} para aprender` : ""}. Recordação ativa fixa lei e artigo na memória.`
-                        : `${cardsToday.new} cartões do núcleo duro (LINDB, 14.133, LGPD, controle externo…) esperando você. 5 minutos por dia bastam.`}
-                    </p>
-                  </div>
-                  <button className="primary" onClick={() => navigate("discursive")}>
-                    <RotateCcw size={16} />{cardsToday.due > 0 ? "Revisar cartões" : "Começar cartões"}
-                  </button>
-                </section>
-              )}
 
               <div className="grid">
                 <section className="card plan-card">
@@ -3020,6 +3022,7 @@ const DECK_LABELS: Record<string, string> = {
   "nucleo-duro-leis": "Núcleo duro — Leis",
   "governanca-ti": "Governança de TI",
   "prazos-e-procedimentos": "Prazos e procedimentos",
+  "jurisprudencia": "Jurisprudência (STF/TCU)",
 };
 const deckLabel = (d: string) => DECK_LABELS[d] ?? d;
 

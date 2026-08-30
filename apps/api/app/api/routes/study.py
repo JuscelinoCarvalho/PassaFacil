@@ -14,8 +14,8 @@ from sqlalchemy.orm import selectinload
 from app.api.deps import AdminUser, CurrentUser, DbSession, PaidUser
 from app.core.assets import question_asset_url, resolve_asset
 from app.models import (
-    Attempt, LearningEvent, Lesson, LessonSection, Question, QuestionProvenance,
-    ReviewItem, StudyTask, Subject, Topic, TrialEvent
+    Attempt, FlashCard, FlashCardState, LearningEvent, Lesson, LessonSection,
+    Question, QuestionProvenance, ReviewItem, StudyTask, Subject, Topic, TrialEvent
 )
 from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
 from app.services.adaptive_engine import default_engine
@@ -214,12 +214,33 @@ def questions(
 
 @router.get("/memory-today")
 def memory_today(user: PaidUser, db: DbSession):
-    """'Memória de hoje' (spec §41): quantas habilidades precisam ser recuperadas hoje
-    e uma estimativa de minutos. Base para o card da home e o botão 'Fortalecer memória'."""
+    """'Memória de hoje' (spec §41): o que precisa ser recuperado hoje por repetição
+    espaçada. Une DUAS fontes que usam o mesmo motor FSRS: as habilidades das questões
+    (fila adaptativa) e os cartões da discursiva (núcleo duro). Base do card da home."""
     due = default_review_queue.due_skill_count(db, user.id)
+    now = datetime.now(UTC)
+    due_cards = db.scalar(
+        select(func.count(FlashCardState.id)).where(
+            FlashCardState.user_id == user.id, FlashCardState.next_review_at <= now
+        )
+    ) or 0
+    total_cards = db.scalar(
+        select(func.count(FlashCard.id)).where(FlashCard.is_published.is_(True))
+    ) or 0
+    seen_cards = db.scalar(
+        select(func.count(FlashCardState.id)).where(
+            FlashCardState.user_id == user.id, FlashCardState.last_review.is_not(None)
+        )
+    ) or 0
+    new_cards = max(0, total_cards - seen_cards)
+    # Estimativa de minutos: questão ~1,5 min; cartão vencido ~0,3 min (novos não contam
+    # como "dívida", só sugestão), com teto para não assustar quando há muito cartão novo.
+    minutes = round(due * 1.5 + due_cards * 0.3)
     return {
         "due_skills": due,
-        "estimated_minutes": max(1, round(due * 1.5)) if due else 0,
+        "due_cards": due_cards,
+        "new_cards": new_cards,
+        "estimated_minutes": max(1, minutes) if (due or due_cards) else 0,
     }
 
 
