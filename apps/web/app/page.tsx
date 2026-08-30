@@ -2141,7 +2141,7 @@ function TrialDiscursive({ onBack, onCreate }: { onBack: () => void; onCreate: (
 // ============================ TELAS DE AUTENTICAÇÃO ============================
 
 function AuthGate({ onAuthed, notice = "" }: { onAuthed: (token: string) => void; notice?: string }) {
-  const [mode, setMode] = useState<"login" | "register" | "forgot">("register");
+  const [mode, setMode] = useState<"login" | "register" | "forgot">("login");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -2210,14 +2210,16 @@ function AuthGate({ onAuthed, notice = "" }: { onAuthed: (token: string) => void
         <div className="gate-brand"><Sparkles size={22} /> Passa Fácil</div>
         <h1>{title}</h1>
         <p className="sub">{sub}</p>
-        <div className="gate-ti-notice">
-          <AlertTriangle size={18} />
-          <span>
-            <strong>Atenção:</strong> o conteúdo é focado exclusivamente na especialidade de{" "}
-            <strong>Tecnologia da Informação (TI)</strong> do TCE-SP 2026. As demais especialidades
-            ainda não têm conteúdo completo.
-          </span>
-        </div>
+        {mode === "register" && (
+          <div className="gate-ti-notice">
+            <AlertTriangle size={18} />
+            <span>
+              <strong>Atenção:</strong> o conteúdo é focado exclusivamente na especialidade de{" "}
+              <strong>Tecnologia da Informação (TI)</strong> do TCE-SP 2026. As demais especialidades
+              ainda não têm conteúdo completo.
+            </span>
+          </div>
+        )}
         {notice && !error && <div className="gate-ok">{notice}</div>}
         {error && <div className="gate-error">{error}</div>}
         {info && <div className="gate-ok">{info}</div>}
@@ -2248,15 +2250,20 @@ function AuthGate({ onAuthed, notice = "" }: { onAuthed: (token: string) => void
             {mode === "login" ? "Entrar" : mode === "register" ? "Crie seu acesso (grátis)" : "Enviar link de recuperação"}
           </button>
         </form>
-        <div className="gate-switch">
-          {mode === "login" ? (
-            <>Ainda não tem conta? <button onClick={() => switchMode("register")}>Crie seu acesso (grátis)</button></>
-          ) : mode === "register" ? (
-            <>Já tem conta? <button onClick={() => switchMode("login")}>Entrar</button></>
-          ) : (
-            <>Lembrou a senha? <button onClick={() => switchMode("login")}>Voltar ao login</button></>
-          )}
-        </div>
+        {mode === "login" ? (
+          <div className="gate-register-cta">
+            <span>Não tem cadastro?</span>
+            <button onClick={() => switchMode("register")}>Faça seu cadastro para acesso gratuito</button>
+          </div>
+        ) : (
+          <div className="gate-switch">
+            {mode === "register" ? (
+              <>Já tem conta? <button onClick={() => switchMode("login")}>Entrar</button></>
+            ) : (
+              <>Lembrou a senha? <button onClick={() => switchMode("login")}>Voltar ao login</button></>
+            )}
+          </div>
+        )}
         <nav className="gate-seo-links" aria-label="Conteúdo gratuito">
           <Link href="/questoes-comentadas">Questões comentadas VUNESP</Link>
           <Link href="/edital-tce-sp-2026">Edital TCE-SP 2026</Link>
@@ -3023,6 +3030,7 @@ const DECK_LABELS: Record<string, string> = {
   "governanca-ti": "Governança de TI",
   "prazos-e-procedimentos": "Prazos e procedimentos",
   "jurisprudencia": "Jurisprudência (STF/TCU)",
+  "sumulas-tce-sp": "Súmulas do TCE-SP",
 };
 const deckLabel = (d: string) => DECK_LABELS[d] ?? d;
 

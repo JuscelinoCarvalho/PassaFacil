@@ -18,6 +18,7 @@ DECK_LEIS = "nucleo-duro-leis"
 DECK_GOV = "governanca-ti"
 DECK_PRAZOS = "prazos-e-procedimentos"
 DECK_JURIS = "jurisprudencia"
+DECK_TCESP = "sumulas-tce-sp"
 
 # (deck, ordem, frente, verso, lei_ref, mnemonic)
 CARDS: list[tuple] = [
@@ -310,6 +311,37 @@ CARDS: list[tuple] = [
     (DECK_JURIS, 12, "STF — recontratação emergencial da mesma empresa além de 12 meses?",
      "ADI 6.890 (2024): é vedada a recontratação, por dispensa emergencial/calamidade, da mesma empresa sob o mesmo fundamento que ultrapasse o limite de 12 meses.",
      "STF, ADI 6.890/2024", None),
+
+    # =========================================================
+    # DECK SÚMULAS DO PRÓPRIO TCE-SP (texto oficial — tce.sp.gov.br)
+    # =========================================================
+    (DECK_TCESP, 1, "TCE-SP — o preço ofertado na licitação deve incluir o quê?",
+     "Súmula 10: o preço final do produto ofertado pelos proponentes deve incluir os tributos e demais encargos a serem suportados pelo ofertante.",
+     "Súmula TCE-SP nº 10", None),
+    (DECK_TCESP, 2, "TCE-SP — o tabelamento de um produto dispensa a licitação?",
+     "Súmula 11: NÃO. O simples tabelamento não dispensa a Administração de adquirir o produto mediante o competente certame licitatório.",
+     "Súmula TCE-SP nº 11", None),
+    (DECK_TCESP, 3, "TCE-SP — a aquisição de combustíveis e derivados de petróleo depende de licitação?",
+     "Súmula 12: SIM, depende de licitação (órgãos e entidades estaduais e municipais, da administração direta e indireta).",
+     "Súmula TCE-SP nº 12", None),
+    (DECK_TCESP, 4, "TCE-SP — pode-se exigir documento que configure compromisso de terceiro alheio à disputa?",
+     "Súmula 15: é VEDADA, em procedimento licitatório, a exigência de qualquer documento que configure compromisso de terceiro alheio à disputa.",
+     "Súmula TCE-SP nº 15", None),
+    (DECK_TCESP, 5, "TCE-SP — como se comprova a capacidade técnico-profissional em obras/serviços de engenharia?",
+     "Súmula 23: mediante apresentação da CAT (Certidão de Acervo Técnico).",
+     "Súmula TCE-SP nº 23", "CAT"),
+    (DECK_TCESP, 6, "TCE-SP — é legal exigir recibo da taxa de retirada do edital para participar?",
+     "Súmula 26: é ILEGAL a exigência de recibo de recolhimento da taxa de retirada do edital como condição para participação no certame.",
+     "Súmula TCE-SP nº 26", None),
+    (DECK_TCESP, 7, "TCE-SP — pode-se usar registro de preços para serviços de natureza continuada?",
+     "Súmula 31: é VEDADA a utilização do sistema de registro de preços para contratação de serviços de natureza continuada.",
+     "Súmula TCE-SP nº 31", None),
+    (DECK_TCESP, 8, "TCE-SP — pode-se designar agente político como responsável por adiantamento?",
+     "Súmula 46: é VEDADO designar agente político como responsável por adiantamento (art. 68 da Lei federal nº 4.320/1964).",
+     "Súmula TCE-SP nº 46", None),
+    (DECK_TCESP, 9, "TCE-SP — é permitido pagar sessões extraordinárias ou verbas de gabinete a Vereadores?",
+     "Súmula 52: é VEDADO o pagamento de sessões extraordinárias ou de verbas de gabinete a Vereadores.",
+     "Súmula TCE-SP nº 52", None),
 ]
 
 

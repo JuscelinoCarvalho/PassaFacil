@@ -345,6 +345,117 @@ CASES: list[dict] = [
              "orientação/recomendações de melhoria e preservação da segurança jurídica (LINDB, art. 30) quando não há dolo/erro grosseiro.", 6),
         ],
     },
+    # =====================================================================
+    # TI 4 — Governança e gestão de TI deficientes — COBIT / art. 169
+    # =====================================================================
+    {
+        "slug": "ti-governanca-deficiente",
+        "disciplina": "TI — Governança de TI",
+        "tema": "Órgão sem PDTI, sem comitê de TI e sem gestão de riscos",
+        "display_order": 6,
+        "texto_apoio": (
+            "Auditoria constatou que um órgão da Administração municipal não possui Plano Diretor de Tecnologia "
+            "da Informação (PDTI), não instituiu comitê de governança de TI, não realiza gestão de riscos nem "
+            "gestão de continuidade de serviços, e não mantém indicadores nem monitoramento dos contratos de TI. "
+            "As contratações de tecnologia ocorrem de forma reativa, sem alinhamento ao planejamento "
+            "institucional, e o controle interno não acompanha os investimentos da área."
+        ),
+        "enunciado": (
+            "Na condição de Auditor de Controle Externo, redija texto dissertativo que responda, com fundamento "
+            "legal, aos seguintes tópicos:\n"
+            "a) aponte as deficiências de governança e gestão de TI e os riscos que geram para a Administração;\n"
+            "b) indique os instrumentos e referenciais aplicáveis (planejamento, comitê, gestão de riscos), "
+            "distinguindo governança de gestão, e a base normativa/principiológica;\n"
+            "c) proponha as recomendações do controle externo e situe o papel das linhas de defesa."
+        ),
+        "model_answer": (
+            "Há grave deficiência de governança e gestão de TI. A ausência de PDTI, de comitê de governança de "
+            "TI, de gestão de riscos e de continuidade, e de indicadores/monitoramento, leva a decisões "
+            "desalinhadas do planejamento institucional, a desperdício de recursos e a vulnerabilidade dos "
+            "serviços, em afronta ao princípio da eficiência (art. 37 da CF) e à busca de resultados.\n"
+            "É preciso distinguir GOVERNANÇA de GESTÃO: no COBIT 2019, a governança AVALIA, DIRIGE e MONITORA "
+            "(domínio EDM), enquanto a gestão PLANEJA, CONSTRÓI, ENTREGA e MONITORA (APO, BAI, DSS, MEA). "
+            "Aplicam-se o PDTI (planejamento), o comitê de TI (direção) e a gestão de riscos (ISO 31000/COSO), "
+            "à luz do Referencial de Governança do TCU e do modelo das três linhas de defesa (art. 169 da Lei "
+            "nº 14.133/2021).\n"
+            "Cabe ao Tribunal de Contas recomendar a instituição do PDTI e do comitê de governança de TI, a "
+            "implantação de gestão de riscos e de continuidade e a definição de indicadores e monitoramento dos "
+            "contratos. No modelo em linhas de defesa, os gestores atuam na 1ª linha, o controle interno "
+            "supervisiona na 2ª e o controle externo, como 3ª linha, audita e determina o aprimoramento da "
+            "governança."
+        ),
+        "micro_aula": (
+            "O ponto que vale ponto é NÃO confundir governança (EDM — avalia/dirige/monitora) com gestão "
+            "(planeja/constrói/entrega/monitora). CIDA: Contextualize (governança de TI sob os referenciais "
+            "aplicáveis), Identifique as lacunas (sem PDTI/comitê/riscos), ancore no Dispositivo (art. 37 da CF — "
+            "eficiência; art. 169 da Lei nº 14.133/2021; Referencial do TCU; COBIT/ISO 31000) e proponha a Ação "
+            "(recomendações de PDTI, comitê, gestão de riscos, indicadores)."
+        ),
+        "criteria": [
+            ("N1", "Deficiências e riscos (comando a).",
+             "Aponta a ausência de PDTI, comitê de TI, gestão de riscos/continuidade e indicadores, e os riscos (desalinhamento, "
+             "desperdício, vulnerabilidade), relacionando ao princípio da eficiência (art. 37 da CF).", 7),
+            ("N2", "Instrumentos/referenciais e governança × gestão (comando b).",
+             "Distingue governança (EDM — avalia/dirige/monitora) de gestão (planeja/constrói/entrega/monitora) no COBIT 2019; "
+             "cita PDTI, comitê, gestão de riscos (ISO 31000/COSO), Referencial de Governança do TCU e o art. 169 da Lei nº 14.133/2021.", 7),
+            ("N3", "Recomendações e linhas de defesa (comando c).",
+             "Propõe recomendações concretas (PDTI, comitê, gestão de riscos/continuidade, indicadores) e situa o controle externo "
+             "como 3ª linha de defesa, após gestores (1ª) e controle interno (2ª).", 6),
+        ],
+    },
+    # =====================================================================
+    # TI 5 — Transparência e dados abertos — LAI + Governo Digital
+    # =====================================================================
+    {
+        "slug": "ti-transparencia-dados-abertos",
+        "disciplina": "TI — Transparência e Dados Abertos",
+        "tema": "Portal da transparência incompleto e não legível por máquina",
+        "display_order": 7,
+        "texto_apoio": (
+            "O portal da transparência de um município publica dados apenas em PDF de imagem (não pesquisável), "
+            "com defasagem de meses, sem formato aberto/legível por máquina e sem série histórica. Parte das "
+            "informações só é fornecida mediante pedido formal, e não há publicação proativa de contratos e "
+            "despesas. O órgão alega cumprir a transparência por 'disponibilizar quando solicitado'."
+        ),
+        "enunciado": (
+            "Na condição de Auditor de Controle Externo, redija texto dissertativo que responda, com fundamento "
+            "legal, aos seguintes tópicos:\n"
+            "a) avalie a conformidade da conduta com a transparência ativa e com os requisitos de dados abertos;\n"
+            "b) fundamente na Lei de Acesso à Informação e na legislação de governo digital, indicando os "
+            "dispositivos e princípios;\n"
+            "c) proponha o encaminhamento do controle externo."
+        ),
+        "model_answer": (
+            "A conduta é IRREGULAR. A Lei nº 12.527/2011 (LAI) impõe a transparência ATIVA — o dever de publicar "
+            "informações de interesse coletivo independentemente de pedido (art. 8º) —, de modo que 'disponibilizar "
+            "só quando solicitado' não a cumpre. Publicar em PDF de imagem, defasado e sem série histórica também "
+            "viola o princípio da publicidade (art. 37 da CF), pilar do controle social.\n"
+            "Quanto aos dados abertos, a Lei nº 14.129/2021 (Governo Digital) consagra os dados abertos por "
+            "padrão, o formato legível por máquina e a interoperabilidade, além do 'once only' (não reexigir do "
+            "cidadão dado que a Administração já possui). A regra é a publicidade; o sigilo é exceção e, quando "
+            "cabível, observa os graus e prazos da LAI (art. 24 — 25/15/5 anos).\n"
+            "Cabe ao Tribunal de Contas determinar a publicação proativa de contratos, despesas e demais dados "
+            "obrigatórios em formato aberto, atualizado e legível por máquina, com série histórica, fixando prazo "
+            "para saneamento e acompanhando o cumprimento; persistindo a omissão, apura responsabilidades."
+        ),
+        "micro_aula": (
+            "Transparência ATIVA (publicar sem pedir, LAI art. 8º) × passiva (responder a pedido) é a chave. "
+            "Some os dados abertos por padrão e o formato legível por máquina da Lei nº 14.129/2021, e a "
+            "publicidade como regra (art. 37 da CF; sigilo é exceção — LAI art. 24). CIDA: identifique a omissão, "
+            "ancore no dispositivo e proponha a Ação (publicar proativamente em formato aberto, com prazo)."
+        ),
+        "criteria": [
+            ("N1", "Transparência ativa e dados abertos (comando a).",
+             "Conclui pela irregularidade; aponta o descumprimento da transparência ATIVA (publicar independe de pedido) e a "
+             "impropriedade do PDF-imagem defasado sem formato aberto/legível por máquina.", 7),
+            ("N2", "Fundamentação LAI + Governo Digital (comando b).",
+             "Fundamenta na LAI (Lei nº 12.527/2011, art. 8º — transparência ativa; art. 24 — sigilo excepcional) e na Lei nº "
+             "14.129/2021 (dados abertos por padrão, formato legível por máquina, interoperabilidade), com a publicidade do art. 37 da CF.", 7),
+            ("N3", "Encaminhamento do controle externo (comando c).",
+             "Propõe determinação de publicação proativa em formato aberto/atualizado com série histórica, prazo para saneamento, "
+             "acompanhamento e apuração de responsabilidades pela omissão.", 6),
+        ],
+    },
 ]
 
 

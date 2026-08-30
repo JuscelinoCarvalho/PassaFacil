@@ -499,6 +499,17 @@ h1 { font-size: clamp(30px, 4vw, 42px); margin-top: 7px; } h2 { font-size: 18px;
 .gate-ti-notice strong { color: #78350f; }
 .gate-switch { text-align: center; margin-top: 18px; font-size: 14px; color: #64748b; }
 .gate-switch button { background: none; border: none; color: #7c3aed; font-weight: 700; cursor: pointer; }
+/* CTA de cadastro embaixo do login — visível e clara (não escondida) */
+.gate-register-cta { margin-top: 20px; padding: 14px; border: 1px solid #e6e2f7; border-radius: 12px;
+  background: #f7f5ff; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.gate-register-cta span { font-size: 14px; color: #475569; }
+.gate-register-cta button { width: 100%; padding: 11px 14px; border: 1px solid #7c3aed; border-radius: 10px;
+  background: #fff; color: #6d28d9; font-weight: 800; font-size: 14.5px; cursor: pointer; transition: background .15s, color .15s; }
+.gate-register-cta button:hover { background: #7c3aed; color: #fff; }
+:root[data-theme="dark"] .gate-register-cta { background: #221c2e; border-color: #3a2f52; }
+:root[data-theme="dark"] .gate-register-cta span { color: #b9ad97; }
+:root[data-theme="dark"] .gate-register-cta button { background: transparent; border-color: #a78bfa; color: #c4b5fd; }
+:root[data-theme="dark"] .gate-register-cta button:hover { background: #a78bfa; color: #1b1712; }
 .gate-seo-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(100,116,139,0.18); }
 .gate-seo-links a { font-size: 12.5px; color: #64748b; text-decoration: none; }
 .gate-seo-links a:hover { color: #7c3aed; text-decoration: underline; }
