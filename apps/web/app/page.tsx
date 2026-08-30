@@ -3019,6 +3019,7 @@ type FlashCardT = { id: string; deck: string; frente: string; verso: string; lei
 const DECK_LABELS: Record<string, string> = {
   "nucleo-duro-leis": "Núcleo duro — Leis",
   "governanca-ti": "Governança de TI",
+  "prazos-e-procedimentos": "Prazos e procedimentos",
 };
 const deckLabel = (d: string) => DECK_LABELS[d] ?? d;
 

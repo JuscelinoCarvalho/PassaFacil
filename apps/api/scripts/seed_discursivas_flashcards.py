@@ -16,6 +16,7 @@ from app.models import FlashCard
 
 DECK_LEIS = "nucleo-duro-leis"
 DECK_GOV = "governanca-ti"
+DECK_PRAZOS = "prazos-e-procedimentos"
 
 # (deck, ordem, frente, verso, lei_ref, mnemonic)
 CARDS: list[tuple] = [
@@ -189,6 +190,84 @@ CARDS: list[tuple] = [
     (DECK_GOV, 5, "Gestão de riscos — etapas e as respostas ao risco (mnemônico)?",
      "Identificar → Analisar → Avaliar → Tratar. Respostas A-T-M-C: Aceitar, Transferir, Mitigar, Compartilhar/evitar.",
      "ISO 31000 / COSO ERM", "A-T-M-C"),
+
+    # =========================================================
+    # DECK LEIS — modalidades (QUANDO usar cada uma)
+    # =========================================================
+    (DECK_LEIS, 66, "Lei 14.133 — quando usar PREGÃO?",
+     "Para aquisição de BENS e SERVIÇOS COMUNS (padrões de qualidade objetivamente definidos por especificações usuais), julgamento por menor preço ou maior desconto. VEDADO para serviços técnicos de natureza predominantemente intelectual.",
+     "Lei nº 14.133/2021, art. 6º, XLI, e art. 29", None),
+    (DECK_LEIS, 67, "Lei 14.133 — quando usar CONCORRÊNCIA e CONCURSO?",
+     "Concorrência: bens/serviços ESPECIAIS e obras/serviços de engenharia (admite vários critérios de julgamento). Concurso: escolha de trabalho técnico, científico ou artístico, mediante prêmio ou remuneração.",
+     "Lei nº 14.133/2021, art. 6º, XXXVIII e XXXIX", None),
+    (DECK_LEIS, 68, "Lei 14.133 — quando usar LEILÃO e DIÁLOGO COMPETITIVO?",
+     "Leilão: ALIENAÇÃO de bens (imóveis ou móveis inservíveis/apreendidos), por MAIOR LANCE. Diálogo competitivo: objetos de INOVAÇÃO ou de alta complexidade em que a Administração dialoga com licitantes para desenvolver a solução.",
+     "Lei nº 14.133/2021, art. 6º, XL e XLII", None),
+
+    # =========================================================
+    # DECK LEIS — legalidade dos atos (é legal? sim/não) — aplicação
+    # =========================================================
+    (DECK_LEIS, 120, "É LEGAL recontratar a MESMA empresa, por dispensa, sob o mesmo fundamento emergencial, além de 12 meses?",
+     "NÃO — ILEGAL. A contratação emergencial/calamidade tem prazo máximo de 1 ano e veda prorrogação e recontratação da mesma empresa sob o mesmo fundamento (STF, ADI 6.890).",
+     "Lei nº 14.133/2021, art. 75, VIII", None),
+    (DECK_LEIS, 121, "É VÁLIDA a inexigibilidade para contratar advocacia quando a Procuradoria tem capacidade para a causa?",
+     "NÃO — IRREGULAR. O STF (Tema 309) exige, CUMULATIVAMENTE, notória especialização, preço compatível e a inadequação/impossibilidade de atuação dos quadros próprios. Havendo procuradoria capaz, falta esse requisito.",
+     "Lei nº 14.133/2021, art. 74 + STF, Tema 309", None),
+    (DECK_LEIS, 122, "É VÁLIDO aumentar despesa com pessoal nos 180 dias finais do mandato?",
+     "NÃO — o ato é NULO (reestruturação, reajuste ou nomeação que amplie o gasto), mesmo que as parcelas só produzam efeito após o mandato.",
+     "LC nº 101/2000 (LRF), art. 21", None),
+    (DECK_LEIS, 123, "É CONSTITUCIONAL o Executivo limitar por decreto o empenho dos demais Poderes?",
+     "NÃO — INCONSTITUCIONAL. Cada Poder e o MP limitam empenho por ATO PRÓPRIO (LRF, art. 9º); o Executivo só pode alertar, sob pena de violar a separação de Poderes e a autonomia financeira (STF).",
+     "LC nº 101/2000 (LRF), art. 9º", None),
+    (DECK_LEIS, 124, "A Administração pode tratar dados pessoais com base no CONSENTIMENTO do titular?",
+     "Em regra NÃO é a base adequada: o Poder Público trata para execução de políticas públicas (LGPD, art. 7º, III, c/c art. 23). Apontar consentimento é erro grave no estudo de caso.",
+     "Lei nº 13.709/2018 (LGPD), arts. 7º, III e 23", None),
+
+    # =========================================================
+    # DECK PRAZOS E PROCEDIMENTOS — o que a banca adora (prazos entre fases)
+    # =========================================================
+    (DECK_PRAZOS, 1, "Lei 14.133 — o que caracteriza a INVERSÃO de fases como regra?",
+     "O JULGAMENTO das propostas ocorre ANTES da habilitação (só se habilita o vencedor). A habilitação pode, excepcionalmente e por ato motivado, anteceder o julgamento.",
+     "Lei nº 14.133/2021, arts. 17 e 62", None),
+    (DECK_PRAZOS, 2, "Lei 14.133 — prazo para IMPUGNAR o edital ou pedir esclarecimento?",
+     "Até 3 dias úteis ANTES da data de abertura do certame; a Administração responde em até 3 dias úteis.",
+     "Lei nº 14.133/2021, art. 164", "impugnação: 3 dias úteis"),
+    (DECK_PRAZOS, 3, "Lei 14.133 — prazo do RECURSO administrativo e das contrarrazões?",
+     "3 dias úteis para o recurso e 3 dias úteis para as contrarrazões, contados da intimação. A fase recursal é ÚNICA (após habilitação e julgamento).",
+     "Lei nº 14.133/2021, art. 165", "recurso: 3 dias úteis"),
+    (DECK_PRAZOS, 4, "Lei 14.133 — prazos mínimos de DIVULGAÇÃO do edital (exemplos-chave)?",
+     "Contados da publicação até a apresentação de propostas (art. 55). Exemplos: bens/serviços comuns por menor preço = 8 dias úteis; obras/serviços comuns de engenharia = 10 dias úteis; leilão = 15 dias úteis; concurso e melhor técnica/técnica e preço = 35 dias úteis.",
+     "Lei nº 14.133/2021, art. 55", None),
+    (DECK_PRAZOS, 5, "Lei 14.133 — duração dos contratos de serviços/fornecimento CONTÍNUOS?",
+     "Até 5 anos (art. 106), prorrogáveis até o limite de 10 anos (art. 107). Contratos de escopo duram até a entrega do objeto.",
+     "Lei nº 14.133/2021, arts. 106 e 107", "5 anos → até 10"),
+    (DECK_PRAZOS, 6, "Cautelar do Tribunal de Contas nas contratações — prazos?",
+     "A Corte de Contas assina 10 dias úteis para o órgão prestar informações e delibera sobre o mérito em 25 dias úteis, prorrogável uma única vez por igual período.",
+     "Lei nº 14.133/2021, art. 171", "10 / 25 dias úteis"),
+    (DECK_PRAZOS, 7, "LAI — prazo para responder ao pedido de acesso à informação?",
+     "Resposta imediata; não sendo possível, em até 20 dias, prorrogáveis por mais 10 dias mediante justificativa.",
+     "Lei nº 12.527/2011 (LAI), art. 11", "20 + 10 dias"),
+    (DECK_PRAZOS, 8, "LAI — prazo de recurso diante da negativa de acesso?",
+     "10 dias a contar da ciência da negativa, dirigido à autoridade hierarquicamente superior à que negou.",
+     "Lei nº 12.527/2011 (LAI), art. 15", "10 dias"),
+    (DECK_PRAZOS, 9, "LRF — prazo para LIMITAR EMPENHO quando a receita frustra as metas?",
+     "30 dias após verificado, ao fim de um bimestre, que a arrecadação pode não comportar as metas fiscais; cada Poder e o MP limitam por ato próprio.",
+     "LC nº 101/2000 (LRF), art. 9º", "30 dias"),
+    (DECK_PRAZOS, 10, "LRF — vedação de despesa com pessoal no FIM DE MANDATO?",
+     "É nulo o ato que resulte aumento de despesa com pessoal nos 180 dias anteriores ao fim do mandato do titular do Poder.",
+     "LC nº 101/2000 (LRF), art. 21", "180 dias"),
+    (DECK_PRAZOS, 11, "LRF — periodicidade dos relatórios fiscais?",
+     "Relatório Resumido da Execução Orçamentária (RREO): BIMESTRAL (art. 52). Relatório de Gestão Fiscal (RGF): QUADRIMESTRAL (art. 54).",
+     "LC nº 101/2000 (LRF), arts. 52 e 54", "RREO bimestral / RGF quadrimestral"),
+    (DECK_PRAZOS, 12, "LGPD — prazo para comunicar incidente de segurança?",
+     "A lei exige comunicação 'em prazo razoável' à ANPD e ao titular (art. 48); a ANPD regulamentou o prazo em dias úteis — confira o número vigente antes da prova.",
+     "Lei nº 13.709/2018 (LGPD), art. 48", None),
+    (DECK_PRAZOS, 13, "Improbidade — prazo de prescrição após a Lei 14.230/2021?",
+     "8 anos, contados da ocorrência do fato ou, na infração permanente, do dia em que cessou.",
+     "Lei nº 8.429/1992, art. 23 (red. Lei nº 14.230/2021)", "8 anos"),
+    (DECK_PRAZOS, 14, "Marco Civil — prazos de GUARDA de registros?",
+     "Registros de CONEXÃO: 1 ano (art. 13). Registros de acesso a APLICAÇÕES: 6 meses (art. 15).",
+     "Lei nº 12.965/2014, arts. 13 e 15", "Conexão 1 ano / Aplicação 6 meses"),
 ]
 
 
