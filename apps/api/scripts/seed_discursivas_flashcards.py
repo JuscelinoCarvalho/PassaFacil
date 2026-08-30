@@ -272,35 +272,36 @@ CARDS: list[tuple] = [
      "Lei nº 12.965/2014, arts. 13 e 15", "Conexão 1 ano / Aplicação 6 meses"),
 
     # =========================================================
-    # DECK JURISPRUDÊNCIA — súmulas/teses do STF e do TCU que a VUNESP cobra
-    # (paráfrase — confira o texto oficial antes de decorar)
+    # DECK JURISPRUDÊNCIA — súmulas/teses do STF que a VUNESP cobra
+    # Súmulas com TEXTO OFICIAL VERBATIM (fonte: portal.stf.jus.br, 2026-08-30).
+    # Cards 2/10/11/12 são teses/decisões (Temas/ADI), não súmulas.
     # =========================================================
     (DECK_JURIS, 1, "STF — a súmula-chave dos Tribunais de Contas (contraditório)?",
-     "SÚMULA VINCULANTE 3: assegura-se contraditório e ampla defesa nos processos do Tribunal de Contas quando a decisão puder anular/revogar ato que beneficie o interessado — EXCETO na apreciação da legalidade do ato de concessão INICIAL de aposentadoria, reforma e pensão.",
+     "SÚMULA VINCULANTE 3 (STF): Nos processos perante o Tribunal de Contas da União asseguram-se o contraditório e a ampla defesa quando da decisão puder resultar anulação ou revogação de ato administrativo que beneficie o interessado, excetuada a apreciação da legalidade do ato de concessão inicial de aposentadoria, reforma e pensão.",
      "STF, Súmula Vinculante 3", "SV 3"),
     (DECK_JURIS, 2, "STF — prazo do Tribunal de Contas para julgar o registro de aposentadoria?",
      "TEMA 445: os Tribunais de Contas têm 5 anos, a contar da chegada do processo à Corte, para julgar a legalidade da concessão inicial de aposentadoria/reforma/pensão; ultrapassado o prazo, exige-se contraditório antes da anulação.",
      "STF, Tema 445 (RE 636.553)", "5 anos"),
     (DECK_JURIS, 3, "STF — autotutela: a Administração pode desfazer os próprios atos?",
-     "SÚMULA 473: a Administração pode ANULAR seus atos ilegais e REVOGAR os inconvenientes/inoportunos, respeitados os direitos adquiridos e ressalvada a apreciação judicial.",
+     "SÚMULA 473 (STF): A administração pode anular seus próprios atos, quando eivados de vícios que os tornam ilegais, porque deles não se originam direitos; ou revogá-los, por motivo de conveniência ou oportunidade, respeitados os direitos adquiridos, e ressalvada, em todos os casos, a apreciação judicial.",
      "STF, Súmula 473", "autotutela"),
     (DECK_JURIS, 4, "STF — a Administração pode declarar a nulidade dos próprios atos?",
-     "SÚMULA 346: sim — a Administração Pública pode declarar a nulidade dos seus próprios atos (par com a Súmula 473).",
+     "SÚMULA 346 (STF): A administração pública pode declarar a nulidade dos seus próprios atos.",
      "STF, Súmula 346", None),
     (DECK_JURIS, 5, "STF — vedação ao nepotismo?",
-     "SÚMULA VINCULANTE 13: é vedado nomear cônjuge, companheiro ou parente até o 3º grau da autoridade nomeante (ou de servidor de direção da mesma pessoa jurídica) para cargo em comissão/função de confiança, inclusive o nepotismo cruzado.",
+     "SÚMULA VINCULANTE 13 (STF): A nomeação de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, inclusive, da autoridade nomeante ou de servidor da mesma pessoa jurídica investido em cargo de direção, chefia ou assessoramento, para o exercício de cargo em comissão ou de confiança ou, ainda, de função gratificada na administração pública direta e indireta em qualquer dos Poderes da União, dos Estados, do Distrito Federal e dos Municípios, compreendido o ajuste mediante designações recíprocas, viola a Constituição Federal.",
      "STF, Súmula Vinculante 13", "SV 13"),
     (DECK_JURIS, 6, "STF — falta de advogado no processo administrativo disciplinar (PAD)?",
-     "SÚMULA VINCULANTE 5: a falta de defesa técnica por advogado no PAD não ofende a Constituição.",
+     "SÚMULA VINCULANTE 5 (STF): A falta de defesa técnica por advogado no processo administrativo disciplinar não ofende a Constituição.",
      "STF, Súmula Vinculante 5", "SV 5"),
     (DECK_JURIS, 7, "STF — cláusula de reserva de plenário?",
-     "SÚMULA VINCULANTE 10: viola a reserva de plenário (art. 97 da CF) a decisão de órgão fracionário que afasta a incidência de lei, no todo ou em parte, sem declarar expressamente a inconstitucionalidade.",
+     "SÚMULA VINCULANTE 10 (STF): Viola a cláusula de reserva de plenário (CF, artigo 97) a decisão de órgão fracionário de tribunal que, embora não declare expressamente a inconstitucionalidade de lei ou ato normativo do poder público, afasta sua incidência, no todo ou em parte.",
      "STF, Súmula Vinculante 10", "SV 10"),
     (DECK_JURIS, 8, "STF — exigir depósito prévio para recorrer na via administrativa?",
-     "SÚMULA VINCULANTE 21: é inconstitucional exigir depósito ou arrolamento prévio de dinheiro/bens como condição de admissibilidade de recurso administrativo.",
+     "SÚMULA VINCULANTE 21 (STF): É inconstitucional a exigência de depósito ou arrolamento prévios de dinheiro ou bens para admissibilidade de recurso administrativo.",
      "STF, Súmula Vinculante 21", "SV 21"),
     (DECK_JURIS, 9, "STF — o Tribunal de Contas pode apreciar a constitucionalidade de leis/atos?",
-     "SÚMULA 347: o Tribunal de Contas pode apreciar a constitucionalidade de leis e atos do Poder Público no exercício de suas atribuições. ⚠️ O STF tem RELATIVIZADO esse entendimento em decisões recentes — cite com cautela.",
+     "SÚMULA 347 (STF): O Tribunal de Contas, no exercício de suas atribuições, pode apreciar a constitucionalidade das leis e dos atos do Poder Público. ⚠️ O STF tem relativizado esse entendimento em decisões recentes — cite com cautela.",
      "STF, Súmula 347", None),
     (DECK_JURIS, 10, "STF — proteção de dados pessoais é direito fundamental?",
      "Sim: o STF reconheceu a proteção de dados pessoais como direito fundamental autônomo (ADI 6.387) e a EC 115/2022 a inseriu no art. 5º, LXXIX, da CF. Reforça a LGPD nos estudos de caso de TI.",
@@ -313,34 +314,35 @@ CARDS: list[tuple] = [
      "STF, ADI 6.890/2024", None),
 
     # =========================================================
-    # DECK SÚMULAS DO PRÓPRIO TCE-SP (texto oficial — tce.sp.gov.br)
+    # DECK SÚMULAS DO PRÓPRIO TCE-SP — TEXTO OFICIAL VERBATIM
+    # (fonte: tce.sp.gov.br/boletim-de-jurisprudencia/sumulas, 2026-08-30)
     # =========================================================
     (DECK_TCESP, 1, "TCE-SP — o preço ofertado na licitação deve incluir o quê?",
-     "Súmula 10: o preço final do produto ofertado pelos proponentes deve incluir os tributos e demais encargos a serem suportados pelo ofertante.",
+     "Súmula nº 10 (TCE-SP): O preço final do produto ofertado pelos proponentes deve incluir os tributos e demais encargos a serem suportados pelo ofertante.",
      "Súmula TCE-SP nº 10", None),
     (DECK_TCESP, 2, "TCE-SP — o tabelamento de um produto dispensa a licitação?",
-     "Súmula 11: NÃO. O simples tabelamento não dispensa a Administração de adquirir o produto mediante o competente certame licitatório.",
+     "Súmula nº 11 (TCE-SP): Não basta o simples tabelamento de um produto para dispensar a administração pública de adquiri-lo mediante o competente certame licitatório.",
      "Súmula TCE-SP nº 11", None),
     (DECK_TCESP, 3, "TCE-SP — a aquisição de combustíveis e derivados de petróleo depende de licitação?",
-     "Súmula 12: SIM, depende de licitação (órgãos e entidades estaduais e municipais, da administração direta e indireta).",
+     "Súmula nº 12 (TCE-SP): Depende de licitação a aquisição de combustíveis e derivados de petróleo pelos órgãos e entidades da administração pública estadual e municipal, direta e indireta, aí incluídas as fundações instituídas pelo poder público e empresas sob seu controle, não podendo eventual dispensa fundar-se no inciso VIII do artigo 24 da Lei nº 8.666, de 21 de junho de 1993.",
      "Súmula TCE-SP nº 12", None),
     (DECK_TCESP, 4, "TCE-SP — pode-se exigir documento que configure compromisso de terceiro alheio à disputa?",
-     "Súmula 15: é VEDADA, em procedimento licitatório, a exigência de qualquer documento que configure compromisso de terceiro alheio à disputa.",
+     "Súmula nº 15 (TCE-SP): Em procedimento licitatório, é vedada a exigência de qualquer documento que configure compromisso de terceiro alheio à disputa.",
      "Súmula TCE-SP nº 15", None),
     (DECK_TCESP, 5, "TCE-SP — como se comprova a capacidade técnico-profissional em obras/serviços de engenharia?",
-     "Súmula 23: mediante apresentação da CAT (Certidão de Acervo Técnico).",
+     "Súmula nº 23 (TCE-SP): Em procedimento licitatório, a comprovação da capacidade técnico-profissional, para obras e serviços de engenharia, se aperfeiçoará mediante a apresentação da CAT (Certidão de Acervo Técnico), devendo o edital fixar as parcelas de maior relevância, vedada a imposição de quantitativos mínimos ou prazos máximos.",
      "Súmula TCE-SP nº 23", "CAT"),
     (DECK_TCESP, 6, "TCE-SP — é legal exigir recibo da taxa de retirada do edital para participar?",
-     "Súmula 26: é ILEGAL a exigência de recibo de recolhimento da taxa de retirada do edital como condição para participação no certame.",
+     "Súmula nº 26 (TCE-SP): É ilegal a exigência de recibo de recolhimento da taxa de retirada do edital, como condição para participação em procedimentos licitatórios.",
      "Súmula TCE-SP nº 26", None),
     (DECK_TCESP, 7, "TCE-SP — pode-se usar registro de preços para serviços de natureza continuada?",
-     "Súmula 31: é VEDADA a utilização do sistema de registro de preços para contratação de serviços de natureza continuada.",
+     "Súmula nº 31 (TCE-SP): Em procedimento licitatório, é vedada a utilização do sistema de registro de preços para contratação de serviços de natureza continuada.",
      "Súmula TCE-SP nº 31", None),
     (DECK_TCESP, 8, "TCE-SP — pode-se designar agente político como responsável por adiantamento?",
-     "Súmula 46: é VEDADO designar agente político como responsável por adiantamento (art. 68 da Lei federal nº 4.320/1964).",
+     "Súmula nº 46 (TCE-SP): É vedado designar agente político como responsável por adiantamento, nos termos do art. 68, da Lei Federal nº 4.320, de 17 de março de 1964.",
      "Súmula TCE-SP nº 46", None),
     (DECK_TCESP, 9, "TCE-SP — é permitido pagar sessões extraordinárias ou verbas de gabinete a Vereadores?",
-     "Súmula 52: é VEDADO o pagamento de sessões extraordinárias ou de verbas de gabinete a Vereadores.",
+     "Súmula nº 52 (TCE-SP): É vedado o pagamento de sessões extraordinárias ou verbas de gabinete a Vereadores.",
      "Súmula TCE-SP nº 52", None),
 ]
 
