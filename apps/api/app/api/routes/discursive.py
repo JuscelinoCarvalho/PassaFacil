@@ -1,13 +1,15 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import DbSession, PaidUser
 from app.models import DiscursiveCase, DiscursiveSubmission, EssayRewrite
 from app.schemas.discursive import DiscursiveSubmitRequest, RewriteRequest, SelfAssessRequest
 from app.services import grading
+from app.services.scheduler import _as_utc
 
 router = APIRouter(prefix="/discursive", tags=["discursive"])
 
@@ -140,6 +142,55 @@ def list_cases(user: PaidUser, db: DbSession):
         }
         for c in cases
     ]
+
+
+@router.get("/today")
+def case_of_the_day(user: PaidUser, db: DbSession):
+    """'Estudo de caso de hoje' (1 por dia): serve o próximo caso ainda NÃO treinado;
+    quando todos já foram feitos, revisita o de escrita mais antiga (revisão espaçada
+    da redação). Estável durante o dia (o mesmo caso fica até ser respondido). Alimenta
+    o 3º card da home."""
+    cases = db.scalars(
+        select(DiscursiveCase)
+        .where(DiscursiveCase.is_published.is_(True), DiscursiveCase.is_demo.is_(False))
+        .order_by(DiscursiveCase.display_order, DiscursiveCase.tema)
+    ).all()
+    if not cases:
+        return {"case": None, "total_cases": 0, "practiced": 0, "done_today": False}
+
+    # Última redação por caso deste aluno.
+    rows = db.execute(
+        select(DiscursiveSubmission.case_id, func.max(DiscursiveSubmission.created_at))
+        .where(DiscursiveSubmission.user_id == user.id)
+        .group_by(DiscursiveSubmission.case_id)
+    ).all()
+    last_by_case = {cid: ts for cid, ts in rows if ts is not None}
+
+    now = datetime.now(UTC)
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    done_today = any(_as_utc(ts) >= today_start for ts in last_by_case.values())
+
+    never = [c for c in cases if c.id not in last_by_case]
+    if never:
+        chosen, is_new = never[0], True
+    else:
+        chosen, is_new = min(cases, key=lambda c: _as_utc(last_by_case[c.id])), False
+
+    return {
+        "case": {
+            "id": chosen.id,
+            "slug": chosen.slug,
+            "tipo": chosen.tipo,
+            "disciplina": chosen.disciplina,
+            "tema": chosen.tema,
+            "pontuacao_maxima": _num(chosen.pontuacao_maxima),
+            "limite_linhas": chosen.limite_linhas,
+            "is_new": is_new,
+        },
+        "total_cases": len(cases),
+        "practiced": len(last_by_case),
+        "done_today": done_today,
+    }
 
 
 @router.get("/cases/{case_id}")

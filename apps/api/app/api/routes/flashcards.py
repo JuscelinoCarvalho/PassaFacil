@@ -21,10 +21,34 @@ router = APIRouter(prefix="/flashcards", tags=["flashcards"])
 
 # Teto de cartões por sessão de estudo (foco > volume; evita fadiga).
 SESSION_LIMIT = 20
+# Teto de cartões NOVOS introduzidos por dia. Repetição espaçada só funciona se o
+# material novo entra dosado — sem isso, a fila de revisão vira bola de neve e nada
+# se fixa. Ritmo "Intenso" escolhido pelo dono (2026-09-05).
+DAILY_NEW_CARDS = 15
 
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def _today_start() -> datetime:
+    return _now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def introduced_today(db, user_id: UUID) -> int:
+    """Quantos cartões NOVOS o aluno já introduziu hoje (estado criado hoje). Base do
+    teto diário de novos — compartilhado com a 'Memória de hoje'."""
+    return db.scalar(
+        select(func.count(FlashCardState.id)).where(
+            FlashCardState.user_id == user_id,
+            FlashCardState.created_at >= _today_start(),
+        )
+    ) or 0
+
+
+def remaining_new_today(db, user_id: UUID) -> int:
+    """Quantos cartões novos ainda cabem hoje (teto - já introduzidos)."""
+    return max(0, DAILY_NEW_CARDS - introduced_today(db, user_id))
 
 
 def _card_public(card: FlashCard, state: FlashCardState | None) -> dict:
@@ -97,7 +121,13 @@ def today(user: PaidUser, db: DbSession):
             FlashCardState.user_id == user.id, FlashCardState.last_review.is_not(None)
         )
     ) or 0
-    return {"due": due, "new": max(0, total - seen)}
+    new_available = max(0, total - seen)
+    return {
+        "due": due,
+        # 'new' = só o que cabe HOJE (dose diária), não o backlog inteiro.
+        "new": min(new_available, remaining_new_today(db, user.id)),
+        "new_backlog": new_available,
+    }
 
 
 @router.get("/study")
@@ -130,11 +160,14 @@ def study(user: PaidUser, db: DbSession, deck: str | None = Query(default=None))
                 due_cards.append((nxt or now, c))
 
     due_cards.sort(key=lambda t: t[0])  # mais atrasados primeiro
-    ordered = [c for _, c in due_cards] + new_cards
+    # Novos entram DOSADOS: só o que ainda cabe no teto diário (o resto espera amanhã).
+    allow_new = remaining_new_today(db, user.id)
+    ordered = [c for _, c in due_cards] + new_cards[:allow_new]
     session = ordered[:SESSION_LIMIT]
     return {
         "due": len(due_cards),
         "new_total": len(new_cards),
+        "new_today": min(len(new_cards), allow_new),
         "cards": [_card_public(c, states.get(c.id)) for c in session],
     }
 

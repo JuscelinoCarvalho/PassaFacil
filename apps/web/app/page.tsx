@@ -566,7 +566,8 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
     return () => document.removeEventListener("mousedown", onDown);
   }, [profileMenuOpen]);
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
-  const [memoryToday, setMemoryToday] = useState<{ due_skills: number; due_cards: number; new_cards: number; estimated_minutes: number } | null>(null);
+  const [memoryToday, setMemoryToday] = useState<{ due_skills: number; due_skills_total?: number; due_cards: number; new_cards: number; new_backlog?: number; daily_new_cards?: number; estimated_minutes: number } | null>(null);
+  const [caseToday, setCaseToday] = useState<{ case: { id: string; tema: string; disciplina: string; tipo: string; pontuacao_maxima: number | null; limite_linhas: number | null; is_new: boolean } | null; done_today: boolean; total_cases: number; practiced: number } | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -591,6 +592,11 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
       try {
         const mt = await authFetch(`${API_URL}/study/memory-today`, { cache: "no-store" });
         if (mt.ok) setMemoryToday(await mt.json());
+      } catch { /* silencioso */ }
+      // Estudo de caso de hoje (1 por dia) — best-effort.
+      try {
+        const ct = await authFetch(`${API_URL}/discursive/today`, { cache: "no-store" });
+        if (ct.ok) setCaseToday(await ct.json());
       } catch { /* silencioso */ }
     } catch {
       setError("A API não respondeu. Confirme se o serviço da porta 9000 está aberto.");
@@ -1011,47 +1017,97 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
                 </div>
               </section>
 
-              {/* Memória de hoje (F4) — habilidades das questões + cartões da discursiva (mesmo motor FSRS) */}
-              <section className="card smart-session-card">
-                <div className="smart-session-copy">
-                  <span className="section-kicker"><Sparkles size={13} /> MEMÓRIA DE HOJE</span>
-                  <h2>{(memoryToday?.due_skills || memoryToday?.due_cards) ? "🧠 O que recuperar hoje" : "Estudar agora"}</h2>
-                  <p>
-                    {(() => {
-                      const s = memoryToday?.due_skills ?? 0;
-                      const dc = memoryToday?.due_cards ?? 0;
-                      const nc = memoryToday?.new_cards ?? 0;
-                      const parts: string[] = [];
-                      if (s) parts.push(`${s} conhecimento${s > 1 ? "s" : ""} das questões`);
-                      if (dc) parts.push(`${dc} cartão${dc > 1 ? "es" : ""} da discursiva`);
-                      if (!s && !dc && nc) parts.push(`${nc} cartões do núcleo duro esperando você`);
-                      if (!parts.length) return "Uma sessão sob medida: revisão do que está em risco, transferência e um pouco de conteúdo novo — sem você ter que escolher.";
-                      const tail = memoryToday?.estimated_minutes ? ` · ~${memoryToday.estimated_minutes} min` : "";
-                      return `${parts.join(" · ")}${tail} para recuperar por repetição espaçada.`;
-                    })()}
-                  </p>
-                </div>
-                <div className="memory-actions">
-                  {memoryToday?.due_skills ? (
+              {/* Memória de hoje (F4) — separada em duas filas: QUESTÕES e LEIS (cartões),
+                  cada uma com a META do dia (tetos diários), para não virar uma montanha. */}
+              <div className="today-split">
+                {/* Fila 1 — Questões (motor adaptativo) */}
+                <section className="card smart-session-card">
+                  <div className="smart-session-copy">
+                    <span className="section-kicker"><Sparkles size={13} /> QUESTÕES DE HOJE</span>
+                    <h2>{memoryToday?.due_skills ? `${memoryToday.due_skills} para revisar` : "Estudar agora"}</h2>
+                    <p>
+                      {(() => {
+                        const s = memoryToday?.due_skills ?? 0;
+                        const tot = memoryToday?.due_skills_total ?? s;
+                        if (!s) return "Nenhuma revisão vencida — faça uma sessão de reforço quando quiser.";
+                        const extra = tot > s ? ` (de ${tot} em risco — o resto vem nos próximos dias)` : "";
+                        return `Conhecimentos que estão prestes a esvair da memória${extra}. Reforce por repetição espaçada.`;
+                      })()}
+                    </p>
+                  </div>
+                  <div className="memory-actions">
                     <button className="primary" onClick={startSmartSession}>
-                      <Play size={17} fill="currentColor" />Fortalecer memória
+                      <Play size={17} fill="currentColor" />{memoryToday?.due_skills ? "Fortalecer memória" : "Começar sessão"}
                     </button>
-                  ) : (memoryToday && (memoryToday.due_cards > 0 || memoryToday.new_cards > 0)) ? (
+                  </div>
+                </section>
+
+                {/* Fila 2 — Leis (cartões da discursiva) */}
+                <section className="card smart-session-card">
+                  <div className="smart-session-copy">
+                    <span className="section-kicker"><RotateCcw size={13} /> LEIS · CARTÕES</span>
+                    <h2>
+                      {(() => {
+                        const dc = memoryToday?.due_cards ?? 0;
+                        const nc = memoryToday?.new_cards ?? 0;
+                        if (!dc && !nc) return "Cartões em dia";
+                        return `${dc + nc} cartõe${dc + nc > 1 ? "s" : ""} hoje`;
+                      })()}
+                    </h2>
+                    <p>
+                      {(() => {
+                        const dc = memoryToday?.due_cards ?? 0;
+                        const nc = memoryToday?.new_cards ?? 0;
+                        const backlog = memoryToday?.new_backlog ?? 0;
+                        if (!dc && !nc) return backlog > 0 ? `Você já bateu a cota de hoje. Faltam ${backlog} leis para introduzir nos próximos dias.` : "Núcleo duro no dia — volte amanhã para a próxima leva.";
+                        const parts: string[] = [];
+                        if (dc) parts.push(`${dc} para revisar`);
+                        if (nc) parts.push(`${nc} nova${nc > 1 ? "s" : ""}`);
+                        const tail = backlog > nc ? ` · ${backlog} leis na fila (dosadas por dia)` : "";
+                        return `${parts.join(" · ")}${tail}.`;
+                      })()}
+                    </p>
+                  </div>
+                  <div className="memory-actions">
                     <button className="primary" onClick={() => navigate("discursive")}>
-                      <RotateCcw size={16} />{memoryToday.due_cards > 0 ? `Revisar cartões (${memoryToday.due_cards})` : "Começar cartões"}
+                      <RotateCcw size={16} />{(memoryToday?.due_cards || memoryToday?.new_cards) ? "Estudar cartões" : "Ver núcleo duro"}
                     </button>
-                  ) : (
-                    <button className="primary" onClick={startSmartSession}>
-                      <Play size={17} fill="currentColor" />Começar sessão
+                  </div>
+                </section>
+
+                {/* Fila 3 — Estudo de caso (1 por dia) */}
+                <section className="card smart-session-card">
+                  <div className="smart-session-copy">
+                    <span className="section-kicker"><FileText size={13} /> ESTUDO DE CASO</span>
+                    <h2>
+                      {caseToday?.done_today ? "Caso de hoje ✓" : (caseToday?.case ? caseToday.case.tema : "Estudo de caso")}
+                    </h2>
+                    <p>
+                      {(() => {
+                        if (caseToday && !caseToday.case) return "Nenhum estudo de caso disponível ainda.";
+                        if (!caseToday?.case) return "Um caso por dia: escreva como auditor e receba correção da IA por critério.";
+                        const c = caseToday.case;
+                        if (caseToday.done_today) return `Você já treinou hoje (${caseToday.practiced}/${caseToday.total_cases} casos). Volte amanhã — ou adiante o próximo.`;
+                        const pts = c.pontuacao_maxima ? ` · até ${c.pontuacao_maxima} pts` : "";
+                        const verbo = c.is_new ? "Novo caso" : "Revisão";
+                        return `${verbo}: ${c.disciplina}${pts}. Escreva como auditor e receba correção por critério.`;
+                      })()}
+                    </p>
+                  </div>
+                  <div className="memory-actions">
+                    <button
+                      className="primary"
+                      disabled={!caseToday?.case}
+                      onClick={() => {
+                        if (caseToday?.case) pendingCaseId = caseToday.case.id;
+                        navigate("discursive");
+                      }}
+                    >
+                      <FileText size={16} />{caseToday?.done_today ? "Fazer outro caso" : (caseToday?.case?.is_new ? "Treinar caso de hoje" : "Revisar um caso")}
                     </button>
-                  )}
-                  {memoryToday?.due_skills && (memoryToday.due_cards > 0 || memoryToday.new_cards > 0) ? (
-                    <button className="ghost" onClick={() => navigate("discursive")}>
-                      <RotateCcw size={16} />{memoryToday.due_cards > 0 ? `Cartões (${memoryToday.due_cards})` : "Cartões novos"}
-                    </button>
-                  ) : null}
-                </div>
-              </section>
+                  </div>
+                </section>
+              </div>
 
               <div className="grid">
                 <section className="card plan-card">
@@ -2859,8 +2915,6 @@ function DiscursiveView() {
     }
   }, []);
 
-  useEffect(() => { loadList(); }, [loadList]);
-
   const openCase = async (id: string) => {
     setBusy(true); setError("");
     try {
@@ -2873,6 +2927,17 @@ function DiscursiveView() {
       setError("Não foi possível abrir o caso.");
     } finally { setBusy(false); }
   };
+
+  // Carrega a lista e, se a home pediu um caso específico ("caso do dia"), abre-o direto.
+  useEffect(() => {
+    loadList();
+    if (pendingCaseId) {
+      const target = pendingCaseId;
+      pendingCaseId = null;
+      openCase(target);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadList]);
 
   const submit = async () => {
     if (!current) return;
@@ -3290,8 +3355,12 @@ function MetodoView({ onGoCartoes, onGoTreino }: { onGoCartoes: () => void; onGo
   );
 }
 
+// Intenção one-shot: a home ("Estudo de caso de hoje") pede para abrir um caso
+// específico direto no treino. Consumida (zerada) ao ser lida.
+let pendingCaseId: string | null = null;
+
 function DiscursivasHub() {
-  const [tab, setTab] = useState<"cartoes" | "metodo" | "treino">("cartoes");
+  const [tab, setTab] = useState<"cartoes" | "metodo" | "treino">(pendingCaseId ? "treino" : "cartoes");
   return (
     <section className="disc-hub">
       <div className="question-top">

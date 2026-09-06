@@ -217,7 +217,14 @@ def memory_today(user: PaidUser, db: DbSession):
     """'Memória de hoje' (spec §41): o que precisa ser recuperado hoje por repetição
     espaçada. Une DUAS fontes que usam o mesmo motor FSRS: as habilidades das questões
     (fila adaptativa) e os cartões da discursiva (núcleo duro). Base do card da home."""
-    due = default_review_queue.due_skill_count(db, user.id)
+    from app.api.routes.flashcards import DAILY_NEW_CARDS, remaining_new_today
+
+    # Teto diário de questões de revisão (ritmo "Intenso"): a fila mostra a META do dia,
+    # não a dívida inteira — assim o número não assusta e o aluno consegue fechar o dia.
+    DAILY_QUESTIONS = 25
+    due_raw = default_review_queue.due_skill_count(db, user.id)
+    due = min(due_raw, DAILY_QUESTIONS)
+
     now = datetime.now(UTC)
     due_cards = db.scalar(
         select(func.count(FlashCardState.id)).where(
@@ -232,15 +239,20 @@ def memory_today(user: PaidUser, db: DbSession):
             FlashCardState.user_id == user.id, FlashCardState.last_review.is_not(None)
         )
     ) or 0
-    new_cards = max(0, total_cards - seen_cards)
+    new_backlog = max(0, total_cards - seen_cards)
+    # Novos entram DOSADOS: só a cota do dia, o resto espera (evita bola de neve).
+    new_cards = min(new_backlog, remaining_new_today(db, user.id))
     # Estimativa de minutos: questão ~1,5 min; cartão vencido ~0,3 min (novos não contam
     # como "dívida", só sugestão), com teto para não assustar quando há muito cartão novo.
-    minutes = round(due * 1.5 + due_cards * 0.3)
+    minutes = round(due * 1.5 + due_cards * 0.3 + new_cards * 0.3)
     return {
-        "due_skills": due,
+        "due_skills": due,             # meta de hoje (com teto)
+        "due_skills_total": due_raw,   # dívida real (para "de X")
         "due_cards": due_cards,
-        "new_cards": new_cards,
-        "estimated_minutes": max(1, minutes) if (due or due_cards) else 0,
+        "new_cards": new_cards,        # cota de cartões novos de hoje
+        "new_backlog": new_backlog,    # total de cartões ainda não vistos
+        "daily_new_cards": DAILY_NEW_CARDS,
+        "estimated_minutes": max(1, minutes) if (due or due_cards or new_cards) else 0,
     }
 
 
