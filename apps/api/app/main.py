@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from sqlalchemy import inspect, text
 
-from app.api.routes import auth, billing, discursive, exams, feedback, flashcards, health, question_bank, reviews, simulations, study
+from app.api.routes import admin, auth, billing, discursive, exams, feedback, flashcards, health, question_bank, reviews, simulations, study
 from app.core.config import settings
 from app.db.base import Base
 from app.db.seed import seed_tce_sp
@@ -72,7 +72,14 @@ def _ensure_columns() -> None:
         "skill_id": uuid_ddl,                 # habilidade primária avaliada (denormalizada)
         "is_transfer": f"BOOLEAN DEFAULT {false_default}",
     }
+    # Telemetria de acesso dos usuários (painel admin). Nullable/default → inserts
+    # atuais seguem funcionando; nenhum dado antigo é tocado.
+    user_additions = {
+        "access_count": "INTEGER DEFAULT 0",
+        "last_seen_at": ts_tz_ddl,
+    }
     plan = [
+        ("users", user_additions),
         ("subscriptions", additions),
         ("discursive_submissions", disc_additions),
         ("questions", question_additions),
@@ -147,3 +154,4 @@ app.include_router(billing.router, prefix=settings.api_v1_prefix)
 app.include_router(discursive.router, prefix=settings.api_v1_prefix)
 app.include_router(flashcards.router, prefix=settings.api_v1_prefix)
 app.include_router(feedback.router, prefix=settings.api_v1_prefix)
+app.include_router(admin.router, prefix=settings.api_v1_prefix)

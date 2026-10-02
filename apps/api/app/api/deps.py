@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Annotated
 from uuid import UUID
 
@@ -37,6 +37,18 @@ def get_current_user(
     user = db.get(User, user_id)
     if not user or not user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuário inválido")
+    # Sinal de atividade p/ o painel admin (online/offline). Throttle de 60s para
+    # não gravar a cada requisição. Best-effort: nunca derruba a requisição.
+    now = datetime.now(timezone.utc)
+    last = user.last_seen_at
+    if last is not None and last.tzinfo is None:
+        last = last.replace(tzinfo=timezone.utc)
+    if last is None or (now - last) >= timedelta(seconds=60):
+        try:
+            user.last_seen_at = now
+            db.commit()
+        except Exception:  # noqa: BLE001
+            db.rollback()
     return user
 
 

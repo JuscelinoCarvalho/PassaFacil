@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
@@ -66,6 +67,8 @@ def register(payload: RegisterRequest, db: DbSession) -> TokenResponse:
         password_hash=hash_password(payload.password),
         email_verified=False,
     )
+    user.access_count = 1
+    user.last_seen_at = datetime.now(timezone.utc)
     db.add(user)
     db.flush()
     gclid = (payload.gclid or "").strip()[:512] or None
@@ -180,6 +183,10 @@ def login(payload: LoginRequest, db: DbSession) -> TokenResponse:
     user = db.scalar(select(User).where(User.email == payload.email.lower()))
     if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="E-mail ou senha inválidos")
+    user.access_count = (user.access_count or 0) + 1
+    user.last_seen_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(user)
     return TokenResponse(access_token=create_access_token(str(user.id)), user=user)
 
 

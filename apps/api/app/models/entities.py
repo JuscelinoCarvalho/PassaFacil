@@ -33,6 +33,11 @@ class User(UUIDMixin, TimestampMixin, Base):
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     email_verified: Mapped[bool] = mapped_column(Boolean, default=False)
 
+    # Telemetria de acesso (painel admin): nº de logins e último sinal de
+    # atividade (atualizado, com throttle, a cada requisição autenticada).
+    access_count: Mapped[int] = mapped_column(Integer, default=0)
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
     subscription: Mapped["Subscription | None"] = relationship(back_populates="user", uselist=False)
     attempts: Mapped[list["Attempt"]] = relationship(back_populates="user")
     study_tasks: Mapped[list["StudyTask"]] = relationship(back_populates="user")

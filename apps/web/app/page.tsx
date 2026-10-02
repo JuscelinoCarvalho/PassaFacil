@@ -37,6 +37,7 @@ import {
   Target,
   TrendingUp,
   Trophy,
+  Users,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -397,6 +398,7 @@ const nav = [
   ["Caderno de erros", CircleAlert, "errors", false],
   ["Banco de questões", Database, "bank", true],
   ["Editor de questões", SquarePen, "editor", true],
+  ["Usuários", Users, "users", true],
   ["Teste grátis", BarChart3, "trial", true],
   ["Aulas em áudio", Headphones, "lessons", false],
 ] as const;
@@ -528,7 +530,7 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "lessons" | "reviews" | "errors" | "bank" | "editor" | "trial" | "soon">("today");
+  const [view, setView] = useState<"today" | "questions" | "test" | "discursive" | "results" | "knowledge" | "lessons" | "reviews" | "errors" | "bank" | "editor" | "users" | "trial" | "soon">("today");
   const [practiceFocus, setPracticeFocus] = useState<"all" | "gaps">("all");
   const [subjectsList, setSubjectsList] = useState<SubjectScope[]>([]);
   const [specialty, setSpecialty] = useState<string>("ti"); // especialidade escolhida
@@ -995,6 +997,8 @@ function StudyApp({ me, onLogout }: { me: Me; onLogout: () => void }) {
             <QuestionBankView />
           ) : view === "editor" && me.is_admin ? (
             <QuestionEditorView />
+          ) : view === "users" && me.is_admin ? (
+            <AdminUsersView />
           ) : view === "trial" && me.is_admin ? (
             <TrialAnalyticsView />
           ) : view === "soon" ? (
@@ -3392,6 +3396,126 @@ type TrialAnalytics = {
   questions: { subject: string; total: number; correct: number; accuracy: number }[];
   discursive: { count: number; avg_length: number; items: { created_at: string; length: number; texto: string }[] };
 };
+
+type AdminUserRow = {
+  id: string;
+  email: string;
+  full_name: string;
+  is_admin: boolean;
+  email_verified: boolean;
+  is_active: boolean;
+  plan: string;
+  created_at: string | null;
+  last_seen_at: string | null;
+  access_count: number;
+  is_online: boolean;
+};
+
+type AdminUsersData = {
+  total: number;
+  online: number;
+  online_window_seconds: number;
+  users: AdminUserRow[];
+};
+
+function fmtDateTime(iso: string | null): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleString("pt-BR", {
+    day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit",
+  });
+}
+
+function AdminUsersView() {
+  const [data, setData] = useState<AdminUsersData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await authFetch(`${API_URL}/admin/users`, { cache: "no-store" });
+      if (!r.ok) throw new Error();
+      setData(await r.json());
+      setError("");
+    } catch {
+      setError("Não foi possível carregar os usuários.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const header = (
+    <div className="question-top">
+      <div>
+        <span className="eyebrow">ADMIN · USUÁRIOS</span>
+        <h1>Usuários da base</h1>
+        <p>Quem está cadastrado, quando entrou, último acesso, quantos acessos e quem está online agora.</p>
+      </div>
+      <div className="chip-row">
+        {data && <span className="chip on">{data.online} online</span>}
+        {data && <span className="chip">{data.total} no total</span>}
+        <button className="chip" onClick={load} disabled={loading}>Atualizar</button>
+      </div>
+    </div>
+  );
+
+  if (loading) return <section className="results-layout">{header}<section className="card empty-state"><LoaderCircle className="spin" /><h2>Carregando usuários...</h2></section></section>;
+  if (error) return <section className="results-layout">{header}<section className="card empty-state"><CircleAlert size={30} /><h2>{error}</h2><button className="primary compact" onClick={load}>Tentar de novo</button></section></section>;
+  if (!data) return null;
+
+  return (
+    <section className="results-layout">
+      {header}
+      {data.users.length === 0 ? (
+        <section className="card empty-state"><Users size={34} /><h1>Nenhum usuário ainda</h1></section>
+      ) : (
+        <section className="card admin-users-card">
+          <div className="admin-users-scroll">
+            <table className="admin-users-table">
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>Status</th>
+                  <th>Plano</th>
+                  <th>Criado em</th>
+                  <th>Último acesso</th>
+                  <th className="num">Acessos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.users.map((u) => (
+                  <tr key={u.id}>
+                    <td>
+                      <div className="admin-user-name">
+                        <b>{u.full_name || "—"}{u.is_admin && <span className="admin-tag">admin</span>}</b>
+                        <span>{u.email}</span>
+                        {!u.email_verified && <span className="admin-unverified">e-mail não confirmado</span>}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={u.is_online ? "status-dot online" : "status-dot offline"}>
+                        <i /> {u.is_online ? "Online" : "Offline"}
+                      </span>
+                    </td>
+                    <td>{u.plan}</td>
+                    <td>{fmtDateTime(u.created_at)}</td>
+                    <td>{fmtDateTime(u.last_seen_at)}</td>
+                    <td className="num">{u.access_count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="admin-users-note">Online = atividade nos últimos {Math.round(data.online_window_seconds / 60)} min.</p>
+        </section>
+      )}
+    </section>
+  );
+}
 
 function TrialAnalyticsView() {
   const [data, setData] = useState<TrialAnalytics | null>(null);
