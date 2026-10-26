@@ -1,0 +1,312 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "desenvolvimento",
+  "subject_name": "Desenvolvimento de Sistemas",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q25",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Analise o seguinte código HTML, que utiliza JavaScript.\n\n<!DOCTYPE html>\n<body>\n<div id=\"valor\"></div>\n<script>\n    var a = 1;\n    var b = 2;\n    if (true) {\n        var a = 2;\n        var b = b + 1;\n        let c = 2;\n    }\n    const resultado = document.getElementById(\"valor\");\n    valor.innerHTML =\n        \"<p>a = \" + a + \"</p>\" +\n        \"<p>b = \" + b + \"</p>\" +\n        \"<p>Tipo da variável c = \" + typeof c + \"</p>\";\n</script>\n</body></html>\n\nAo abrir essa página em um navegador, inicialmente será exibido:",
+      "options": [
+        "a = 2\nb = 3\nTipo da variável c = 2",
+        "a = 2\nb = 1\nTipo da variável c = undefined",
+        "a = 1\nb = 2\nTipo da variável c = undefined",
+        "a = 1\nb = 2\nTipo da variável c = 2",
+        "a = 2\nb = 3\nTipo da variável c = undefined"
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q26",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Considere o seguinte código HTML, que utiliza JavaScript.\n\n<!DOCTYPE html>\n<html><body>\n<p id=\"nome\">Página da Empresa</p>\n<button onclick=\"mudar()\">Modificar texto</button>\n<script>\n    function mudar() {\n        const elemento = document.getElementById(\"nome\");\n        elemento.style.fontWeight = \"bold\";\n        elemento.style.fontStyle = \"italic\";\n    }\n</script>\n</body></html>\n\nAo abrir essa página em um navegador, inicialmente será exibido o texto “Página da Empresa” e um botão “Modificar texto”. Assinale a alternativa correta sobre esse programa.",
+      "options": [
+        "Ao clicar o botão, o texto Página da Empresa será exibido em negrito e itálico. Ao clicar o botão novamente, o texto será exibido no formato anterior.",
+        "Ao clicar o botão pela primeira vez, o texto “Página da Empresa” será exibido em negrito e itálico. Ao clicar o botão novamente, nada irá ocorrer.",
+        "Ao clicar o botão aparecerá uma janela com uma mensagem de confirmação de alteração da forma do texto “Página da Empresa”.",
+        "Ao passar o cursor do mouse no botão, o texto Página da Empresa será exibido em negrito e itálico. Ao retirar o cursor do mouse do botão, o texto continuará a ser exibido em negrito e itálico.",
+        "Ao passar o cursor do mouse no botão, o texto Página da Empresa será exibido em negrito e itálico. Ao retirar o cursor do mouse do botão, o texto será exibido no formato anterior."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q27",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Considere o seguinte código HTML, que utiliza JavaScript.\n\n<!DOCTYPE html>\n<body>\n<button id=\"botao\">\n    <span id=\"texto\">Clique nesse botão</span>\n</button>\n<p id=\"valor\"></p>\n<script>\n    const botao = document.getElementById(\"botao\");\n    const texto = document.getElementById(\"texto\");\n    const valor = document.getElementById(\"valor\");\n    botao.addEventListener(\"click\", function () {\n        valor.textContent += \"casa \";\n    });\n    texto.addEventListener(\"click\", function (event) {\n        valor.textContent += \"bola \";\n        event.stopPropagation();\n    });\n</script>\n</body></html>\n\nAo abrir essa página em um navegador,",
+      "options": [
+        "é exibido um botão que, a cada clique sobre o texto “Clique nesse botão”, exibe a palavra bola.",
+        "é exibido um botão que, a cada clique sobre o texto “Clique nesse botão”, exibe a palavra casa.",
+        "é exibido um botão que, ao se clicar em uma área do botão fora do texto “Clique nesse botão”, exibe a palavra bola.",
+        "é exibida a palavra casa.",
+        "é exibida a palavra bola."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q37",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "Na linguagem JavaScript, a propriedade Number.MAX_SAFE_INTEGER indica o maior valor inteiro que pode ser representado com segurança.\n\nAssinale a alternativa que apresenta o valor correto dessa propriedade, considerando o símbolo ^ como operador de exponenciação.",
+      "options": [
+        "2^32 - 1",
+        "2^52 - 1",
+        "2^51 - 1",
+        "2^53 - 1",
+        "2^31 - 1"
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q38",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "Considere o seguinte trecho de código na linguagem PHP 8.x:\n\n$n = 6;\nunset($n);\n\nApós a execução da função unset($n), é correto afirmar que a variável $n",
+      "options": [
+        "deixa de ser definida.",
+        "passa a assumir valor VOID.",
+        "passa a assumir valor 0.",
+        "passa a assumir valor de string vazia.",
+        "permanece armazenando o valor 6."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q39",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "Os tipos double, float e long são utilizados na linguagem C# para representar números.\n\nAssinale a alternativa que apresenta, respectivamente, os tamanhos desses tipos de dados.",
+      "options": [
+        "4 bytes, 4 bytes e 4 bytes.",
+        "8 bytes, 8 bytes e 8 bytes.",
+        "8 bytes, 4 bytes e 8 bytes.",
+        "4 bytes, 8 bytes e 8 bytes.",
+        "4 bytes, 8 bytes e 4 bytes."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q40",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Requisições HTTP (HTTP Requests) são realizadas por meio de métodos. Esses métodos podem ser classificados como seguros e/ou idempotentes.\n\nAssinale a alternativa que apresenta um método que é idempotente, mas não seguro.",
+      "options": [
+        "PUT",
+        "GET",
+        "POST",
+        "CONNECT",
+        "HEAD"
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q41",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "Um usuário utilizou o seguinte prompt para interagir com um LLM:\n\nExplique qual é o papel de um auditor.\n\nCom base nas técnicas de engenharia de prompts, é correto afirmar que o usuário utilizou uma abordagem do tipo",
+      "options": [
+        "Few-shot prompting.",
+        "One-shot prompting.",
+        "Chain prompting.",
+        "Multi-shot prompting.",
+        "Zero-shot prompting."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q42",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "LLMs são modelos capazes de processar solicitações escritas em linguagem natural.\n\nNesse tipo de modelo, o conceito de token representa",
+      "options": [
+        "um Transformer que compõe o modelo.",
+        "uma resposta retornada pelo modelo.",
+        "uma consulta à web realizada pelo modelo.",
+        "uma unidade de texto processada pelo modelo.",
+        "um prompt processado pelo modelo."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q43",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "Uma das tarefas em que o aprendizado de máquina não supervisionado é utilizado é a detecção de anomalias. Nesse tipo de tarefa, alguns modelos possuem um hiperparâmetro denominado contamination.\n\nA função desse hiperparâmetro é",
+      "options": [
+        "habilitar o bootstraping.",
+        "indicar a proporção esperada de anomalias nos dados.",
+        "ajustar o número de features válidas.",
+        "definir a proporção dos dados de treinamento utilizada pelo modelo.",
+        "configurar a função de perda do modelo."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q44",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Analise o algoritmo apresentado a seguir, na forma de uma pseudolinguagem (português estruturado), que no seu início lê dois valores.\n\nInício\n    Inteiro: va1, va2, va3, cont;\n    va1 ← 8;\n    Leia (va2, va3);\n    Para cont de 1 até 5 faça\n    [\n        va1 ← va1 + va2 − va3;\n        Se (va1 ≥ 10)\n            Então\n                va3 ← va2+1;\n            Senão\n                va2 ← va3-1;\n    ]\n    Imprima va1;\nFim.\n\nCaso os valores lidos para as variáveis va2 e va3 tenham sido, respectivamente, 5 e 3, o valor da variável va1 impresso ao final do programa será:",
+      "options": [
+        "8",
+        "9",
+        "10",
+        "7",
+        "6"
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q45",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Deseja-se executar o seguinte programa, elaborado na forma de uma pseudolinguagem (português estruturado).\n\nInício\n    Inteiro: i, j;\n    Inteiro: M[1..3], N[1..3];\n    Para i de 1 até 3 faça\n    [\n        M[i] ← 0;\n        N[i] ← 0;\n    ]\n    Para i de 1 até 3 faça\n    [\n        M[i] ← M[i] + i;\n        Para j de 1 até 3 faça\n        [\n            N[j] ← N[j] + 2*j;\n        ]\n    ]\nFim.\n\nAo final da execução desse programa, a soma de todos os valores dos vetores M e N será igual a:",
+      "options": [
+        "24",
+        "30",
+        "42",
+        "48",
+        "54"
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q46",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Uma estrutura de dados do tipo pilha, em um determinado instante, encontra-se com os seguintes dados armazenados, conforme ilustrado na figura, em que SP é o Stack Pointer atual da pilha. Do topo (apontado por SP) para a base, os valores são: 30, 14, 17, 20.\n\nConsidere as operações padrão PUSH e POP associadas a essa estrutura de dados, e assuma x, y e z como variáveis. As operações a seguir, na ordem apresentada, foram executadas sobre essa estrutura de dados.\n\nPOP x\nPOP y\nPOP z\nPUSH x\nPUSH z\nPUSH y\nPOP x\nPOP y\nPOP z\n\nAo final dessa execução, os valores presentes nas variáveis x, y e z, respectivamente, serão:",
+      "options": [
+        "14, 17 e 30.",
+        "14, 30 e 17.",
+        "17, 30 e 14.",
+        "17, 14 e 30.",
+        "30, 17 e 14."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q47",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Ao desenvolver um programa considerando o paradigma da programação estruturada, pode-se chamar uma sub-rotina passando parâmetros por valor ou por referência.\n\nAssinale a alternativa correta a respeito.",
+      "options": [
+        "Na chamada por referência, a passagem de uma estrutura de dados grande para a sub-rotina é facilitada por ser necessária a passagem do endereço da estrutura, e não de todo o seu conteúdo.",
+        "Na chamada por valor, a sub-rotina recebe o endereço de memória onde se encontra a variável original no programa chamador.",
+        "Na chamada por referência, a sub-rotina recebe uma cópia do valor da variável, deixando esse processo mais seguro, sem risco de se alterar a variável original no programa chamador.",
+        "Tanto na chamada por valor quanto na chamada por referência, uma modificação efetuada no parâmetro dentro da sub-rotina não altera o valor da variável original no programa chamador.",
+        "Na chamada por valor, uma eventual modificação efetuada no parâmetro dentro da sub-rotina altera o valor da variável original no programa chamador."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q52",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Considere o seguinte código JavaScript em uma página HTML:\n\n<script>\nmb1 = document.getElementById(\"mb1\");\nmb1.addEventListener(\"click\",f1);\nmb1.addEventListener(\"click\",f2);\nmb1.addEventListener(\"click\",f3);\nmb1.removeEventListener(\"click\",f3);\nfunction f1( ) { console.log(\"a\"); }\nfunction f2( ) { console.log(\"b\"); }\nfunction f3( ) { console.log(\"c\"); }\n</script>\n\nem que mb1 corresponde a um elemento do tipo button declarado da seguinte maneira:\n\n<button id=\"mb1\">mb1</button>\n\nApós a carga completa da página, quando o usuário clicar no botão mb1, a saída gerada no console será:",
+      "options": [
+        "a\nb",
+        "nenhuma (saída vazia).",
+        "a",
+        "a\nb\nc",
+        "a\nb\nc\nc"
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q53",
+      "topic_slug": "desenvolvimento-2",
+      "statement": "O CLR (Common Language Runtime) da plataforma .NET 10",
+      "options": [
+        "é capaz de executar bytecode Java nativamente.",
+        "é capaz de interpretar código-fonte C# diretamente, oferecendo ganho de desempenho por dispensar o uso do compilador Just-In-Time (JIT).",
+        "funciona exclusivamente em ambientes Windows, sendo parte do ecossistema da Microsoft.",
+        "embora suporte os sistemas operacionais Linux e Windows, não pode ser usado para aplicações web.",
+        "está disponível para arquiteturas de máquina x64 e Arm64."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q54",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "A especificação do Jakarta EE (evolução do Java EE e J2EE) que provê suporte para a criação de web services RESTful é historicamente conhecida como",
+      "options": [
+        "JNDI.",
+        "JAX-WS.",
+        "JAX-RS.",
+        "JAXP.",
+        "JDBC."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q55",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "No contexto de servlets Java, considerando a classe HttpServlet, assinale a alternativa correta.",
+      "options": [
+        "Toda vez que uma requisição é recebida, com base em seu cabeçalho, o container de servlets deve decidir se chama o método service() ou doPost(), ou um ou outro, para processá-la.",
+        "O método init() é chamado toda vez que uma requisição é recebida.",
+        "A implementação dos métodos doPut() e doPost() em uma classe derivada de HttpServlet são mutuamente exclusivas, não podendo existir simultaneamente.",
+        "A implementação padrão do método doHead() chama o método doGet() internamente.",
+        "O método destroy() é chamado toda vez que uma requisição termina de ser processada, e pode ser usado para fechar conexões com banco de dados."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q56",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Em uma aplicação do tipo Minimal API desenvolvida em ASP.Net Core, foi encontrada a seguinte linha de código, onde builder é um WebApplicationBuilder:\n\nbuilder.Services.AddOpenApi();\n\nA intenção dessa linha de código é",
+      "options": [
+        "registrar um serviço de compatibilidade com a linguagem Java, permitindo que seja possível encaminhar automaticamente certas requisições recebidas pela API a contêineres de servlets.",
+        "registrar um serviço de geração de documentação no padrão OpenAPI, por meio da extração de metadados dos endpoints.",
+        "informar que devem ser aceitas requisições HTTP (sem criptografia) e não devem ser aceitas requisições HTTPS (criptografadas).",
+        "inicializar o servidor web que responderá às requisições recebidas pela API, por meio da abertura (open) das portas TCP associadas ao protocolo HTTP e HTTPS (80 e 443 por padrão).",
+        "abrir (open) as portas TCP associadas ao protocolo HTTP e HTTPS (80 e 443 por padrão) no firewall do sistema operacional, permitindo que conexões provenientes de outros computadores na rede ou na Internet sejam aceitas."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q57",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Considere o seguinte conteúdo em formato XML:\n\n<raiz>\n<tag1>XYZ</tag1>\n<tag2><![CDATA[\n<p><strong>Link</p></strong><br>\n<a href=\"https://exemplo.com\">Clique aqui</a>\n]]>\n</tag2>\n</raiz>\n\nO conteúdo completo apresentado foi enviado para um validador sintático de XML que informa se a entrada é válida, ou indica o número da linha em que detecta o primeiro erro, sendo que a primeira linha é considerada a linha de número 1.\n\nAssinale a alternativa que corresponde ao resultado obtido no validador.",
+      "options": [
+        "XML válido.",
+        "Erro na linha 3.",
+        "Erro na linha 4.",
+        "Erro na linha 6.",
+        "Erro na linha 5."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q58",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Considere a seguinte requisição a uma API REST, baseada no protocolo HTTP, que trafega via HTTPS:\n\nGET /v1/users/123 HTTP/1.1\nAccept-Encoding: deflate, gzip\nAuthorization: Bearer 3c9d480d62ba89c6d50b34a7dd\nHost: exemplo.com\nAccept: application/json\n\nAssinale a alternativa correta a respeito.",
+      "options": [
+        "A string 3c9d480d62ba89c6d50b34a7dd corresponde a um token do tipo JWT assinado em sua forma compacta.",
+        "A string 3c9d480d62ba89c6d50b34a7dd codifica um usuário e senha, separados por dois-pontos, em Base64.",
+        "O cliente informa que suporta receber uma resposta compactada e define os formatos suportados.",
+        "O endpoint acessado é application/json dentro do host exemplo.com.",
+        "A requisição usa o esquema Basic Auth para autenticação."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q70",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "Considerando a programação orientada a objetos e o conceito de classes, é correto afirmar que, em um programa que utilize esse tipo de programação,",
+      "options": [
+        "cada classe possui uma limitação teórica de comportar até dez objetos.",
+        "as classes existentes devem todas serem compostas pelo mesmo tipo de atributos.",
+        "as classes existentes devem todas ter o mesmo número de atributos.",
+        "não há limitação teórica quanto ao número de classes existentes em um programa.",
+        "o nome de cada uma das classes implementadas não pode conter atributos numéricos."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q71",
+      "topic_slug": "desenvolvimento-1",
+      "statement": "O conceito de sobrecarga presente na orientação a objetos significa, especificamente, que",
+      "options": [
+        "uma mesma classe não pode ter o mesmo tipo de parâmetros em quaisquer dois de seus métodos.",
+        "os métodos de uma mesma classe podem ter o mesmo nome, porém esses métodos devem possuir assinaturas diferentes.",
+        "o número de métodos declarados em cada classe possui uma limitação teórica de até vinte métodos.",
+        "duas ou mais classes podem possuir o mesmo nome.",
+        "uma mesma classe não pode possuir mais de um método com o mesmo número de parâmetros."
+      ],
+      "correct_option": 1
+    }
+  ]
+}

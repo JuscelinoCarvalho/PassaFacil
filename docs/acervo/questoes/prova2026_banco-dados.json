@@ -1,0 +1,65 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "banco-dados",
+  "subject_name": "Banco de Dados",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q72",
+      "topic_slug": "banco-dados-2",
+      "statement": "Considere a seguinte tabela de um banco de dados relacional:\n\nEscritório (Número, Tipo, Andar, Fone)   [Número é a chave primária]\n\nA consulta do PL/SQL para obter a quantidade de escritórios do tipo ‘Sala de Reunião’ é:",
+      "options": [
+        "SELECT SUM(Tipo)\nFROM Escritório\nWHERE Tipo = ‘Sala de Reunião’;",
+        "SELECT COUNT(‘Sala de Reunião’)\nFROM Escritório;",
+        "SELECT COUNT(Tipo)\nFROM Escritório\nWHERE Tipo = ‘Sala de Reunião’;",
+        "SELECT COUNT(Tipo=’Sala de Reunião’)\nFROM Escritório;",
+        "SELECT SUM(Tipo: ‘Sala de Reunião’)\nFROM Escritório;"
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q73",
+      "topic_slug": "banco-dados-2",
+      "statement": "Considere a seguinte tabela de um banco de dados relacional:\n\nAluno (ID, Nome, Sala)   [ID é a chave primária]\n\nA consulta do PL/SQL para obter o nome dos alunos que comecem com a letra M é:",
+      "options": [
+        "SELECT Nome\nFROM Aluno\nWHERE Nome LIKE ‘M%’;",
+        "SELECT Nome\nFROM Aluno (‘M%’);",
+        "SELECT Nome\nFROM Aluno\nWHERE Nome EQUAL ‘M%’;",
+        "SELECT Aluno.Nome\nWHERE Nome = ‘M%’;",
+        "SELECT Nome\nFROM Aluno\nWHERE Nome IN ‘M%’;"
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q79",
+      "topic_slug": "banco-dados-1",
+      "statement": "Ao se proceder ao processo de normalização das tabelas de um banco de dados relacional, obtém-se como efeito principal dessa operação a",
+      "options": [
+        "reunião de todos atributos de todas tabelas em uma única tabela.",
+        "redução, ou mesmo eliminação, de redundâncias desnecessárias que possam estar presentes nessas tabelas.",
+        "eliminação de atributos do tipo data dessas tabelas.",
+        "inserção de um tipo de atributo especial nessas tabelas, denominado atributo normal.",
+        "eliminação de todas chaves estrangeiras presentes nas tabelas."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q80",
+      "topic_slug": "banco-dados-1",
+      "statement": "Considerando os processos conhecidos pelas siglas ETL e ELT, é correto afirmar que",
+      "options": [
+        "no processo ETL a fase de transformação dos dados é feita anteriormente à fase de carga dos dados.",
+        "no processo ELT a fase de transformação é substituída pela fase de temporização.",
+        "em ambos os processos, ELT e ETL, a fase de carga é feita após a realização da fase de transformação dos dados.",
+        "em ambos os processos, ELT e ETL, a última fase do ciclo consiste na extração dos dados.",
+        "no processo ELT a fase de transformação dos dados é feita em sequência à fase de carga dos dados."
+      ],
+      "correct_option": 4
+    }
+  ]
+}

@@ -75,6 +75,7 @@
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
 - [ ] **Escalar a cascata quando crescer a base de assinantes:** Cerebras (chave `csk-…` já no `/etc`, modelo `gpt-oss-120b`) e/ou OpenRouter — ambos exigem crédito/cartão. Retomar é só incluir o nome no `GRADING_ORDER` + garantir crédito na conta.
 - [x] **Servidor MCP — Fase 1 (tools de leitura, stdio)** pronto e testado localmente (`apps/api/mcp_server/`, `app/services/question_query.py`).
+- [ ] **Aplicar em PRODUÇÃO a prova 2026** (owner roda): `importar_acervo.py` (80 objetivas owner_only) + `seed_prova2026_casos.py` (2 casos). Depois: enriquecer explicações por IA das 80; trocar os espelhos provisórios pelo **padrão de resposta oficial** da VUNESP quando sair.
 - [ ] **Servidor MCP — Fase 2:** `montar_simulado`, `submeter_redacao`, `consultar_correcao`, `resources` e `prompts`. ⚠️ A correção hoje é **síncrona** (sem fila/`job_id`) — decidir se adapta a spec (corrige na hora) ou cria fila. **Fase 3:** transporte HTTP + token + Nginx + rate limit. **Fase 4:** README em inglês + seed + demo (portfólio).
 - [ ] Feature de **Áudios** ainda "em breve". Se for regerar/ampliar: criar `apps/api/scripts/gerar_audios.py` **versionado**, lendo `ELEVENLABS_API_KEY` do `/etc` (nunca hardcoded).
 - [x] Pagamento Asaas em **produção** (`ASAAS_SANDBOX=false` no `/etc`) — o default do código é `true`, o `/etc` sobrescreve.
@@ -90,6 +91,16 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-10-26 (acervo) — PROVA OFICIAL VUNESP TCE-SP 2026 (TI): 80 objetivas + 2 estudos de caso
+- **Fonte:** o dono subiu na raiz os PDFs OFICIAIS da prova que fez em 11.10.2026 — `ProvaMarqueX2026.pdf` (80 objetivas), `GabaritoMarqueX2026.pdf` (gabarito Versão 2) e `EstudoCaso2026.pdf` (2 estudos de caso). **PDFs ficam UNTRACKED** (direito autoral VUNESP), como os demais de `docs/acervo/`.
+- **80 objetivas — transcrição MANUAL e fiel** (lidas visualmente do caderno, pois o layout 2-colunas + marcação tipográfica embaralha a extração automática). Preservados: trechos destacados/lacunas de Português, textos de leitura (embutidos p/ a questão ser autossuficiente) e formatação de código (JS/PHP/YAML/SQL/XML/pseudocódigo). Classificadas por conteúdo nas matérias do seed. **Gabarito OFICIAL aplicado** (confirmado que o caderno é a Versão 2 cruzando questões factuais).
+  - `apps/api/scripts/prova2026_data.py` (transcrição) → `apps/api/scripts/gerar_prova2026_json.py` (valida: 80 questões/5 alts/gabarito completo; aplica a letra oficial; gera `docs/acervo/questoes/prova2026_<materia>.json`).
+  - **Validado:** dry-run do `importar_acervo.py` = **80/80 importam, 0 rejeições**. Distribuição: Desenvolvimento 23 · Redes 15 · Governança 9 · Português 12 · BD 4 · Eng.Soft 4 · Segurança 4 · Lógica 4 · Ética 2 · Legislação 2 · LGPD 1.
+  - Entram como **`owner_only`** (aparecem no estudo logado via `published_filter`, ficam FORA do MCP público) e **sem explicação** (gabarito só traz a letra) — rodar depois o enriquecimento de explicações por IA.
+- **2 estudos de caso 2026** (`apps/api/scripts/seed_prova2026_casos.py`): enunciados/tabelas transcritos fielmente; **espelho + grade PROVISÓRIOS** (serão trocados pelo padrão de resposta OFICIAL da VUNESP quando sair — é o oficial que leva a correção da IA ao máximo). Validado: idempotente, grade soma 20/20, alimenta `grading._build_user_prompt`.
+- **Como aplicar em produção** (owner, com DATABASE_URL de prod, a partir de `apps/api`): `PYTHONPATH=. .venv/bin/python scripts/importar_acervo.py` + `PYTHONPATH=. .venv/bin/python -m scripts.seed_prova2026_casos`. (Os JSONs já vêm versionados; `importar_acervo.py` é idempotente.)
+- **Nota sobre correção “mais inteligente”:** a qualidade da correção discursiva depende do ESPELHO+GRADE que alimentam `grading.grade` (ele corrige “só com base no espelho e na grade”). Não é questão de modelo nem de baixar nada — é ter o padrão de resposta oficial. Daí os espelhos provisórios agora + troca pelo oficial depois.
 
 ### 2026-10-26 (MCP) — SERVIDOR MCP, Fase 1 (tools de leitura via stdio)
 - **O quê:** novo servidor MCP (Model Context Protocol) em **`apps/api/mcp_server/`** expondo o banco de questões como *tools* para qualquer cliente MCP (Claude Desktop/Code, Cursor). Spec: `spec-mcp-server.md`. Fase 1 = **`listar_filtros`, `buscar_questoes`, `obter_gabarito`, `estatisticas_banco`** via transporte **stdio**.

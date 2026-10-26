@@ -1,0 +1,39 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "etica",
+  "subject_name": "Ética Pública e Integridade",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q17",
+      "topic_slug": "etica-1",
+      "statement": "Mário Mariano é servidor público vinculado ao Tribunal de Contas do Estado de São Paulo e encontra-se licenciado do cargo para tratar de assuntos particulares. Durante o período de licença, Mário tem oferecido, por meio de plataformas digitais, serviços de “mentoria” na área de contratações públicas e utilizado suas redes sociais para tecer comentários depreciativos sobre precedentes da Corte.\nApós ser alertado de que suas condutas poderiam ser questionadas à luz do Código de Conduta Ética do TCE/SP, o servidor afirmou acreditar que não estaria praticando qualquer ato ilícito. Ainda assim, para sanar eventuais dúvidas, decidiu formular consulta à Presidência do TCE/SP, a fim de esclarecer se sua conduta é compatível com as normas éticas aplicáveis.\n\nCom base na situação hipotética e no disposto no Código de Conduta Ética do TCE/SP, é correto afirmar que",
+      "options": [
+        "cabe à Presidência disciplinar a aplicação do Código de Conduta Ética e, consequentemente, responder à consulta.",
+        "o servidor somente poderá ser responsabilizado por opiniões depreciativas caso se identifique, na publicação, como servidor do TCE/SP.",
+        "Mário Mariano não pode ser responsabilizado, pois o Código de Conduta Ética se aplica a atos que não estejam relacionados ao exercício de suas atribuições funcionais.",
+        "o Código de Conduta Ética não se aplica aos servidores licenciados, motivo pelo qual não houve a prática de ato ilícito.",
+        "a autoridade competente para responder à consulta é a Comissão de Ética do TCE/SP, órgão colegiado vinculado ao Gabinete da Presidência, que tem natureza pedagógica, consultiva e deliberativa."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q18",
+      "topic_slug": "etica-2",
+      "statement": "Equipe técnica do Tribunal de Contas do Estado de São Paulo (TCE/SP), durante auditoria realizada em autarquia estadual, identificou a ocorrência de fraudes relacionadas à celebração e à execução de contratos administrativos, que resultaram em elevados prejuízos para a Administração Pública.\nDiante da gravidade das irregularidades constatadas, a equipe técnica, em reunião com agentes públicos vinculados à autarquia, formulou questionamentos acerca da implantação e do funcionamento do programa de integridade na entidade. As respostas apresentadas revelaram, contudo, que os agentes desconheciam as disposições do Decreto Estadual nº 67.683/2023.\n\nCom base na situação hipotética e no disposto no referido Decreto, é correto afirmar:",
+      "options": [
+        "cabe à Controladoria Geral do Estado a orientação e a supervisão técnica para a elaboração e execução dos programas de integridade, sem prejuízo da subordinação hierárquica ou vinculação administrativa.",
+        "o plano deve ser criado pela entidade e deve ter como eixo, dentre outros, o comprometimento da alta administração do órgão ou entidade, a instituição de instância responsável por sua implantação e gestão e a gestão de riscos à integridade.",
+        "o Decreto ordena que todas as empresas que contratem com a Administração Pública estadual possuam programas de integridade em funcionamento, a serem fiscalizados pela Controladoria Geral do Estado.",
+        "o plano é implantado e fiscalizado pela Controladoria Geral do Estado, a quem cabe sanar eventuais dúvidas envolvendo o tema.",
+        "compete ao Secretário titular da Pasta a que está vinculada a autarquia indicar o titular da Unidade de Gestão de Integridade, a quem cabe coordenar a elaboração, a execução, a comunicação, a implantação e o monitoramento do programa de integridade."
+      ],
+      "correct_option": 1
+    }
+  ]
+}

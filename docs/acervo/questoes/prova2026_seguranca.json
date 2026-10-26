@@ -1,0 +1,65 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "seguranca",
+  "subject_name": "Segurança da Informação",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q62",
+      "topic_slug": "seguranca-2",
+      "statement": "Assinale a alternativa que corresponde a uma boa prática de programação segura (secure coding) para aplicações web, conforme recomendações do OWASP (Open Web Application Security Project).",
+      "options": [
+        "O instante (data e hora) do último uso de uma conta de usuário deve ser reportado a esse usuário em seu próximo login bem sucedido.",
+        "Enviar identificadores de sessão em parâmetros de URLs, deixando-os visíveis publicamente.",
+        "Gerar mensagens de erros e logs visíveis ao usuário bem detalhadas, incluindo detalhes do sistema, versões e identificadores de sessão, possibilitando que eventual problema seja rapidamente entendido e resolvido.",
+        "Em código que executa no lado do servidor (server side), não validar as entradas de dados que já foram validadas no cliente por meio de JavaScript, obtendo-se melhor desempenho em relação a sempre validar todas as entradas.",
+        "Utilizar o mesmo identificador de sessão em caso de reautenticação do usuário."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q63",
+      "topic_slug": "seguranca-2",
+      "statement": "Programas antivírus contemporâneos devem estar preparados para detectar e intervir contra tipos de ameaças cada vez mais sofisticadas. Nesse contexto, a técnica de ciberataque conhecida como Process Hollowing consiste",
+      "options": [
+        "na adoção do ícone de um aplicativo legítimo em um executável de malware, enganando o usuário, fazendo-o pensar que se trata de um aplicativo inofensivo e legítimo.",
+        "na criação de um processo legítimo suspenso, cujo código original em memória é desalocado e substituído por código malicioso.",
+        "no carregamento de uma DLL em memória sem usar a API padrão do sistema operacional Windows (LoadLibrary).",
+        "na tradução de código de máquina, em tempo real, de uma arquitetura para outra (ex. x64 para Arm64), para que o malware possa atacar plataformas distintas.",
+        "na exclusão deliberada de arquivos DLL ou outras dependências requeridas por programas antivírus, impedindo que os mesmos funcionem."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q64",
+      "topic_slug": "seguranca-2",
+      "statement": "Em um firewall de borda de uma empresa, foi encontrada a seguinte regra:\n• Bloquear qualquer tráfego destinado às portas UDP/TCP 53 e TCP 853, da LAN para a Internet, exceto se proveniente de um endereço IP específico.\n\nAinda que não cubra 100% das possibilidades para a intenção pretendida, considerando os números das portas padrões da Internet, é correto afirmar que essa configuração tem a intenção de",
+      "options": [
+        "impedir acesso direto a websites externos via protocolo HTTP, liberando apenas o HTTPS, exceto se partir de uma estação de trabalho específica.",
+        "bloquear o compartilhamento de arquivos na rede local via protocolo SMB, exceto se compartilhado por um determinado servidor de arquivos.",
+        "impedir o uso direto de servidores externos de telefonia baseada no protocolo SIP, permitindo apenas que o PABX digital interno da empresa tenha esse acesso.",
+        "funcionar como anti-bypass de DNS Global, permitindo que apenas um servidor DNS interno da empresa efetue consultas a servidores externos.",
+        "impedir o funcionamento de servidores DHCP quaisquer dentro da rede, exceto um previamente autorizado."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q69",
+      "topic_slug": "seguranca-1",
+      "statement": "De acordo com o Decreto Federal nº 10.540/2020, assinale a alternativa que apresenta um mecanismo de autenticação de usuários explicitamente previsto para o Siafic.",
+      "options": [
+        "CPF e senha.",
+        "E-mail corporativo governamental e senha.",
+        "Reconhecimento facial.",
+        "Login alfanumérico e senha.",
+        "Biometria das mãos."
+      ],
+      "correct_option": 0
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "redes",
+  "subject_name": "Redes e Infraestrutura",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q21",
+      "topic_slug": "redes-2",
+      "statement": "Considere um sistema operacional com três processos (P1, P2 e P3) e três recursos (R1, R2 e R3). Cada recurso possui uma única instância, e nenhum dos recursos pode ser retirado à força do processo que o possui. Em determinado momento, o estado do sistema é:\n• P1 possui R1 e solicita R2;\n• P2 possui R2 e solicita R3;\n• P3 possui R3 e solicita R1.\n\nCom base nas condições de Coffman, assinale a alternativa que apresenta a conclusão correta sobre esse estado do sistema.",
+      "options": [
+        "O enunciado não apresenta a ordem em que P1, P2 e P3 foram criados, não sendo possível determinar a ocorrência de deadlock.",
+        "A espera circular caracteriza deadlock somente quando há dois processos envolvidos. Como a situação apresenta três processos, não existe deadlock.",
+        "Como há três processos e cada um deles possui um recurso, não existe deadlock. Pelo menos um processo pode liberar um recurso, evitando impasses.",
+        "Os três processos formam uma espera circular e estão presentes simultaneamente as condições de exclusão mútua, posse e espera e não preempção, existindo deadlock.",
+        "Os recursos possuem uma única instância, o que por si só caracteriza a exclusão mútua, determinando a ocorrência de deadlock. Se houvesse mais de uma instância de cada recurso, a espera circular deixaria de existir."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q22",
+      "topic_slug": "redes-2",
+      "statement": "Em um sistema operacional, um dispositivo de entrada gera caracteres de forma contínua. Para otimizar o fluxo e evitar a perda de dados, o kernel utiliza o mecanismo de double buffering (Buffer 1 e Buffer 2). Considere a seguinte sequência de eventos:\n• O Buffer 1 atinge sua capacidade máxima, e o kernel inicia a transferência de seu conteúdo para a memória do processo do usuário.\n• Durante essa transferência, ocorre uma falha de página (page fault), bloqueando a conclusão da cópia até que a página necessária seja trazida do disco.\n• O dispositivo de hardware continua a enviar novos dados ininterruptamente.\n\nAssinale a alternativa que descreve a conduta correta do sistema operacional segundo o conceito de double buffering.",
+      "options": [
+        "Manter a recepção de dados no Buffer 1 simultaneamente à transferência para o usuário, permitindo o acesso concorrente ao mesmo buffer.",
+        "Redirecionar os novos caracteres diretamente para o espaço do usuário via Memory-Mapped I/O, liberando os buffers do núcleo para a paginação do disco.",
+        "Redirecionar a gravação dos novos caracteres recebidos para o Buffer 2, enquanto a transferência do Buffer 1 permanece suspensa aguardando o tratamento do page fault.",
+        "Transferir o conteúdo dos dois buffers paralelamente para o espaço do usuário, dobrando a largura de banda da transferência de entrada.",
+        "Interromper imediatamente a leitura do dispositivo de entrada (gerando hardware stall) até que o tratamento da falha de página seja concluído."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q23",
+      "topic_slug": "redes-2",
+      "statement": "O sistema operacional Windows 11 possui uma conta local interna denominada Administrador, destinada à administração do sistema.\n\nAssinale a alternativa correta associada a essa conta.",
+      "options": [
+        "O uso da conta local (não administrador) para entrar no computador é uma prática recomendada de segurança, utilizando-se a elevação de privilégios quando forem necessárias tarefas administrativas.",
+        "A associação de um usuário ao grupo Administradores faz com que todos os aplicativos executados por esse usuário sejam automaticamente executados com privilégios administrativos completos.",
+        "Após a instalação do Windows 11, pode-se excluir a conta Administrador.",
+        "Uma prática recomendada é utilizar a conta Administrador interna para atividades cotidianas, pois isso dificulta o acesso de usuários mal-intencionados ao computador.",
+        "A conta Administrador não pode ser renomeada ou desabilitada."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q24",
+      "topic_slug": "redes-2",
+      "statement": "Um usuário de um computador com o sistema operacional Windows 11 formatou um pendrive com capacidade de 128 GB. Em seguida, tentou copiar para esse pendrive um arquivo de tamanho 6 GB e não conseguiu, recebendo uma mensagem informando que o arquivo é muito grande para o sistema de arquivos de destino.\n\nAssinale a alternativa correta quanto à explicação sobre o que ocorreu e uma possível solução.",
+      "options": [
+        "Arquivos maiores que 1 GiB em pendrives não são permitidos no Windows 11, por questões de segurança. Uma solução é desabilitar esse bloqueio automático no Gerenciador de dispositivos do Windows 11.",
+        "O pendrive provavelmente está formatado em exFAT, e nesse padrão existe um limite máximo de 2 GiB por arquivo gravado. Uma solução é reformatá-lo em outro padrão, por exemplo, o FAT32 que suporta arquivos de tamanho significativamente maior que 6 GiB.",
+        "O Windows 11 permite pendrives com capacidade de até 64 GiB, podendo apresentar erros em pendrives de maior capacidade. Uma solução seria particioná-lo em duas partes de 64 GB.",
+        "O pendrive provavelmente está formatado em FAT32, e nesse padrão existe um limite máximo de 4 GiB - 1 byte por arquivo gravado. Uma solução é reformatá-lo em outro padrão, por exemplo, o NTFS, que suporta arquivos de tamanho significativamente maior que 6 GiB.",
+        "A Tabela de Alocação de Arquivos do pendrive deve estar defeituosa. A solução é executar o utilitário de teste do Windows 11 para localizar e isolar as partes defeituosas do pendrive."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q31",
+      "topic_slug": "redes-2",
+      "statement": "Assinale a alternativa que apresenta uma afirmação correta sobre uma arquitetura de computação em nuvem do tipo multi-tenancy.",
+      "options": [
+        "Arquiteturas desse tipo são utilizadas em soluções SaaS e PaaS, mas não em IaaS.",
+        "Esse tipo de arquitetura permite exclusivamente o escalonamento vertical.",
+        "Não é possível implementar esse tipo de arquitetura em uma nuvem pública.",
+        "O compartilhamento de recursos nesse tipo de arquitetura contribui para a redução do custo operacional.",
+        "Uma das vantagens desse tipo de arquitetura é a redução da necessidade de mecanismos de isolamento e controle de acesso entre os diferentes tenants."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q32",
+      "topic_slug": "redes-2",
+      "statement": "PaaS e IaaS são dois modelos de computação em nuvem.\n\nAssinale a alternativa que apresenta uma vantagem do PaaS em relação ao IaaS.",
+      "options": [
+        "Existe um acesso facilitado ao hardware físico do sistema utilizado.",
+        "A latência das operações é maior.",
+        "O cliente pode instalar e gerenciar o sistema operacional do sistema utilizado.",
+        "O cliente pode focar no desenvolvimento da aplicação.",
+        "As chamadas de sistema (syscalls) são configuradas pelo cliente."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q33",
+      "topic_slug": "redes-2",
+      "statement": "Um dos recursos disponíveis no VMware vSphere 8.x é o Quick Boot.\n\nA principal vantagem desse recurso é permitir reiniciar o hipervisor ESXi sem reinicializar o",
+      "options": [
+        "vCenter Server.",
+        "Sistema operacional hospedeiro.",
+        "Cluster vSphere.",
+        "Datastore VMFS.",
+        "Hardware do servidor."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q34",
+      "topic_slug": "redes-1",
+      "statement": "No terminal de um sistema Ubuntu, foi executado o seguinte comando:\n\ncut -d: -f6 /etc/passwd\n\nÉ correto afirmar que as informações retornadas pelo comando correspondem ao",
+      "options": [
+        "nome de cada usuário.",
+        "identificador de cada usuário (UID).",
+        "diretório home de cada usuário.",
+        "shell padrão de cada usuário.",
+        "senha de cada usuário."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q35",
+      "topic_slug": "redes-1",
+      "statement": "Considere o seguinte comando chmod, executado no terminal de um sistema Ubuntu:\n\nchmod g-wx,o-rw,u=xrw,g+r,go+x file.sh\n\nUm comando equivalente ao apresentado é:",
+      "options": [
+        "chmod 751 file.sh",
+        "chmod 731 file.sh",
+        "chmod 711 file.sh",
+        "chmod 733 file.sh",
+        "chmod 755 file.sh"
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q36",
+      "topic_slug": "redes-2",
+      "statement": "O Docker pode ser instalado em um sistema Ubuntu por meio do gerenciador de pacotes apt.\n\nEm uma instalação padrão, os dados persistentes do Docker são armazenados no diretório",
+      "options": [
+        "/usr/local/docker",
+        "/var/lib/docker",
+        "/usr/lib/docker",
+        "/srv/docker",
+        "/etc/docker"
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q48",
+      "topic_slug": "redes-1",
+      "statement": "No contexto do sistema operacional Windows Server 2022, considere o seguinte comando do PowerShell:\n\nInstall-WindowsFeature -Name Web-Server -Source \\\\server2\\winsxs\n\nEle tem como objetivo instalar o",
+      "options": [
+        "AD DS no computador de nome server2, dentro da pasta compartilhada winsxs, tornando server2 um controlador de domínio.",
+        "AD DS no computador local, tornando-o um controlador de domínio que armazena seu banco de dados no compartilhamento designado por \\\\server2\\winsxs.",
+        "IIS no computador local, especificando que a origem dos arquivos do recurso para instalação está no compartilhamento winsxs do computador de nome server2, caso não estejam disponíveis no computador local.",
+        "IIS no computador de nome server2, dentro da pasta compartilhada winsxs.",
+        "IIS no VHD (Virtual Hard Disk) offline designado por \\\\server2\\winsxs, que deve conter uma instalação do Windows Server."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q49",
+      "topic_slug": "redes-2",
+      "statement": "No Kubernetes, a relação ou diferença entre um Deployment e um ReplicaSet é que",
+      "options": [
+        "enquanto Deployments servem para manter réplicas de Pods ativas, ReplicaSets servem para manter réplicas de Jobs permanentemente ativas.",
+        "Deployments executam exclusivamente em ambientes Linux, enquanto ReplicaSets executam em ambientes Windows.",
+        "um Deployment é um tipo específico de ReplicaSet com quantidade máxima de réplicas permitidas igual a 1, possuindo um gerenciamento mais fácil para casos de uso mais simples.",
+        "o Deployment atua em um nível hierárquico superior, criando e gerenciando ReplicaSets.",
+        "um ReplicaSet determina quantas réplicas de um Deployment devem estar ativas em um determinado momento."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q50",
+      "topic_slug": "redes-2",
+      "statement": "Considere a seguinte definição de um Pod do Kubernetes:\n\napiVersion: v1\nkind: Pod\nmetadata:\n  name: test-pd\nspec:\n  containers:\n  - image: registry.k8s.io/test-webserver\n    name: test-container\n    volumeMounts:\n    - mountPath: /cache\n      name: cache-volume\n  - image: alpine\n    name: test-container2\n    volumeMounts:\n    - mountPath: /app-cache\n      name: cache-volume\n  volumes:\n  - name: cache-volume\n    emptyDir:\n      sizeLimit: 500Mi\n\nAssinale a alternativa correta a respeito.",
+      "options": [
+        "Cada container no Pod acessa um volume próprio chamado cache-volume, que é independente e isolado dos volumes de mesmo nome dos outros containers do mesmo Pod.",
+        "Todos os containers no Pod podem ler e escrever os mesmos arquivos no volume cache-volume.",
+        "O volume cache-volume é montado como um sistema de arquivos em memória RAM.",
+        "O container test-container enxerga o volume cache-volume na pasta /test-webserver.",
+        "O Pod apresentado possui 3 containers: test-container, test-container2 e cache-volume."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q60",
+      "topic_slug": "redes-2",
+      "statement": "Uma empresa (contratante) utiliza um software de gestão empresarial contratado no modelo SaaS, pagando um valor mensal ao fornecedor (contratada) pelo uso. Embora os detalhes exatos de fornecimento dependam do contrato firmado, com base nas características desse modelo, é correto presumir que",
+      "options": [
+        "do ponto de vista da contratante, a infraestrutura de servidor e banco de dados é on-premises.",
+        "outras empresas concorrentes da contratante não utilizam o mesmo software.",
+        "a equipe técnica da contratante possui acesso direto ao banco de dados utilizado pela aplicação, via linha de comandos ou aplicativo client específico.",
+        "a equipe técnica da contratante possui acesso direto à infraestrutura de computação utilizada, como por exemplo Virtual Private Servers (VPS) que hospedam o servidor de aplicação, por meio de protocolos como SSH ou RDP.",
+        "a integração com outras ferramentas e sistemas da contratante pode ser disponibilizada por meio de APIs e Webhooks."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q61",
+      "topic_slug": "redes-1",
+      "statement": "Provedores de serviços de nuvem costumam oferecer um serviço designado pela sigla VPC. Esse serviço consiste em",
+      "options": [
+        "uma máquina virtual (Virtual Machine).",
+        "um motor de execução de contêineres Docker.",
+        "um interpretador de código Python, que permite executar programas escritos nessa linguagem em um ambiente virtual.",
+        "uma versão virtual de uma rede física, que oferece recursos de segurança e conectividade.",
+        "um PABX virtual baseado no protocolo SIP, que permite criar ramais e números integrados à rede telefônica convencional."
+      ],
+      "correct_option": 3
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "governanca",
+  "subject_name": "Governança e Auditoria de TI",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q29",
+      "topic_slug": "governanca-2",
+      "statement": "Uma empresa comercializou a licença de uso de um de seus programas de computador (software) para um órgão público. A empresa informou que será concedido ao órgão o direito de utilizar o software, mas não serão transferidos a ele os direitos patrimoniais sobre o software nem será fornecido o código-fonte.\n\nAssinale a alternativa correta, com base na Lei nº 9.609/1998.",
+      "options": [
+        "A licença de uso pode autorizar a utilização do programa pelo órgão público sem, contudo, transferir a ele a titularidade dos direitos patrimoniais sobre o software.",
+        "A comercialização não foi realizada da forma correta, pois pela citada lei, órgãos públicos devem sempre receber a titularidade dos direitos patrimoniais sobre o software juntamente com a licença de uso.",
+        "A informação não foi fornecida da forma correta, pois, pela citada lei, órgãos públicos recebem automaticamente a titularidade dos direitos patrimoniais sobre o software após cinco anos da compra da licença de uso.",
+        "A informação fornecida pela empresa não tem valor legal, pois pela citada lei os softwares, quando comercializados, automaticamente transferem a titularidade dos direitos patrimoniais.",
+        "Segundo a citada lei, o órgão público tem direito de alterar o código-fonte desde que não comercialize ou forneça essas alterações para outras empresas."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q30",
+      "topic_slug": "governanca-2",
+      "statement": "Uma pessoa solicita a um órgão público federal a cópia integral de um documento interno que contém, no mesmo arquivo, informações que são públicas e, em algumas partes do documento, informações de acesso restrito, que é amparado pela legislação. Considerando a Lei Federal nº 12.527/2011, caso o órgão público federal não atenda o pedido da pessoa, com a alegação de que a presença de informações protegidas impede a divulgação do documento, ele está",
+      "options": [
+        "em desacordo com a citada lei, pois como o documento tem partes públicas, ele pode ser fornecido integralmente.",
+        "em desacordo com a citada lei, pois ele deverá possibilitar o acesso à parte não sigilosa, por meio de certidão, extrato ou cópia, com ocultação ou exclusão da parte sob sigilo.",
+        "de acordo com a citada lei, pois o órgão público federal tem a obrigação de tornar o documento inacessível desde a existência de uma parte protegida, que torna todo o documento inacessível.",
+        "de acordo com a citada lei, pois só um juiz poderá obrigá-lo a exibir um documento que apresente algumas partes sob sigilo.",
+        "de acordo com a citada lei, pois o órgão público federal só poderá divulgar o documento após expirar o período de 10 anos de sigilo."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q65",
+      "topic_slug": "governanca-2",
+      "statement": "A Auditoria Baseada em Riscos (Risk-Based Audit) é uma metodologia que",
+      "options": [
+        "direciona o foco para a conformidade passada, checando se regras históricas foram cumpridas, sem cobrir ameaças futuras ou mudanças no cenário tecnológico.",
+        "audita todos os processos com o mesmo nível de profundidade, buscando oferecer tratamento isonômico a todas as áreas.",
+        "segue uma lista fixa de verificação de riscos (checklist do tipo sim/não), o que permite acelerar bastante o trabalho do auditor e gerar cronogramas curtos.",
+        "define o que será auditado principalmente com base no orçamento disponível e na facilidade de acesso aos dados, o que permite atender budgets bem reduzidos.",
+        "direciona o foco, o escopo e a intensidade dos trabalhos do auditor para as áreas de maior risco da organização."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q66",
+      "topic_slug": "governanca-2",
+      "statement": "Com relação à Lei Federal nº 14.133/2021, assinale a alternativa correta.",
+      "options": [
+        "Na contratação que previr a conclusão de escopo predefinido, quando essa conclusão não ocorrer dentro do prazo por culpa do contratado, a Administração não poderá optar pela extinção do contrato até que o contratado entregue o escopo faltante.",
+        "Aplica-se às sociedades de economia mista e às suas subsidiárias por completo, inclusive no que tange a normas penais.",
+        "Contratos que previrem a operação continuada de sistemas estruturantes de tecnologia da informação poderão ter vigência de 15 anos.",
+        "Contratos que tenham por objeto operação de crédito e gestão de dívida pública são subordinados a essa Lei.",
+        "Aplica-se a compras, inclusive por encomenda, mas não a locações de bens móveis, como equipamentos de informática."
+      ],
+      "correct_option": 2
+    },
+    {
+      "external_key": "vun-tcesp-2026-q67",
+      "topic_slug": "governanca-1",
+      "statement": "No contexto do Guia de Boas Práticas em Contratação de Soluções de Tecnologia da Informação – Riscos e controles para o planejamento da contratação – versão 1.0, assinale a alternativa correta.",
+      "options": [
+        "As contratações de TI de um órgão podem ser influenciadas pelos planos elaborados pelo órgão governante superior.",
+        "Normas relativas à segurança da informação publicadas pelo Gabinete de Segurança Institucional (GSI) não precisam ser observadas no planejamento de outros órgãos governantes.",
+        "O único artefato a ser gerado pelo processo de planejamento da contratação de soluções de TI é o plano de trabalho.",
+        "Se os artefatos do planejamento da contratação tiverem sido documentados adequadamente pela equipe de planejamento, não há mais necessidade de interação dessa equipe com aquela da gestão do contrato, economizando custos.",
+        "Basear a elaboração dos artefatos necessários ao planejamento da contratação em listas de verificação (checklists) não é considerada uma boa prática, haja vista a simplicidade e limitações dessa técnica."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q68",
+      "topic_slug": "governanca-1",
+      "statement": "Um Contrato Público para Solução Inovadora (CPSI), no contexto do art. 14 da Lei Complementar nº 182/2021, que é celebrado pela administração pública após a homologação do resultado da licitação, pode ter valor máximo a ser pago à contratada de",
+      "options": [
+        "R$ 800.000,00 por CPSI.",
+        "R$ 600.000,00 por CPSI.",
+        "R$ 1.200.000,00 por CPSI.",
+        "R$ 1.000.000,00 por CPSI.",
+        "R$ 1.600.000,00 por CPSI."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q76",
+      "topic_slug": "governanca-2",
+      "statement": "O ITIL v.4 define a Cadeia de Valor de Serviço. Essa cadeia é composta por seis atividades, sendo correto afirmar que, especificamente, duas dessas atividades são:",
+      "options": [
+        "reunir e distribuir.",
+        "contratar e supervisionar.",
+        "especificar e documentar.",
+        "planejar e engajar.",
+        "precificar e finalizar."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q77",
+      "topic_slug": "governanca-2",
+      "statement": "O modelo de melhoria contínua do ITIL v.4 define algumas práticas e tipos de gerenciamento incluídos em cada prática, sendo correto afirmar que o Gerenciamento de",
+      "options": [
+        "Implantação está incluído nas Práticas de Gerenciamento Técnico.",
+        "Arquitetura está incluído nas Práticas de Gerenciamento Técnico.",
+        "Conhecimento está incluído nas Práticas de Gerenciamento de Serviço.",
+        "Disponibilidade está incluído nas Práticas Gerais de Gerenciamento.",
+        "Nível de Serviço está incluído nas Práticas Gerais de Gerenciamento."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q78",
+      "topic_slug": "governanca-1",
+      "statement": "O PMBOK 7ª edição define oito domínios de desempenho de projetos, sendo correto afirmar que, especificamente, dois desses domínios são:",
+      "options": [
+        "Orçamento e Finalização.",
+        "Preparação e Iniciação.",
+        "Agendamento e Simulação.",
+        "Inclusão e Distribuição.",
+        "Equipe e Planejamento."
+      ],
+      "correct_option": 4
+    }
+  ]
+}

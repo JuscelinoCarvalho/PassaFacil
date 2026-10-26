@@ -1,0 +1,26 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "lgpd",
+  "subject_name": "LGPD",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q28",
+      "topic_slug": "lgpd-1",
+      "statement": "Um órgão público (controlador) possui um sistema que armazena dados pessoais. Em determinado momento, constata a necessidade de contratar uma empresa especializada (operador) para realizar a manutenção desse sistema. Durante a vigência do contrato, a empresa utilizou os dados pessoais para testar um novo produto que ela desenvolveu. A empresa não recebeu autorização ou instrução do órgão público para utilizar os dados nessa nova finalidade nem informou os titulares dos dados. De acordo com a Lei Geral de Proteção de Dados Pessoais (LGPD) nº 13.709/2018, a utilização dos dados",
+      "options": [
+        "é permitida para fins de pesquisa e aprimoramento de produtos da empresa, independentemente de autorização do controlador, pois o operador pode utilizar os dados para finalidades relacionadas ao desenvolvimento tecnológico, desde que não os divulgue publicamente.",
+        "é permitida, sem necessidade de autorização, desde que a empresa utilize os dados exclusivamente em ambiente interno e não os divulgue a terceiros.",
+        "pode caracterizar tratamento incompatível com a atuação do operador (empresa), pois este deve realizar o tratamento segundo as instruções fornecidas pelo controlador (órgão público). A empresa não pode utilizar os dados livremente para outras finalidades.",
+        "é permitida, sem necessidade de autorização, pois a empresa possui acesso legítimo aos dados durante a execução do contrato e pode utilizá-los para qualquer finalidade relacionada às suas atividades comerciais.",
+        "é permitida, sem necessidade de autorização, não caracterizando tratamento incompatível com a atuação do operador (empresa), desde que o novo produto possa ser utilizado também pelo controlador (órgão público)."
+      ],
+      "correct_option": 2
+    }
+  ]
+}

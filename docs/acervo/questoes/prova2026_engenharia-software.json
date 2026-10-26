@@ -1,0 +1,65 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "engenharia-software",
+  "subject_name": "Engenharia de Software",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q51",
+      "topic_slug": "engenharia-software-2",
+      "statement": "A Entrega Contínua (Continuous Delivery) em DevOps propõe que",
+      "options": [
+        "versões específicas do código-fonte de um software devem existir, de forma separada, para os ambientes de testes, homologação e produção, adequando-se às especificidades e escala de cada um.",
+        "todo o código-fonte enviado ao repositório que passa com sucesso pelos builds, testes automatizados e validações estão prontos para implantação em ambiente de produção, mas essa implantação depende de uma decisão humana para ocorrer.",
+        "operações de merge em sistemas de controle de versão de código-fonte não podem ser feitas por ferramentas automatizadas, sob o risco de introdução de conflitos que podem passar despercebidos mesmo quando a operação aparenta sucesso.",
+        "sejam utilizadas exclusivamente linguagens de programação interpretadas no desenvolvimento de software, eliminando etapas de compilação que existiriam com linguagens compiladas e, assim, promovendo maior continuidade entre o envio de código-fonte para o repositório e a disponibilização do mesmo em ambiente de produção.",
+        "os testes unitários sejam a única camada de validação do pipeline, eliminando completamente a necessidade de testes de integração, de aceitação ou testes manuais exploratórios."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q59",
+      "topic_slug": "engenharia-software-1",
+      "statement": "No contexto de desenvolvimento de software, como orientação do princípio SOLID conhecido como Aberto/Fechado (Open/Closed Principle), deve-se",
+      "options": [
+        "fazer com que módulos de mais alto nível dependam de módulos de mais baixo nível.",
+        "adicionar novas funcionalidades em um software por meio da extensão de suas classes e funções, adicionando código, e não por meio da modificação do código previamente existente.",
+        "fazer com que módulos de mais baixo nível dependam de módulos de mais alto nível.",
+        "abrir a possibilidade de novos membros ingressarem em um time de desenvolvimento entre um sprint e outro, mas fechar essa possibilidade enquanto o sprint estiver em execução.",
+        "construir métodos que suportem trabalhar com objetos de qualquer subtipo da classe esperada como parâmetro, mesmo sem conhecer esses subtipos especificamente."
+      ],
+      "correct_option": 1
+    },
+    {
+      "external_key": "vun-tcesp-2026-q74",
+      "topic_slug": "engenharia-software-1",
+      "statement": "O BPMN (Business Process Model and Notation) versão 2.0 define os seguintes três tipos de processos:",
+      "options": [
+        "Normativo, Estratégico e Explicativo.",
+        "Estratégico, Normativo e Operacional.",
+        "Operacional, Explicativo e Estratégico.",
+        "Normativo, Operacional e Explicativo.",
+        "Privado Não Executável, Privado Executável e Público."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q75",
+      "topic_slug": "engenharia-software-1",
+      "statement": "Considere os seguintes tipos de gateway utilizados pela notação do BPMN (Business Process Model and Notation) versão 2.0:\n(a) um losango com um “X” em seu interior;\n(b) um losango com um “+” em seu interior.\n\nEsses elementos representam, correta e respectivamente, os símbolos de gateway dos tipos:",
+      "options": [
+        "(a) Direto, (b) Invertido.",
+        "(a) Temporário, (b) Permanente.",
+        "(a) Exclusivo, (b) Paralelo.",
+        "(a) Inclusivo, (b) Complexo.",
+        "(a) Simples, (b) Padrão."
+      ],
+      "correct_option": 2
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "legislacao",
+  "subject_name": "Legislação",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q19",
+      "topic_slug": "legislacao-1",
+      "statement": "O Tribunal de Contas do Estado do Estado de São Paulo recebeu, para apreciação, as contas anuais prestadas pelo prefeito do Município Y, relativas ao último exercício financeiro. Durante a instrução, a unidade técnica identificou preliminarmente irregularidades relevantes na execução orçamentária e na aplicação dos recursos destinados à manutenção e ao desenvolvimento do ensino. Concluída a instrução, surgiu divergência interna quanto ao órgão competente para deliberar sobre o processo, bem como sobre o rito que deve ser seguido no procedimento de emissão do parecer prévio.\n\nCom base na situação hipotética e no Regimento Interno do Tribunal de Contas do Estado do Estado de São Paulo, é correto afirmar que",
+      "options": [
+        "compete privativamente às Câmaras emitir parecer prévio, que será passível de pedido de reexame, formulado uma única vez e com efeito suspensivo.",
+        "os processos de emissão de parecer prévio são distribuídos automaticamente para a Presidência, que poderá redistribuí-los, de acordo com ato interno.",
+        "nos processos desta natureza não são admitidas decisões monocráticas que suspendam a sua análise ou ordenem a adoção de diligências complementares.",
+        "a competência para a emissão do parecer prévio é privativa do Plenário.",
+        "cabe ao juiz singular emitir parecer prévio sobre as contas do prefeito, admitida a possibilidade de interposição de embargos de declaração e recurso de revisão para a Câmara, nas hipóteses previstas no Regimento Interno."
+      ],
+      "correct_option": 0
+    },
+    {
+      "external_key": "vun-tcesp-2026-q20",
+      "topic_slug": "legislacao-1",
+      "statement": "Considere que o Tribunal de Contas do Estado de São Paulo recebeu denúncia acerca de possíveis irregularidades em procedimento licitatório promovido pelo Município X para a contratação de empresa destinada à prestação dos serviços de coleta, transporte e destinação final de resíduos sólidos domiciliares. Segundo o denunciante, determinadas exigências do instrumento convocatório teriam sido estabelecidas com o objetivo de direcionar a contratação em favor de empresa específica.\nA denúncia sustenta, ainda, que a empresa supostamente beneficiada pertence ao empresário que teria realizado expressivas doações não contabilizadas à campanha eleitoral do atual chefe do Poder Executivo municipal e que o favorecimento na licitação, inclusive mediante contratação por valores superiores aos praticados no mercado, constituiria contrapartida ao apoio financeiro anteriormente prestado.\n\nCom base na situação hipotética, no disposto na Lei Complementar Estadual nº 709/1993 e no Regimento Interno do Tribunal de Contas do Estado de São Paulo, assinale a alternativa correta.",
+      "options": [
+        "A denúncia pode ser apresentada por pessoa jurídica desde que, com base na situação narrada, ela não seja utilizada para atender interesse subjetivo próprio.",
+        "A denúncia não pode ser autuada em caráter sigiloso, salvo em situações em que seja necessária a preservação da intimidade dos envolvidos ou de interesse público.",
+        "A denúncia pode ser apresentada de forma anônima, cabendo ao relator do processo avaliar se deve ou não ser recebida, de acordo com a natureza das circunstâncias reveladas na sua apresentação.",
+        "O relator poderá, após recebida a denúncia, decretar a suspensão liminar do procedimento licitatório, estando a decisão sujeita a referendo do Plenário.",
+        "A denúncia, para ser recebida, precisa conter, além do relato do ilícito, o nome legível, a qualificação e o endereço do denunciante e estar acompanhada de prova ou indício concernente ao fato denunciado."
+      ],
+      "correct_option": 4
+    }
+  ]
+}

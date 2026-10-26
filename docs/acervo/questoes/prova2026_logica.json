@@ -1,0 +1,65 @@
+{
+  "exam_slug": "tce-sp-2026-ti",
+  "subject_slug": "logica",
+  "subject_name": "Raciocínio Lógico",
+  "source_name": "Prova Objetiva — TCE-SP 2026 (VUNESP) — Auditor de Controle Externo (TI)",
+  "organization": "TCE-SP",
+  "board": "VUNESP",
+  "exam_year": 2026,
+  "rights_status": "owner_only",
+  "import_batch": "prova-oficial-2026",
+  "questions": [
+    {
+      "external_key": "vun-tcesp-2026-q13",
+      "topic_slug": "logica-1",
+      "statement": "Considere a afirmação: “Todos os funcionários fizeram o treinamento e pelo menos um deles fez o treinamento de maneira remota”.\n\nUma negação dessa afirmação é equivalente a:",
+      "options": [
+        "pelo menos um funcionário não fez o treinamento ou todos os funcionários fizeram o treinamento de maneira remota.",
+        "nenhum funcionário fez o treinamento ou todos os funcionários fizeram o treinamento de maneira remota.",
+        "nenhum funcionário fez o treinamento ou pelo menos um funcionário fez o treinamento de maneira remota.",
+        "algum funcionário não fez o treinamento ou nenhum funcionário fez o treinamento de maneira remota.",
+        "pelo menos um funcionário não fez o treinamento e apenas um funcionário fez o treinamento de maneira remota."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q14",
+      "topic_slug": "logica-1",
+      "statement": "Marina decidiu que em sua festa haverá, no máximo, 4 tipos de doces. Para ajudar em sua decisão, ela selecionou os 5 doces que mais gosta e depois escreveu 4 afirmações que precisam ser todas verdadeiras:\n• Se tiver cajuzinho, então não haverá quindim.\n• Haverá brigadeiro ou churros, mas não ambos.\n• Haverá quindim se e somente se houver churros.\n• Se houver pudim, então haverá cajuzinho ou não haverá brigadeiro.\n\nEm seguida, Marina decidiu que haverá brigadeiro, portanto, os únicos tipos de doce em sua festa serão",
+      "options": [
+        "brigadeiro e cajuzinho.",
+        "brigadeiro, quindim e cajuzinho.",
+        "brigadeiro e churros.",
+        "brigadeiro, pudim e cajuzinho.",
+        "brigadeiro e quindim."
+      ],
+      "correct_option": 4
+    },
+    {
+      "external_key": "vun-tcesp-2026-q15",
+      "topic_slug": "logica-2",
+      "statement": "Considere o padrão de formação da sequência ilimitada:\n1, 0, 1, 2, 0, 0, 1, 2, 3, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, …\n\nNessa sequência, a 1ª ocorrência do termo 0 (zero) ocorre na 2ª posição e a 1.000ª ocorrência do termo 0 (zero) ocorre na",
+      "options": [
+        "1.995ª posição.",
+        "3.150ª posição.",
+        "2.955ª posição.",
+        "2.035ª posição.",
+        "2.450ª posição."
+      ],
+      "correct_option": 3
+    },
+    {
+      "external_key": "vun-tcesp-2026-q16",
+      "topic_slug": "logica-1",
+      "statement": "Seis irmãos nasceram, respectivamente, nos anos de 1990, 1992, 1994, 1996, 1998 e 2000.\nConsidere as seguintes afirmações proferidas por eles:\nAbel: eu sou o mais novo entre os irmãos.\nAbel: Denis não é o mais velho entre os irmãos.\nBeto: Eder é mais novo do que Fábio\nCaio: Denis é o terceiro mais velho.\nDenis: eu sou mais velho do que Beto.\nDenis: eu não nasci em 2000.\nEder: Caio é um dos dois irmãos mais velhos.\nFábio: Beto nasceu em 1998.\n\nApenas três desses irmãos fizeram afirmações verdadeiras. Entre os três irmãos que mentiram em suas afirmações, dois são os mais velhos entre todos.\nOs irmãos que nasceram em 1992 e 1996 foram, não necessariamente nessa ordem,",
+      "options": [
+        "Eder e Fábio.",
+        "Caio e Denis.",
+        "Beto e Fábio.",
+        "Abel e Denis.",
+        "Caio e Eder."
+      ],
+      "correct_option": 2
+    }
+  ]
+}
