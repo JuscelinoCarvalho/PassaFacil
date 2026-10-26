@@ -57,6 +57,7 @@
 
 - **Auth** (JWT), **billing** (Asaas Pix — `asaas_sandbox=true` por padrão), **conversão Google Ads server-side** (desligada por padrão), **feedback** (widget "Fale conosco"), **banco de questões / import de PDF**, **simulados**, **revisões**, **estudo do dia**, **teste grátis** (telemetria anônima, retenção 180 dias — LGPD).
 - **Correção por IA das discursivas (Fase 2) — ✅ NO AR (2026-08-16).** `apps/api/app/services/grading.py`: cascata de provedores gratuitos (Groq → Gemini → OpenRouter → Cerebras) via endpoint compatível com a API OpenAI. Corrige critério a critério com **crédito parcial**; nota salva em `discursive_submissions.ai_*`. Sem chaves/falha → **degrada para a autoavaliação manual** (Fase 1). Hoje ativa com **Groq (principal) + Gemini (`gemini-flash-latest`, fallback)** — cascata validada no ar (Groq 503 simulado → cai no Gemini e corrige). Cerebras e OpenRouter ficam **fora da cascata** (exigem crédito/cartão); chaves/modelos prontos para retomar depois. **A autoavaliação manual foi REMOVIDA da tela** (confundia): agora a IA marca os três botões (Não completou / Em parte / Completou) com nota realista por critério. Se a IA falhar (raro), mostra aviso "correção indisponível" — sem self-scoring.
+- **Servidor MCP (Fase 1) — ✅ pronto (stdio, local) 2026-10-26.** `apps/api/mcp_server/` expõe 4 tools de LEITURA do banco (`listar_filtros`, `buscar_questoes`, `obter_gabarito`, `estatisticas_banco`) reutilizando `app/services/question_query.py`. Só material publicado (exclui `owner_only`). Rodar: `python -m mcp_server.server` a partir de `apps/api`. Fases 2–4 (simulado/redação async, HTTP+token+Nginx, README/seed/demo) **pendentes**.
 - **Áudio-piloto:** 8 MP3 estáticos (voz ElevenLabs) em `apps/api/media/audio_pilot/`, servidos em `/api/v1/study/audio-pilot` só para o dono revisar. Menu "Áudios" segue **"em breve"**. A chave **`ELEVENLABS_API_KEY` está guardada em `/etc/passafacil.env`** (o app **não a consome** — os áudios são pré-gerados e servidos estáticos). O que **não** está versionado é o *script* de geração (foi descartável); a chave nunca se perdeu.
 
 ## 5. Pendências / próximos passos
@@ -73,6 +74,8 @@
 - [ ] **Mesclar** o branch `feat/correcao-ia-discursivas` na `main` (quando o dono aprovar).
 - [x] **Gemini** adicionado como fallback (chave no `/etc`, modelo `gemini-flash-latest`) — cascata Groq→Gemini validada no ar.
 - [ ] **Escalar a cascata quando crescer a base de assinantes:** Cerebras (chave `csk-…` já no `/etc`, modelo `gpt-oss-120b`) e/ou OpenRouter — ambos exigem crédito/cartão. Retomar é só incluir o nome no `GRADING_ORDER` + garantir crédito na conta.
+- [x] **Servidor MCP — Fase 1 (tools de leitura, stdio)** pronto e testado localmente (`apps/api/mcp_server/`, `app/services/question_query.py`).
+- [ ] **Servidor MCP — Fase 2:** `montar_simulado`, `submeter_redacao`, `consultar_correcao`, `resources` e `prompts`. ⚠️ A correção hoje é **síncrona** (sem fila/`job_id`) — decidir se adapta a spec (corrige na hora) ou cria fila. **Fase 3:** transporte HTTP + token + Nginx + rate limit. **Fase 4:** README em inglês + seed + demo (portfólio).
 - [ ] Feature de **Áudios** ainda "em breve". Se for regerar/ampliar: criar `apps/api/scripts/gerar_audios.py` **versionado**, lendo `ELEVENLABS_API_KEY` do `/etc` (nunca hardcoded).
 - [x] Pagamento Asaas em **produção** (`ASAAS_SANDBOX=false` no `/etc`) — o default do código é `true`, o `/etc` sobrescreve.
 
@@ -87,6 +90,15 @@
 ---
 
 ## 7. Diário de bordo
+
+### 2026-10-26 (MCP) — SERVIDOR MCP, Fase 1 (tools de leitura via stdio)
+- **O quê:** novo servidor MCP (Model Context Protocol) em **`apps/api/mcp_server/`** expondo o banco de questões como *tools* para qualquer cliente MCP (Claude Desktop/Code, Cursor). Spec: `spec-mcp-server.md`. Fase 1 = **`listar_filtros`, `buscar_questoes`, `obter_gabarito`, `estatisticas_banco`** via transporte **stdio**.
+- **Reuso (sem SQL paralelo):** nova camada **`app/services/question_query.py`** concentra a consulta. `published_filter()` foi **movido** do `routes/study.py` para lá (study passou a importá-lo — comportamento idêntico). As tools só chamam o serviço.
+- **Rodar:** a partir de `apps/api`, `python -m mcp_server.server`. Registrar no Claude Code: `claude mcp add passa-facil -- <apps/api>/.venv/bin/python -m mcp_server.server` (com `cwd`=apps/api). No Claude Desktop, `command` = o python do venv, `args` = `["-m","mcp_server.server"]`, `cwd` = apps/api. O banco vem do **mesmo `DATABASE_URL`** da API (não há config paralela).
+- **Segurança/LGPD (§8):** as tools expõem **só `is_published=True`** — `public_filter()` EXCLUI material `owner_only` de propósito (≠ do `published_filter()` do estudo logado, que o inclui). Nenhuma tool toca `User`/redações. Gabarito/explicação só pela tool dedicada `obter_gabarito`. Teto de 50 resultados por chamada. Filtros por ILIKE **parametrizado**.
+- **SDK:** fixado **`mcp>=1.13,<2`** no `requirements.txt` (a API `mcp.server.fastmcp.FastMCP` + stdio é a da linha 1.x; a 2.x renomeou/migrou). ⚠️ `mcp` só pede `starlette>=0.27`; sem teto um `pip install` limpo pega **starlette 1.x e quebra o fastapi 0.116** (exige `<0.48`) — por isso travei **`starlette<0.48`** no requirements.
+- **Testes:** `mcp_server/tests/` (21 testes, **todos passam**) cobrem o serviço + as 4 tools via `mcp.call_tool`. Verificação ponta-a-ponta real sobre stdio em `mcp_server/scripts_e2e_stdio.py` (handshake + tools/list + as 4 tools num banco temporário) — **OK**. Suite da API: 24 passam, as mesmas **4 falhas pré-existentes** (auth 401 em teste + `reportlab` ausente) inalteradas.
+- **Divergências da spec confirmadas (p/ Fase 2):** banco é SQLite(dev)/Postgres(prod) via ORM — **não MySQL**; a correção discursiva é **síncrona** (`grading.grade`, cascata Groq→Gemini) — **não há fila/`job_id`/polling** nem providers Anthropic/OpenAI. A Fase 2 (`submeter_redacao`/`consultar_correcao`) terá de decidir: adaptar a spec ao modelo síncrono atual ou introduzir fila real.
 
 ### 2026-10-02 (admin) — PAINEL "USUÁRIOS" (só admin): base, criação, último acesso, nº de acessos, online/offline
 - **Pedido do dono:** item de menu **só no perfil admin** para ver os usuários criados na base, data de criação, data do último acesso, qtd de acessos e status atual (online/offline).

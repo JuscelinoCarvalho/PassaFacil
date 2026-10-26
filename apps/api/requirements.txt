@@ -10,3 +10,8 @@ pypdf==5.7.0
 pdfplumber==0.11.9
 Pillow==12.1.0
 python-multipart==0.0.20
+# Servidor MCP (linha 1.x: expõe mcp.server.fastmcp.FastMCP + transporte stdio).
+mcp>=1.13,<2
+# mcp só exige starlette>=0.27; sem este teto um install limpo pega starlette 1.x
+# e quebra o fastapi 0.116 (que exige starlette<0.48). Mantém a stack consistente.
+starlette<0.48

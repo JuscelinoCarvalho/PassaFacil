@@ -21,6 +21,7 @@ from app.schemas.study import AnswerRequest, TestSubmitRequest, TrialEventIn
 from app.services.adaptive_engine import default_engine
 from app.services.feedback import build_answer_feedback, normalize_confidence
 from app.services.knowledge_map import build_knowledge_map
+from app.services.question_query import published_filter
 from app.services.review_queue import default_review_queue
 
 router = APIRouter(prefix="/study", tags=["study"])
@@ -40,13 +41,6 @@ TRIAL_KEYS: list[str] = [
 
 # Nunca deixar esta questão (interpretação longa "O Sobrado") abrir a amostra grátis.
 TRIAL_AVOID_FIRST_KEY = "vunesp-tcesp-2025-q02"
-
-
-def published_filter():
-    return or_(
-        Question.is_published.is_(True),
-        Question.provenance.has(QuestionProvenance.rights_status == "owner_only"),
-    )
 
 
 def _parse_slugs(subjects: str | None) -> list[str]:
